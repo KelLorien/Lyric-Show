@@ -1,8 +1,10 @@
 package nameless;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Scanner;
 
 import org.apache.poi.hslf.model.Slide;
 import org.apache.poi.hslf.usermodel.SlideShow;
@@ -15,7 +17,15 @@ import org.apache.poi.hslf.usermodel.SlideShow;
 public class HelloWorld {
 
     public static void main(String[] args) {
-        createPowerPoint();
+        String path;
+        if (args.length > 0) {
+            path = args[0];
+        } else {
+            System.out.println("Enter the fully qualified name of the file to parsed.");
+            path = new Scanner(System.in).nextLine().trim();
+        }
+
+        PowerPointReader.readPowerpoint(new File(path));
     }
 
     public static void createPowerPoint() {
