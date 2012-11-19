@@ -1,4 +1,4 @@
-package nameless;
+package examples;
 
 import org.apache.poi.hslf.model.Slide;
 import org.apache.poi.hslf.model.TextRun;
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  * User: jpipe
- * Date: 10/17/12
+ * WeekDate: 10/17/12
  * Time: 4:37 PM
  */
 public class PowerPointReader {

@@ -1,4 +1,4 @@
-package nameless;
+package examples;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +11,7 @@ import org.apache.poi.hslf.usermodel.SlideShow;
 
 /**
  * User: jpipe
- * Date: 10/10/12
+ * WeekDate: 10/10/12
  * Time: 5:18 PM
  */
 public class HelloWorld {
