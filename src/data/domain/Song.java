@@ -1,14 +1,12 @@
 package data.domain;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: jpipe
- * WeekDate: 11/19/12
+ * Date: 11/19/12
  *
- * Represents a Song. Contains the title, lyrics, date last used, and all other attributes
+ * Represents a Song. Contains the title, lyrics, date last used, and all other keywords
  * of a song stored in the library. Attributes besides title and lyrics are stored in a
  * {@link java.util.HashMap} of {@link String} to {@link String}.
  */
@@ -18,7 +16,7 @@ public class Song {
     String lyrics;
     Date lastUsed;
 
-    HashMap<String, String> attributes = new HashMap<String, String>();
+    ArrayList<String> keywords = new ArrayList<String>();
 
     public String getTitle() {
         return title;
@@ -44,8 +42,16 @@ public class Song {
         this.lastUsed = lastUsed;
     }
 
-    public Map<String, String> getAttributeMap() {
-        return attributes;
+    public List<String> getKeywords() {
+        return keywords;
+    }
+
+    public void addKeyword(String key) {
+        keywords.add(key);
+    }
+
+    public void addAllKeywords(List<String> keys) {
+        keywords.addAll(keys);
     }
     /**
      * Sets the date this song was last used to the current time;
@@ -55,8 +61,8 @@ public class Song {
         lastUsed = new Date();
     }
 
-    public String getAttribute(String attrName) {
-        return attributes.get(attrName);
+    public boolean hasKeyword(String keyword) {
+        return keywords.contains(keyword);
     }
 
     @Override

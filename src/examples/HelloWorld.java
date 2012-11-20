@@ -11,7 +11,7 @@ import org.apache.poi.hslf.usermodel.SlideShow;
 
 /**
  * User: jpipe
- * WeekDate: 10/10/12
+ * Date: 10/10/12
  * Time: 5:18 PM
  */
 public class HelloWorld {
@@ -28,6 +28,7 @@ public class HelloWorld {
         PowerPointReader.readPowerpoint(new File(path));
     }
 
+    //this is just an example
     public static void createPowerPoint() {
         SlideShow show = new SlideShow();
 

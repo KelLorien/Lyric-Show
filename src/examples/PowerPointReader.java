@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  * User: jpipe
- * WeekDate: 10/17/12
+ * Date: 10/17/12
  * Time: 4:37 PM
  */
 public class PowerPointReader {
