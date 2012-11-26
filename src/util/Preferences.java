@@ -10,7 +10,7 @@ public class Preferences {
      * will also be located there.
      * @return String representing the path to the library.
      */
-    public static String getLibraryURI() {
+    public static String getLibraryURL() {
         //TODO: get this from a preferences file
         return "";
     }

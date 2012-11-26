@@ -8,7 +8,7 @@ import java.util.*;
  *
  * Represents a Song. Contains the title, lyrics, date last used, and all other keywords
  * of a song stored in the library. Attributes besides title and lyrics are stored in a
- * {@link java.util.HashMap} of {@link String} to {@link String}.
+ * {@link List} of Strings.
  */
 public class Song {
 

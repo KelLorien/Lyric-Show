@@ -2,10 +2,12 @@ package data;
 
 import data.domain.Song;
 import util.Preferences;
+import util.SongStorageParser;
 
 import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import static util.SongStorageParser.*;
@@ -16,10 +18,11 @@ import static util.SongStorageParser.*;
  */
 public class SongDAO {
 
-    private static final String LIBRARY_FILE_NAME = "songs.lib";
+    private static final String LIBRARY_DIR_NAME = "songs";
     private static final String INDEX_FILE_NAME = "index.lib";
 
-    private static String LIBRARY_URL = Preferences.getLibraryURI();
+    private static String LIBRARY_URL = Preferences.getLibraryURL();
+
 
     private static SongDAO instance = null;
 
@@ -33,8 +36,14 @@ public class SongDAO {
         return instance;
     }
 
+    private File library;
+
     //private constructor; use the static method above to access this singleton.
     private SongDAO() {
+        library = new File(LIBRARY_URL + LIBRARY_DIR_NAME);
+        if (!library.mkdir()) {
+            System.out.println("INFO: song library already exists");
+        }
     }
 
     /**
@@ -62,32 +71,28 @@ public class SongDAO {
     /**
      * Gets all titles of songs currently in the database.
      * @return ArrayList of Strings, representing each song title currently stored in the library.
-     * @throws LibraryReadException if there was an error reading the index.
      */
-    public ArrayList<String> getAllTitles() throws LibraryReadException {
+    public ArrayList<String> getAllTitles() {
         ArrayList<String> titles = new ArrayList<String>();
 
-        Scanner scanner = null;
+        titles.addAll(Arrays.asList(library.list()));
 
-        try {
-            scanner = getIndexScanner();
-
-            Tag tag = Tag.TITLE;
-            while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                if (line.contains(tag.start())) {
-                    titles.add(extractTagDataFromString(line, tag));
-                }
-            }
-        } catch (ParseException e) {
-            System.err.println(e);
-            throw new LibraryReadException("Could not read Index file", e);
-        } finally {
-            if (scanner != null) {
-                scanner.close();
-            }
-        }
         return titles;
+    }
+
+    /**
+     * Gets the song with the given title.
+     * @param title the song title of the desired song
+     * @return {@link Song} object fully instantiated with all its relevant information.
+     */
+    public Song getSong(String title) throws FileNotFoundException, LibraryReadException {
+        Song song = new Song();
+        song.setTitle(title);
+
+        Scanner scanner = getLibraryScanner(title);
+
+        //TODO: instantiate song
+        return song;
     }
 
     private void writeToIndex(Song song) throws IOException {
@@ -103,8 +108,15 @@ public class SongDAO {
     private void writeToLibrary(Song song) throws IOException {
         FileWriter writer = null;
         try {
-            writer = new FileWriter(LIBRARY_URL + LIBRARY_FILE_NAME, true);
-            writer.append(toStorageString(song));
+            File newStorageFile = new File(library, song.getTitle());
+            System.out.println(newStorageFile.getAbsolutePath());
+
+            if (newStorageFile.createNewFile()) {
+                writer = new FileWriter(newStorageFile);
+                writer.write(toStorageString(song));
+            } else {
+                throw new IOException("Could not create storage file: " + newStorageFile.getAbsolutePath());
+            }
         } finally {
             closeQuietly(writer);
         }
@@ -119,13 +131,8 @@ public class SongDAO {
         }
     }
 
-    private FileReader getLibraryScanner() {
-        try {
-            return new FileReader(LIBRARY_URL + INDEX_FILE_NAME);
-        } catch (FileNotFoundException e) {
-            System.err.println("Library not found!");
-            throw new RuntimeException("Library not found", e);
-        }
+    private Scanner getLibraryScanner(String title) throws FileNotFoundException {
+        return new Scanner(new File(library, title));
     }
 
     private void closeQuietly(Writer io) {
@@ -150,28 +157,11 @@ public class SongDAO {
             song.setTitle("new title");
             dao.addSong(song);
         } catch (LibraryWriteException e) {
-            System.err.println("FAILED WRITE\n"+e);
+            e.printStackTrace();
         }
 
-        try {
-            System.out.println(dao.getAllTitles());
-        } catch (LibraryReadException e) {
-            System.err.println("FAILED READ\n"+e);
-        }
+        System.out.println(dao.getAllTitles());
 
-        File ind = new File(LIBRARY_URL + INDEX_FILE_NAME);
-        File lib = new File(LIBRARY_URL + LIBRARY_FILE_NAME);
 
-        if (ind.exists() && ind.delete()) {
-            System.out.println("ind deleted");
-        } else {
-            System.out.println("ind not deleted");
-        }
-
-        if (lib.exists() && lib.exists())
-            System.out.println("lib deleted");
-        else  {
-            System.out.println("lib not deleted");
-        }
     }
 }

@@ -13,7 +13,6 @@ public class tester {
 		try {
 			test.addSong(song);
 		} catch (LibraryWriteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
