@@ -12,6 +12,6 @@ public class Preferences {
      */
     public static String getLibraryURI() {
         //TODO: get this from a preferences file
-        return "C:\\Users\\jpipe\\lyric-show\\";
+        return "";
     }
 }

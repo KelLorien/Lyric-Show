@@ -17,7 +17,7 @@ public class SongStorageParser {
     public static String toIndexString(Song song) {
         String ss = valWithTag(song.getTitle(), TITLE) + LINE;
 
-        ss += valWithTag(String.valueOf(song.getLastUsed().getTime()), DATE) + LINE;
+     //   ss += valWithTag(String.valueOf(song.getLastUsed().getTime()), DATE) + LINE;
 
         ss += ATT_LIST.start() + LINE;
         for (String key: song.getKeywords()) {

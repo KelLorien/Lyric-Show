@@ -1,3 +1,9 @@
 .idea/
 *.iml
 .DS_Store
+bin/
+index.lib
+library.lib
+songs.lib
+.classpath
+.project
