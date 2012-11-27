@@ -38,16 +38,16 @@ public class Song {
         return lastUsed;
     }
 
-    public void setLastUsed(Date lastUsed) {
-        this.lastUsed = lastUsed;
+    public void setLastUsed(Long lastUsed) {
+        this.lastUsed = new Date(lastUsed);
     }
 
     public List<String> getKeywords() {
         return keywords;
     }
 
-    public void addKeyword(String key) {
-        keywords.add(key);
+    public void addKeyword(String... key) {
+        Collections.addAll(keywords, key);
     }
 
     public void addAllKeywords(List<String> keys) {

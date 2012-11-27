@@ -5,6 +5,7 @@ package util;
  * Date: 11/19/12
  */
 public class Preferences {
+
     /**
      * Gets the path to the directory where the song library is located. The index file
      * will also be located there.
