@@ -3,7 +3,6 @@
 .DS_Store
 bin/
 index.lib
-library.lib
-songs.lib
+songs/
 .classpath
 .project
