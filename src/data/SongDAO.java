@@ -6,10 +6,7 @@ import util.SongStorageParser;
 
 import java.io.*;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static util.SongStorageParser.*;
 
@@ -41,17 +38,21 @@ public class SongDAO {
     }
 
     private File library;
+    private ArrayList<String> allTitles = new ArrayList<String>();
 
-    //private constructor; use the static method above to access this singleton.
+    //private constructor; use the getInstance() to access this singleton.
     private SongDAO() {
         library = new File(STORAGE_URL + LIBRARY_DIR_NAME);
-        if (!library.mkdir()) {
-            System.out.println("INFO: song library already exists");
+        library.mkdir();
+        if (!library.canRead() && !library.canWrite()) {
+            throw new RuntimeException("Library is not readable!");
         }
+
+        allTitles.addAll(Arrays.asList(library.list()));
     }
 
     /**
-     * Adds a song to the database. DOES NOT check that the song title is unique; do not call
+     * Adds a song to the library. DOES NOT check that the song title is unique; do not call
      * without first confirming that title is unique.
      * @param song new {@link Song} to be written to the library
      * @throws LibraryWriteException if there was an error writing to the library (usually would be caused
@@ -70,18 +71,19 @@ public class SongDAO {
             System.err.println("Could not write to library!");
             throw new LibraryWriteException("Could not write to library", e);
         }
+
+        allTitles.add(song.getTitle());
     }
 
     /**
-     * Gets all titles of songs currently in the database.
-     * @return ArrayList of Strings, representing each song title currently stored in the library.
+     * Gets all titles of songs currently in the library. Sorts the running list of stored songs before
+     * returning (this sorting has no effect on the physical library).
+     * @return ArrayList of Strings, representing each song title currently stored in the library in
+     * alphabetical order.
      */
     public List<String> getAllTitles() {
-        ArrayList<String> titles = new ArrayList<String>();
-
-        titles.addAll(Arrays.asList(library.list()));
-
-        return titles;
+        Collections.sort(allTitles);
+        return new ArrayList<String>(allTitles);
     }
 
     /**
@@ -120,6 +122,12 @@ public class SongDAO {
         return song;
     }
 
+    /**
+     * Determines which songs have the given keyword, and returns a list of all those song's titles.
+     * @param key keyword by which to filter song titles.
+     * @return {@link List} of each song title corresponding to each song which has the given keyword.
+     * @throws LibraryReadException if there was an error in reading or parsing the
+     */
     public List<String> getTitlesWithKeyword(String key) throws LibraryReadException {
         ArrayList<String> titles =  new ArrayList<String>();
 
@@ -255,11 +263,13 @@ public class SongDAO {
             e.printStackTrace();
         }
 
-        try {
+        System.out.println(dao.getAllTitles());
+
+/*        try {
             System.out.println(dao.getTitlesWithKeyword("another won"));
         } catch (LibraryReadException e) {
             e.printStackTrace();
-        }
+        }*/
 
         try {
             Song gotten = dao.getSong(song.getTitle());

@@ -13,6 +13,6 @@ public class Preferences {
      */
     public static String getLibraryURL() {
         //TODO: get this from a preferences file
-        return "";
+        return "song_lib";
     }
 }

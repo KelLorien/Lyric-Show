@@ -2,7 +2,6 @@
 *.iml
 .DS_Store
 bin/
-index.lib
-songs/
+song_lib/
 .classpath
 .project
