@@ -8,6 +8,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import static util.SongStorageParser.*;
@@ -75,7 +76,7 @@ public class SongDAO {
      * Gets all titles of songs currently in the database.
      * @return ArrayList of Strings, representing each song title currently stored in the library.
      */
-    public ArrayList<String> getAllTitles() {
+    public List<String> getAllTitles() {
         ArrayList<String> titles = new ArrayList<String>();
 
         titles.addAll(Arrays.asList(library.list()));
@@ -105,7 +106,7 @@ public class SongDAO {
 
             String lyrics = "";
             while(scanner.hasNext()) {
-                lyrics += scanner.nextLine();
+                lyrics += scanner.nextLine() + "\n";
             }
 
             song.setLyrics(lyrics);
@@ -117,6 +118,27 @@ public class SongDAO {
         }
 
         return song;
+    }
+
+    public List<String> getTitlesWithKeyword(String key) throws LibraryReadException {
+        ArrayList<String> titles =  new ArrayList<String>();
+
+        Scanner indexScanner = getIndexScanner();
+
+        try {
+            while (indexScanner.hasNext()){
+                String currentTitle = indexScanner.nextLine();
+                if (SongStorageParser.extractAllKeywords(indexScanner.nextLine()).contains(key)) {
+                    titles.add(currentTitle);
+                }
+            }
+        } catch (ParseException e) {
+            throw new LibraryReadException("Could not read from library.", e);
+        } finally {
+            indexScanner.close();
+        }
+
+        return titles;
     }
 
     private void writeToIndex(Song song) throws IOException {
@@ -175,7 +197,56 @@ public class SongDAO {
         song.setTitle("testing");
         song.setLastDateToNow();
         song.addKeyword("keywuuuuuuuuuuuurd", "another won");
-        song.setLyrics("lkjalksjdlfj\nalsallyourbasekjsdf\nalsdivoia\nalsikivhqwhevhh\nalisdf\n");
+        song.setLyrics("A thousand times I've failed\n" +
+                "Still your mercy remains\n" +
+                "And should I stumble again\n" +
+                "Still I'm caught in your grace\n" +
+                "\n" +
+                "Everlasting, Your light will shine when all else fades\n" +
+                "Never ending, Your glory goes beyond all fame\n" +
+                "\n" +
+                "My heart and my soul, I give You control\n" +
+                "Consume me from the inside out Lord\n" +
+                "Let justice and praise, become my embrace\n" +
+                "To love You from the inside out\n" +
+                "\n" +
+                "Your will above all else, my purpose remains\n" +
+                "The art of losing myself in bringing you praise\n" +
+                "\n" +
+                "Everlasting, Your light will shine when all else fades\n" +
+                "Never ending, Your glory goes beyond all fame\n" +
+                "\n" +
+                "My heart, my soul, Lord I give you control\n" +
+                "Consume me from the inside out Lord\n" +
+                "Let justice and praise become my embrace\n" +
+                "To love You from the inside out\n" +
+                "\n" +
+                "Everlasting, Your light will shine when all else fades\n" +
+                "Never ending, Your glory goes beyond all fame\n" +
+                "And the cry of my heart is to bring You praise\n" +
+                "From the inside out, O my soul cries out\n" +
+                "\n" +
+                "My Soul cries out to You\n" +
+                "My Soul cries out to You\n" +
+                "to You, to You\n" +
+                "\n" +
+                "My heart, my soul, Lord I give you control\n" +
+                "Consume me from the inside out Lord\n" +
+                "Let justice and praise become my embrace\n" +
+                "To love You from the inside out\n" +
+                "\n" +
+                "Everlasting, Your light will shine when all else fades\n" +
+                "Never ending, Your glory goes beyond all fame\n" +
+                "And the cry of my heart is to bring You praise\n" +
+                "From the inside out, O my soul cries out\n" +
+                "\n" +
+                "Everlasting, Your light will shine when all else fades\n" +
+                "Never ending, Your glory goes beyond all fame\n" +
+                "And the cry of my heart is to bring You praise\n" +
+                "From the inside out, O my soul cries out\n" +
+                "From the inside out, O my soul cries out\n" +
+                "From the inside out, O my soul cries out.");
+
         try {
             dao.addSong(song);
             song.setTitle("next");
@@ -184,7 +255,11 @@ public class SongDAO {
             e.printStackTrace();
         }
 
-//        System.out.println(dao.getAllTitles());
+        try {
+            System.out.println(dao.getTitlesWithKeyword("another won"));
+        } catch (LibraryReadException e) {
+            e.printStackTrace();
+        }
 
         try {
             Song gotten = dao.getSong(song.getTitle());
