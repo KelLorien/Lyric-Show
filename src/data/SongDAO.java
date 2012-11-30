@@ -265,11 +265,11 @@ public class SongDAO {
 
         System.out.println(dao.getAllTitles());
 
-/*        try {
+        try {
             System.out.println(dao.getTitlesWithKeyword("another won"));
         } catch (LibraryReadException e) {
             e.printStackTrace();
-        }*/
+        }
 
         try {
             Song gotten = dao.getSong(song.getTitle());
