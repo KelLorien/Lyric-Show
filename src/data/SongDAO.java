@@ -149,6 +149,31 @@ public class SongDAO {
         return titles;
     }
 
+    /**
+     * Gets a {@link Map} of all song titles (String) to the respective song's {@link Song#lastUsed} variable.
+     *
+     * @return {@link Map} of Strings to {@link Date} objects.
+     */
+    public Map<String, Date> getAllTitlesToLastUsedDatesMap() throws LibraryReadException {
+        Map<String, Date> titleToDate = new HashMap<String, Date>();
+
+        Scanner indexScanner = getIndexScanner();
+
+        try {
+            while (indexScanner.hasNext()) {
+                titleToDate.put(indexScanner.nextLine(), new Date(Long.parseLong(
+                        SongStorageParser.extractTagDataFromString(indexScanner.nextLine(), Tag.DATE)
+                )));
+            }
+        } catch (ParseException e) {
+            throw new LibraryReadException("Could not read index file. ", e);
+        } finally {
+            indexScanner.close();
+        }
+
+        return titleToDate;
+    }
+
     private void writeToIndex(Song song) throws IOException {
         FileWriter writer = null;
         try {
@@ -203,7 +228,7 @@ public class SongDAO {
         SongDAO dao = SongDAO.getInstance();
         Song song = new Song();
         song.setTitle("testing");
-        song.setLastDateToNow();
+        song.setLastUsed(1L);
         song.addKeyword("keywuuuuuuuuuuuurd", "another won");
         song.setLyrics("A thousand times I've failed\n" +
                 "Still your mercy remains\n" +
@@ -258,6 +283,7 @@ public class SongDAO {
         try {
             dao.addSong(song);
             song.setTitle("next");
+            song.setLastUsed((long) (Long.MAX_VALUE * Math.random()));
             dao.addSong(song);
         } catch (LibraryWriteException e) {
             e.printStackTrace();
@@ -266,7 +292,7 @@ public class SongDAO {
         System.out.println(dao.getAllTitles());
 
         try {
-            System.out.println(dao.getTitlesWithKeyword("another won"));
+            System.out.println(dao.getAllTitlesToLastUsedDatesMap());
         } catch (LibraryReadException e) {
             e.printStackTrace();
         }
