@@ -57,6 +57,9 @@ public class SongStorageParser {
                 throw new ParseException("Unable to parse " + tag.tagString +" from line:\n" + line +
                         "\nNo closing tag.\nFile may be corrupt!", line.length()-1);
             }
+        } else {
+            throw new ParseException("Unable to parse " + tag.tagString +" from line:\n" + line +
+                    "\nNo opening tag.\nFile may be corrupt!", line.length()-1);
         }
         return title;
     }

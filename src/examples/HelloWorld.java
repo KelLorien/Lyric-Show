@@ -1,13 +1,12 @@
 package examples;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 import org.apache.poi.hslf.model.Slide;
+import org.apache.poi.hslf.model.TextBox;
 import org.apache.poi.hslf.usermodel.SlideShow;
+import org.apache.poi.util.IOUtils;
 
 /**
  * User: jpipe
@@ -17,28 +16,40 @@ import org.apache.poi.hslf.usermodel.SlideShow;
 public class HelloWorld {
 
     public static void main(String[] args) {
-        String path;
-        if (args.length > 0) {
-            path = args[0];
-        } else {
-            System.out.println("Enter the fully qualified name of the file to parsed.");
-            path = new Scanner(System.in).nextLine().trim();
-        }
+//        String path;
+//        if (args.length > 0) {
+//            path = args[0];
+//        } else {
+//            System.out.println("Enter the fully qualified name of the file to parsed.");
+//            path = new Scanner(System.in).nextLine().trim();
+//        }
+//
+//        PowerPointReader.readPowerpoint(new File(path));
 
-        PowerPointReader.readPowerpoint(new File(path));
+        createPowerPoint();
     }
 
     //this is just an example
     public static void createPowerPoint() {
+        String fileName = "pwr.ppt";
+        new File(fileName).delete();
+
         SlideShow show = new SlideShow();
 
         Slide s1 = show.createSlide();
 
-        s1.addTitle().setText("Hello There");
+//        s1.addTitle().setText("Hello There");
+
+
+        TextBox txt = new TextBox();
+        txt.setText("Hello, World!");
+        txt.setAnchor(new java.awt.Rectangle(300, 400, 300, 50));
+
+        s1.addShape(txt);
 
         FileOutputStream outputStream;
         try {
-            outputStream = new FileOutputStream("pwr.ppt");
+            outputStream = new FileOutputStream(fileName);
         } catch (FileNotFoundException e) {
             System.out.println("Could not create file!");
             return;

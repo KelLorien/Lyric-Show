@@ -94,7 +94,7 @@ public class SongDAO {
      * @throws LibraryReadException if the file could not be read or parsed. Check the for the cause
      * ({@link Throwable#cause}) when thrown if the reason is relevant.
      */
-    public Song getSong(String title) throws FileNotFoundException, LibraryReadException {
+    public Song getSong(String title) throws FileNotFoundException, ParseException {
         Song song = new Song();
         song.setTitle(title);
 
@@ -113,8 +113,6 @@ public class SongDAO {
 
             song.setLyrics(lyrics);
 
-        } catch (ParseException e) {
-            throw new LibraryReadException("Could not read from library.", e);
         } finally {
             scanner.close();
         }
@@ -213,7 +211,7 @@ public class SongDAO {
         return new Scanner(new File(library, title));
     }
 
-    private void closeQuietly(Writer io) {
+    private void closeQuietly(Closeable io) {
         try {
             if (io != null)
                 io.close();
@@ -305,7 +303,7 @@ public class SongDAO {
             System.out.println("Lyrics: " + gotten.getLyrics());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (LibraryReadException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 

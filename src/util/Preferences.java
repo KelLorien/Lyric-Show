@@ -6,13 +6,17 @@ package util;
  */
 public class Preferences {
 
+    //TODO: get from a preferences file
     /**
      * Gets the path to the directory where the song library is located. The index file
      * will also be located there.
      * @return String representing the path to the library.
      */
     public static String getLibraryURL() {
-        //TODO: get this from a preferences file
+        return "song_lib";
+    }
+
+    public static String getPPTOutURL() {
         return "song_lib";
     }
 }
