@@ -122,7 +122,7 @@ public class SongStorageParser {
     public static enum Tag {
         KEY ( "<a>", "<\\a>"),
         KEY_LIST( "<ats>", "<\\ats>"),
-        DATE ( "<d>", "\\d>");
+        DATE ( "<d>", "<\\d>");
 
         private final String tagString;
         private final String endTagString;

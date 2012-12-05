@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class PPTBuilder {
     private static final String OUTPUT_NAME = "songs.ppt";
-    private static final File DEFAUT_OUTPUT_DIR = new File(Preferences.getPPTOutURL());
+    private static final File DEFAULT_OUTPUT_DIR = new File(Preferences.getPPTOutURL());
 
     private static PPTBuilder instance = null;
 
@@ -45,12 +45,12 @@ public class PPTBuilder {
     }
 
     public void buildPPT (List<String> titles) throws IOException {
-        DEFAUT_OUTPUT_DIR.mkdirs();
+        DEFAULT_OUTPUT_DIR.mkdirs();
 
         List<Song> songs = new ArrayList<Song>();
         populateSongs(titles, songs);
 
-        outputPPT(songs, DEFAUT_OUTPUT_DIR);
+        outputPPT(songs, DEFAULT_OUTPUT_DIR);
     }
 
     private void outputPPT(List<Song> songs, File outputFile) throws IOException {
@@ -92,13 +92,13 @@ public class PPTBuilder {
         }
     }
 
-    private void populateSongs(List<String> titles, List<Song> songs) {
+    private void populateSongs(List<String> titles, List<Song> songs) throws FileNotFoundException {
         for (String title: titles) {
             try {
                 songs.add(dao.getSong(title));
             } catch (FileNotFoundException e) {
                 System.err.println("Storage file not found for " + title);
-                e.printStackTrace();
+                throw e;
             } catch (ParseException e) {
                 System.err.println("Error reading storage file for song " + title);
                 e.printStackTrace();
@@ -117,9 +117,10 @@ public class PPTBuilder {
         }
     }
 
+    //TODO: remove for prod
     public static void main(String[] args) {
-//        new File(DEFAUT_OUTPUT_DIR, OUTPUT_NAME).delete();
-        DEFAUT_OUTPUT_DIR.mkdir();
+        new File(DEFAULT_OUTPUT_DIR, OUTPUT_NAME).delete();
+        DEFAULT_OUTPUT_DIR.mkdir();
 
         Song song = new Song();
         song.setTitle("testing");
@@ -175,7 +176,7 @@ public class PPTBuilder {
                 "From the inside out, O my soul cries out\n" +
                 "From the inside out, O my soul cries out.");
         try {
-            PPTBuilder.getInstance().outputPPT(Arrays.asList(song), DEFAUT_OUTPUT_DIR);
+            PPTBuilder.getInstance().outputPPT(Arrays.asList(song), DEFAULT_OUTPUT_DIR);
         } catch (IOException e) {
             e.printStackTrace();
         }

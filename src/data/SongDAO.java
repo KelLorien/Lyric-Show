@@ -43,8 +43,8 @@ public class SongDAO {
     //private constructor; use the getInstance() to access this singleton.
     private SongDAO() {
         library = new File(STORAGE_URL + LIBRARY_DIR_NAME);
-        library.mkdir();
-        if (!library.canRead() && !library.canWrite()) {
+        library.mkdirs();
+        if (!library.canRead() || !library.canWrite()) {
             throw new RuntimeException("Library is not readable!");
         }
 
@@ -58,7 +58,7 @@ public class SongDAO {
      * @throws LibraryWriteException if there was an error writing to the library (usually would be caused
      * by a {@link IOException}).
      */
-    public void addSong(Song song) throws LibraryWriteException {
+    public void addSong(Song song) throws LibraryWriteException, LibraryConflictException {
         try {
             writeToIndex(song);
         } catch (IOException e) {
@@ -91,8 +91,8 @@ public class SongDAO {
      * @param title the song title of the desired song
      * @return {@link Song} object fully instantiated with all its relevant information.
      * @throws FileNotFoundException if the file for the associate song is not found.
-     * @throws LibraryReadException if the file could not be read or parsed. Check the for the cause
-     * ({@link Throwable#cause}) when thrown if the reason is relevant.
+     * @throws ParseException if the file could not be parsed. Probably means files were
+     * corrupted
      */
     public Song getSong(String title) throws FileNotFoundException, ParseException {
         Song song = new Song();
@@ -124,9 +124,10 @@ public class SongDAO {
      * Determines which songs have the given keyword, and returns a list of all those song's titles.
      * @param key keyword by which to filter song titles.
      * @return {@link List} of each song title corresponding to each song which has the given keyword.
-     * @throws LibraryReadException if there was an error in reading or parsing the
+     * @throws ParseException if there was an error parsing the keywords from the index (could mean index
+     * is corrupt)
      */
-    public List<String> getTitlesWithKeyword(String key) throws LibraryReadException {
+    public List<String> getTitlesWithKeyword(String key) throws ParseException {
         ArrayList<String> titles =  new ArrayList<String>();
 
         Scanner indexScanner = getIndexScanner();
@@ -138,8 +139,6 @@ public class SongDAO {
                     titles.add(currentTitle);
                 }
             }
-        } catch (ParseException e) {
-            throw new LibraryReadException("Could not read from library.", e);
         } finally {
             indexScanner.close();
         }
@@ -152,19 +151,18 @@ public class SongDAO {
      *
      * @return {@link Map} of {@link Date} objects to Strings.
      */
-    public Map<Date, String> getAllTitlesToLastUsedDatesMap() throws LibraryReadException {
+    public Map<Date, String> getAllTitlesToLastUsedDatesMap() throws ParseException {
         Map<Date, String> titleToDate = new HashMap<Date, String>();
 
         Scanner indexScanner = getIndexScanner();
 
         try {
             while (indexScanner.hasNext()) {
+                String title = indexScanner.nextLine();
                 titleToDate.put(new Date(
                         Long.parseLong(SongStorageParser.extractTagDataFromString(indexScanner.nextLine(), Tag.DATE))
-                ), indexScanner.nextLine());
+                ), title);
             }
-        } catch (ParseException e) {
-            throw new LibraryReadException("Could not read index file. ", e);
         } finally {
             indexScanner.close();
         }
@@ -182,10 +180,10 @@ public class SongDAO {
         }
     }
 
-    private void writeToLibrary(Song song) throws IOException {
+    private void writeToLibrary(Song song) throws IOException, LibraryConflictException {
         FileWriter writer = null;
         try {
-            File newStorageFile = new File(library, song.getTitle());
+            File newStorageFile = getStorageFileThrowIfExists(song);
 
             if (newStorageFile.createNewFile()) {
                 writer = new FileWriter(newStorageFile);
@@ -209,6 +207,14 @@ public class SongDAO {
 
     private Scanner getLibraryScanner(String title) throws FileNotFoundException {
         return new Scanner(new File(library, title));
+    }
+
+    private File getStorageFileThrowIfExists(Song song) throws LibraryConflictException {
+        File newStorageFile = new File(library, song.getTitle());
+        if (newStorageFile.exists()) {
+            throw new LibraryConflictException(song.getTitle() + " already exists!");
+        }
+        return newStorageFile;
     }
 
     private void closeQuietly(Closeable io) {
@@ -285,13 +291,15 @@ public class SongDAO {
             dao.addSong(song);
         } catch (LibraryWriteException e) {
             e.printStackTrace();
+        } catch (LibraryConflictException e) {
+            e.printStackTrace();
         }
 
         System.out.println(dao.getAllTitles());
 
         try {
             System.out.println(dao.getAllTitlesToLastUsedDatesMap());
-        } catch (LibraryReadException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -319,5 +327,9 @@ public class SongDAO {
 
         if(!new File(STORAGE_URL + INDEX_FILE_NAME).delete())
             System.err.println("index not deleted!");
+
+        if(!new File(STORAGE_URL).delete())
+            System.err.println("test storage dir not deleted!");
+
     }
 }

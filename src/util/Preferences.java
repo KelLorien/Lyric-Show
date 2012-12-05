@@ -13,10 +13,10 @@ public class Preferences {
      * @return String representing the path to the library.
      */
     public static String getLibraryURL() {
-        return "song_lib";
+        return "song_lib/";
     }
 
     public static String getPPTOutURL() {
-        return "song_lib";
+        return "test_output";
     }
 }
