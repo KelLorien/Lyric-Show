@@ -148,20 +148,20 @@ public class SongDAO {
     }
 
     /**
-     * Gets a {@link Map} of all song titles (String) to the respective song's {@link Song#lastUsed} variable.
+     * Gets a {@link Map} of all song's {@link Song#lastUsed} to the respective song's title.
      *
-     * @return {@link Map} of Strings to {@link Date} objects.
+     * @return {@link Map} of {@link Date} objects to Strings.
      */
-    public Map<String, Date> getAllTitlesToLastUsedDatesMap() throws LibraryReadException {
-        Map<String, Date> titleToDate = new HashMap<String, Date>();
+    public Map<Date, String> getAllTitlesToLastUsedDatesMap() throws LibraryReadException {
+        Map<Date, String> titleToDate = new HashMap<Date, String>();
 
         Scanner indexScanner = getIndexScanner();
 
         try {
             while (indexScanner.hasNext()) {
-                titleToDate.put(indexScanner.nextLine(), new Date(Long.parseLong(
-                        SongStorageParser.extractTagDataFromString(indexScanner.nextLine(), Tag.DATE)
-                )));
+                titleToDate.put(new Date(
+                        Long.parseLong(SongStorageParser.extractTagDataFromString(indexScanner.nextLine(), Tag.DATE))
+                ), indexScanner.nextLine());
             }
         } catch (ParseException e) {
             throw new LibraryReadException("Could not read index file. ", e);

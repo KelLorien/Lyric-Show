@@ -4,6 +4,8 @@ import data.SongDAO;
 import data.domain.Song;
 import org.apache.poi.hslf.model.Slide;
 import org.apache.poi.hslf.model.TextBox;
+import org.apache.poi.hslf.model.TextShape;
+import org.apache.poi.hslf.usermodel.RichTextRun;
 import org.apache.poi.hslf.usermodel.SlideShow;
 import util.Preferences;
 
@@ -65,10 +67,16 @@ public class PPTBuilder {
         for (String line: song.getLyrics().split("\n\n")) {
             Slide slide = show.createSlide();
             slide.addTitle().setText(song.getTitle());
+            slide.getTextRuns()[0].getRichTextRunAt(0).setFontSize(48);
 
             TextBox lyrics = new TextBox();
             lyrics.setText(line);
-            lyrics.setAnchor(new java.awt.Rectangle(150, 150, 300, 300));
+            lyrics.setHorizontalAlignment(TextShape.AlignCenter);
+            RichTextRun rtr = lyrics.getTextRun().getRichTextRunAt(0);
+            rtr.setFontSize(32);
+
+            lyrics.setAnchor(new java.awt.Rectangle(0, 150,
+                    (int) show.getPageSize().getWidth(), (int) show.getPageSize().getHeight() - 150));
 
             slide.addShape(lyrics);
         }
@@ -110,7 +118,7 @@ public class PPTBuilder {
     }
 
     public static void main(String[] args) {
-        new File(DEFAUT_OUTPUT_DIR, OUTPUT_NAME).delete();
+//        new File(DEFAUT_OUTPUT_DIR, OUTPUT_NAME).delete();
         DEFAUT_OUTPUT_DIR.mkdir();
 
         Song song = new Song();
