@@ -38,20 +38,45 @@ public class PPTBuilder {
     private PPTBuilder() {
     }
 
-    public void buildPPT (List<String> titles, File dir) throws IOException {
+    /**
+     * Builds a powerpoint file out each song specified by a {@link List} of titles. If the given
+     * directory is not writable or is <code>null</code>, it will print to {@link PPTBuilder#DEFAULT_OUTPUT_DIR}.
+     * @param titles list of song titles to identify which songs to create a powerpoint out of.
+     * @param dir specifies where the created .ppt file will be upon completion.
+     * @return <code>true</code> if the .ppt was successful stored in the given directory. Returns <code>false</code>
+     * if the given directory could not be written to (in which case, it will be in the default output directory).
+     * @throws IOException if there was an exception writing the file to its target directory.
+     * @see PPTBuilder#buildPPT(java.util.List)
+     */
+    public boolean buildPPT (List<String> titles, File dir) throws IOException {
+        if (dir == null || !dir.canWrite()) {
+            System.err.println("cannot write to given directory (buildPPT). Writing to default");
+            buildPPT(titles);
+            return false;
+        }
         List<Song> songs = new ArrayList<Song>();
         populateSongs(titles, songs);
 
         outputPPT(songs, dir);
+        return true;
     }
 
-    public void buildPPT (List<String> titles) throws IOException {
+    /**
+     * Builds a powerpoint file out each song specified by a {@link List}, saved at the directory
+     * specified by {@link PPTBuilder#DEFAULT_OUTPUT_DIR}.
+     * @param titles list of song titles to identify which songs to create a powerpoint out of.
+     * @return <code>true</code> if the .ppt was successful stored in the default directory.
+     * @throws IOException if there was an exception writing the file to its target directory.
+     * @see PPTBuilder#buildPPT(java.util.List, java.io.File)
+     */
+    public boolean buildPPT (List<String> titles) throws IOException {
         DEFAULT_OUTPUT_DIR.mkdirs();
 
         List<Song> songs = new ArrayList<Song>();
         populateSongs(titles, songs);
 
         outputPPT(songs, DEFAULT_OUTPUT_DIR);
+        return true;
     }
 
     private void outputPPT(List<Song> songs, File outputFile) throws IOException {
