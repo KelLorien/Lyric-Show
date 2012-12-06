@@ -9,6 +9,7 @@ import org.apache.poi.hslf.usermodel.RichTextRun;
 import org.apache.poi.hslf.usermodel.SlideShow;
 import util.Preferences;
 
+import java.awt.*;
 import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -63,23 +64,43 @@ public class PPTBuilder {
         writePPT(show, outputFile);
     }
 
+    private static final int AUTH_WIDTH = 90;
+    private static final int AUTH_HEIGHT = 50;
+    private static final int TITLE_HEIGHT = 150;
+    private static final int COPYRIGHT_HEIGHT = 100;
+
     private void addSongToPPT (SlideShow show, Song song) {
         for (String line: song.getLyrics().split("\n\n")) {
             Slide slide = show.createSlide();
             slide.addTitle().setText(song.getTitle());
             slide.getTextRuns()[0].getRichTextRunAt(0).setFontSize(48);
 
-            TextBox lyrics = new TextBox();
-            lyrics.setText(line);
-            lyrics.setHorizontalAlignment(TextShape.AlignCenter);
-            RichTextRun rtr = lyrics.getTextRun().getRichTextRunAt(0);
-            rtr.setFontSize(32);
+            insertTextbox(slide, line, 32, TextShape.AlignCenter,
+                    new Rectangle(AUTH_WIDTH, TITLE_HEIGHT,
+                    (int) show.getPageSize().getWidth() - (2*AUTH_WIDTH),
+                    (int) show.getPageSize().getHeight() - COPYRIGHT_HEIGHT));
 
-            lyrics.setAnchor(new java.awt.Rectangle(0, 150,
-                    (int) show.getPageSize().getWidth(), (int) show.getPageSize().getHeight() - 150));
+            insertTextbox(slide, song.getAuthor(), 12, TextShape.AlignLeft,
+                    new java.awt.Rectangle(0, TITLE_HEIGHT, AUTH_WIDTH, AUTH_HEIGHT));
 
-            slide.addShape(lyrics);
+            insertTextbox(slide, song.getLyricist(), 12, TextShape.AlignRight,
+                    new Rectangle((int) show.getPageSize().getWidth() - AUTH_WIDTH,
+                            TITLE_HEIGHT, AUTH_WIDTH, AUTH_HEIGHT));
+
+            insertTextbox(slide, song.getCopyright(), 10, TextShape.AlignCenter,
+                    new Rectangle(0,(int) show.getPageSize().getHeight() - COPYRIGHT_HEIGHT,
+                            (int) show.getPageSize().getWidth(), COPYRIGHT_HEIGHT));
         }
+    }
+
+    private void insertTextbox(Slide slide, String line, int font, int align, Rectangle rect) {
+        TextBox box = new TextBox();
+        box.setText(line);
+        box.setHorizontalAlignment(align);
+        RichTextRun textRun = box.getTextRun().getRichTextRunAt(0);
+        textRun.setFontSize(font);
+        box.setAnchor(rect);
+        slide.addShape(box);
     }
 
     private void writePPT(SlideShow show, File outputFile) throws IOException {
@@ -122,63 +143,14 @@ public class PPTBuilder {
         new File(DEFAULT_OUTPUT_DIR, OUTPUT_NAME).delete();
         DEFAULT_OUTPUT_DIR.mkdir();
 
-        Song song = new Song();
-        song.setTitle("testing");
-        song.setLastUsed(1L);
-        song.addKeyword("keywuuuuuuuuuuuurd", "another won");
-        song.setLyrics("A thousand times I've failed\n" +
-                "Still your mercy remains\n" +
-                "And should I stumble again\n" +
-                "Still I'm caught in your grace\n" +
-                "\n" +
-                "Everlasting, Your light will shine when all else fades\n" +
-                "Never ending, Your glory goes beyond all fame\n" +
-                "\n" +
-                "My heart and my soul, I give You control\n" +
-                "Consume me from the inside out Lord\n" +
-                "Let justice and praise, become my embrace\n" +
-                "To love You from the inside out\n" +
-                "\n" +
-                "Your will above all else, my purpose remains\n" +
-                "The art of losing myself in bringing you praise\n" +
-                "\n" +
-                "Everlasting, Your light will shine when all else fades\n" +
-                "Never ending, Your glory goes beyond all fame\n" +
-                "\n" +
-                "My heart, my soul, Lord I give you control\n" +
-                "Consume me from the inside out Lord\n" +
-                "Let justice and praise become my embrace\n" +
-                "To love You from the inside out\n" +
-                "\n" +
-                "Everlasting, Your light will shine when all else fades\n" +
-                "Never ending, Your glory goes beyond all fame\n" +
-                "And the cry of my heart is to bring You praise\n" +
-                "From the inside out, O my soul cries out\n" +
-                "\n" +
-                "My Soul cries out to You\n" +
-                "My Soul cries out to You\n" +
-                "to You, to You\n" +
-                "\n" +
-                "My heart, my soul, Lord I give you control\n" +
-                "Consume me from the inside out Lord\n" +
-                "Let justice and praise become my embrace\n" +
-                "To love You from the inside out\n" +
-                "\n" +
-                "Everlasting, Your light will shine when all else fades\n" +
-                "Never ending, Your glory goes beyond all fame\n" +
-                "And the cry of my heart is to bring You praise\n" +
-                "From the inside out, O my soul cries out\n" +
-                "\n" +
-                "Everlasting, Your light will shine when all else fades\n" +
-                "Never ending, Your glory goes beyond all fame\n" +
-                "And the cry of my heart is to bring You praise\n" +
-                "From the inside out, O my soul cries out\n" +
-                "From the inside out, O my soul cries out\n" +
-                "From the inside out, O my soul cries out.");
+        Song song = SongDAO.getTestSong();
+
         try {
             PPTBuilder.getInstance().outputPPT(Arrays.asList(song), DEFAULT_OUTPUT_DIR);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        SongDAO.deleteStuff(PPTBuilder.getInstance().dao);
     }
 }

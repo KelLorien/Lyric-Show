@@ -48,7 +48,7 @@ public class SongStorageParser {
      * @throws ParseException if there is no ending tag in the String for the given {@link Tag}.
      */
     public static String extractTagDataFromString(String line, Tag tag) throws ParseException {
-        String title = null;
+        String title;
         int index = line.indexOf(tag.tagString);
         if (index >= 0) {
             try {
@@ -99,7 +99,10 @@ public class SongStorageParser {
     }
 
     private static String getStorageString(Song song) {
-        String ss = valWithTag(String.valueOf(getDateFromSong(song)), DATE);
+        String ss = valWithTag(song.getAuthor(), AUTHOR)
+                + valWithTag(song.getLyricist(), LYRICIST)
+                + valWithTag(String.valueOf(getDateFromSong(song)), DATE)
+                + valWithTag(song.getCopyright(), COPYRIGHT);
 
         ss += KEY_LIST.start();
         for (String key: song.getKeywords()) {
@@ -120,9 +123,12 @@ public class SongStorageParser {
     }
 
     public static enum Tag {
-        KEY ( "<a>", "<\\a>"),
-        KEY_LIST( "<ats>", "<\\ats>"),
-        DATE ( "<d>", "<\\d>");
+        KEY ( "<k>", "<\\\\k>"),
+        KEY_LIST( "<keys>", "<\\keys>"),
+        DATE ( "<d>", "<\\d>"),
+        AUTHOR ( "<a>", "<\\a>"),
+        LYRICIST( "<l>", "<\\l>"),
+        COPYRIGHT( "<c>", "<\\c>");
 
         private final String tagString;
         private final String endTagString;

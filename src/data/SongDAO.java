@@ -4,6 +4,7 @@ import data.domain.Song;
 import util.Preferences;
 import util.SongStorageParser;
 
+import javax.jnlp.FileSaveService;
 import java.io.*;
 import java.text.ParseException;
 import java.util.*;
@@ -38,11 +39,13 @@ public class SongDAO {
     }
 
     private File library;
+    private File index;
     private ArrayList<String> allTitles = new ArrayList<String>();
 
     //private constructor; use the getInstance() to access this singleton.
     private SongDAO() {
         library = new File(STORAGE_URL + LIBRARY_DIR_NAME);
+        index = new File(STORAGE_URL + INDEX_FILE_NAME);
         library.mkdirs();
         if (!library.canRead() || !library.canWrite()) {
             throw new RuntimeException("Library is not readable!");
@@ -52,11 +55,12 @@ public class SongDAO {
     }
 
     /**
-     * Adds a song to the library. DOES NOT check that the song title is unique; do not call
-     * without first confirming that title is unique.
+     * Adds a song to the library.
+     *
      * @param song new {@link Song} to be written to the library
      * @throws LibraryWriteException if there was an error writing to the library (usually would be caused
      * by a {@link IOException}).
+     * @throws LibraryConflictException if a song with the given title already exists.
      */
     public void addSong(Song song) throws LibraryWriteException, LibraryConflictException {
         try {
@@ -104,6 +108,9 @@ public class SongDAO {
 
         try {
             song.addAllKeywords(SongStorageParser.extractAllKeywords(metaLine));
+            song.setAuthor(SongStorageParser.extractTagDataFromString(metaLine, Tag.AUTHOR));
+            song.setLyricist(SongStorageParser.extractTagDataFromString(metaLine, Tag.LYRICIST));
+            song.setCopyright(SongStorageParser.extractTagDataFromString(metaLine, Tag.COPYRIGHT));
             song.setLastUsed(Long.parseLong(SongStorageParser.extractTagDataFromString(metaLine, Tag.DATE)));
 
             String lyrics = "";
@@ -150,6 +157,7 @@ public class SongDAO {
      * Gets a {@link Map} of all song's {@link Song#lastUsed} to the respective song's title.
      *
      * @return {@link Map} of {@link Date} objects to Strings.
+     * @throws ParseException if the index file could not be parses (may mean index is corrupt).
      */
     public Map<Date, String> getAllTitlesToLastUsedDatesMap() throws ParseException {
         Map<Date, String> titleToDate = new HashMap<Date, String>();
@@ -168,6 +176,16 @@ public class SongDAO {
         }
 
         return titleToDate;
+    }
+
+    /**
+     * Updates a song that already exists in the library.
+     * @param song {@link Song} to be updated
+     * @throws LibraryWriteException if there is an IO exception writing to the index or library.
+     */
+    public void updateSong(Song song) throws LibraryWriteException, IOException {
+        updateIndex(song);
+        updateLibrary(song);
     }
 
     private void writeToIndex(Song song) throws IOException {
@@ -196,9 +214,64 @@ public class SongDAO {
         }
     }
 
+    private void updateIndex(Song song) throws LibraryWriteException {
+        File tempIndex = new File(STORAGE_URL + "tempIndex");
+
+        FileWriter tempIndexWriter;
+        try {
+            tempIndexWriter = new FileWriter(tempIndex);
+        } catch (IOException e) {
+            System.err.println("unable to create writer to temporary index file");
+            throw new LibraryWriteException("Could not update Index", e);
+        }
+
+        Scanner indexScanner = getIndexScanner();
+
+        try {
+            while(indexScanner.hasNext()) {
+                String titleLine = indexScanner.nextLine();
+                if (titleLine.equalsIgnoreCase(song.getTitle())) {
+                    tempIndexWriter.append(SongStorageParser.toIndexString(song)).append("\n");
+                    indexScanner.nextLine();
+                } else {
+                    tempIndexWriter.append(titleLine).append("\n")
+                            .append(indexScanner.nextLine()).append("\n");
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("could not write to temporary index file");
+            throw new LibraryWriteException("Could not update Index", e);
+        } finally {
+            closeQuietly(tempIndexWriter);
+            indexScanner.close();
+        }
+
+        if(!index.delete()) {
+            throw new LibraryWriteException("Could not update Index\nFailed to delete Index.");
+        }
+        if(!tempIndex.renameTo(index)) {
+            throw new LibraryWriteException("Could not update Index\nFailed to delete Index.");
+        }
+
+    }
+
+    private void updateLibrary(Song song) throws LibraryWriteException, IOException {
+        if (!new File(library, song.getTitle()).delete()) {
+            throw new LibraryWriteException("Could not save song.\nFailed to delete old song file");
+        }
+
+        try {
+            writeToLibrary(song);
+        } catch (LibraryConflictException e) {
+            //should not happen, since the file should be deleted above when it reaches here
+            throw new RuntimeException("Storage file for " + song.getTitle() + " still exists " +
+                    "after deletion!");
+        }
+    }
+
     private Scanner getIndexScanner() {
         try {
-            return new Scanner(new File(STORAGE_URL + INDEX_FILE_NAME));
+            return new Scanner(index);
         } catch (FileNotFoundException e) {
             System.err.println("Index not found!");
             throw new RuntimeException("Index not found", e);
@@ -227,12 +300,44 @@ public class SongDAO {
         }
     }
 
+    //TODO: remove for prod
     public static void main(String[] args) {
-        System.out.println();
         SongDAO dao = SongDAO.getInstance();
+
+        Song song = getTestSong();
+
+        try {
+            dao.addSong(song);
+            System.out.println("First:");
+            Song storedSong = dao.getSong(song.getTitle());
+            System.out.println("title: " + storedSong.getTitle());
+            System.out.println("author: " + storedSong.getAuthor());
+            System.out.println("copyright: " + storedSong.getCopyright());
+
+            song.setCopyright("CCLI");
+            dao.updateSong(song);
+
+            System.out.println("\nChanged:");
+            storedSong = dao.getSong(song.getTitle());
+            System.out.println("title: " + storedSong.getTitle());
+            System.out.println("author: " + storedSong.getAuthor());
+            System.out.println("copyright: " + storedSong.getCopyright());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        deleteStuff(dao);
+
+    }
+
+    public static Song getTestSong() {
         Song song = new Song();
         song.setTitle("testing");
-        song.setLastUsed(1L);
+        song.setAuthor("hillsong");
+        song.setLyricist("hillsong");
+        song.setCopyright("pirates");
+        song.setLastDateToNow();
         song.addKeyword("keywuuuuuuuuuuuurd", "another won");
         song.setLyrics("A thousand times I've failed\n" +
                 "Still your mercy remains\n" +
@@ -283,38 +388,10 @@ public class SongDAO {
                 "From the inside out, O my soul cries out\n" +
                 "From the inside out, O my soul cries out\n" +
                 "From the inside out, O my soul cries out.");
+        return song;
+    }
 
-        try {
-            dao.addSong(song);
-            song.setTitle("next");
-            song.setLastUsed((long) (Long.MAX_VALUE * Math.random()));
-            dao.addSong(song);
-        } catch (LibraryWriteException e) {
-            e.printStackTrace();
-        } catch (LibraryConflictException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(dao.getAllTitles());
-
-        try {
-            System.out.println(dao.getAllTitlesToLastUsedDatesMap());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Song gotten = dao.getSong(song.getTitle());
-            System.out.println("Title: " + gotten.getTitle());
-            System.out.println("Words: " + gotten.getKeywords());
-            System.out.println("Last Played: " + gotten.getLastUsed().toString());
-            System.out.println("Lyrics: " + gotten.getLyrics());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+    public static void deleteStuff(SongDAO dao) {
         File lib = new File(STORAGE_URL + LIBRARY_DIR_NAME);
 
         for (String title: dao.getAllTitles()) {
@@ -330,6 +407,5 @@ public class SongDAO {
 
         if(!new File(STORAGE_URL).delete())
             System.err.println("test storage dir not deleted!");
-
     }
 }

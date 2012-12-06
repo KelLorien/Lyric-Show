@@ -15,6 +15,9 @@ public class Song {
     String title;
     String lyrics;
     Date lastUsed;
+    String author;
+    String lyricist;
+    String copyright;
 
     ArrayList<String> keywords = new ArrayList<String>();
 
@@ -44,6 +47,30 @@ public class Song {
 
     public List<String> getKeywords() {
         return keywords;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getLyricist() {
+        return lyricist;
+    }
+
+    public void setLyricist(String lyricist) {
+        this.lyricist = lyricist;
+    }
+
+    public String getCopyright() {
+        return copyright;
+    }
+
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
     }
 
     public void addKeyword(String... key) {
