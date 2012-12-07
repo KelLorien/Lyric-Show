@@ -153,6 +153,25 @@ public class SongDAO {
         return titles;
     }
 
+    public List<String> getAllSongsWithAttribute(String val, Tag tag) throws ParseException {
+        List<String> titles = new ArrayList<String>();
+
+        Scanner indexScanner = getIndexScanner();
+
+        try {
+            while (indexScanner.hasNext()){
+                String currentTitle = indexScanner.nextLine();
+                if (SongStorageParser.extractTagDataFromString(indexScanner.nextLine(), tag).contains(val)) {
+                    titles.add(currentTitle);
+                }
+            }
+        } finally {
+            indexScanner.close();
+        }
+
+        return titles;
+    }
+
     /**
      * Gets a {@link Map} of all song's {@link Song#lastUsed} to the respective song's title.
      *
@@ -250,7 +269,7 @@ public class SongDAO {
             throw new LibraryWriteException("Could not update Index\nFailed to delete Index.");
         }
         if(!tempIndex.renameTo(index)) {
-            throw new LibraryWriteException("Could not update Index\nFailed to delete Index.");
+            throw new LibraryWriteException("Could not update Index\nFailed to rename Index.");
         }
 
     }
@@ -322,6 +341,13 @@ public class SongDAO {
             System.out.println("title: " + storedSong.getTitle());
             System.out.println("author: " + storedSong.getAuthor());
             System.out.println("copyright: " + storedSong.getCopyright());
+
+            //finds 1 title
+            System.out.println("get title for author: " + dao.getAllSongsWithAttribute("hillsong", Tag.AUTHOR));
+            //finds 1 title
+            System.out.println("get title for lyricist: " + dao.getAllSongsWithAttribute("hillsong", Tag.LYRICIST));
+            //finds none
+            System.out.println("get title for copyright: " + dao.getAllSongsWithAttribute("pirates", Tag.COPYRIGHT));
         } catch (Exception e) {
             e.printStackTrace();
         }
