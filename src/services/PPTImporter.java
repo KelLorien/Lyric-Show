@@ -88,7 +88,9 @@ public class PPTImporter {
         return song;
     }
 
+    //TODO: remove for prod
     public static void main(String[] args) {
+        //TO RUN THIS METHOD, THIS FILE MUST ALREADY EXIST.
         File target = new File("songs.ppt");
 
         try {

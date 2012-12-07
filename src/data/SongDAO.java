@@ -342,11 +342,11 @@ public class SongDAO {
             System.out.println("copyright: " + storedSong.getCopyright());
 
             //finds 1 title
-            System.out.println("get title for author: " + dao.getAllSongsWithAttribute("hillsong", Tag.AUTHOR));
+            System.out.println("get title for author: " + dao.getAllSongsWithAttribute(song.getAuthor(), Tag.AUTHOR));
             //finds 1 title
-            System.out.println("get title for lyricist: " + dao.getAllSongsWithAttribute("hillsong", Tag.LYRICIST));
+            System.out.println("get title for lyricist: " + dao.getAllSongsWithAttribute(song.getLyricist(), Tag.LYRICIST));
             //finds none
-            System.out.println("get title for copyright: " + dao.getAllSongsWithAttribute("pirates", Tag.COPYRIGHT));
+            System.out.println("get title for copyright: " + dao.getAllSongsWithAttribute(song.getCopyright(), Tag.COPYRIGHT));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -359,8 +359,8 @@ public class SongDAO {
     public static Song getTestSong() {
         Song song = new Song();
         song.setTitle("testing");
-        song.setAuthor("hillsong");
-        song.setLyricist("hillsong");
+        song.setAuthor("author");
+        song.setLyricist("lyricss sdsstttrs");
         song.setCopyright("pirates");
         song.setLastUsedToNow();
         song.addKeyword("keywuuuuuuuuuuuurd", "another won");
