@@ -4,7 +4,6 @@ import data.domain.Song;
 import util.Preferences;
 import util.SongStorageParser;
 
-import javax.jnlp.FileSaveService;
 import java.io.*;
 import java.text.ParseException;
 import java.util.*;
@@ -363,7 +362,7 @@ public class SongDAO {
         song.setAuthor("hillsong");
         song.setLyricist("hillsong");
         song.setCopyright("pirates");
-        song.setLastDateToNow();
+        song.setLastUsedToNow();
         song.addKeyword("keywuuuuuuuuuuuurd", "another won");
         song.setLyrics("A thousand times I've failed\n" +
                 "Still your mercy remains\n" +

@@ -92,7 +92,7 @@ public class PPTBuilder {
     private static final int AUTH_WIDTH = 90;
     private static final int AUTH_HEIGHT = 50;
     private static final int TITLE_HEIGHT = 150;
-    private static final int COPYRIGHT_HEIGHT = 100;
+    private static final int COPYRIGHT_HEIGHT = 75;
 
     private void addSongToPPT (SlideShow show, Song song) {
         for (String line: song.getLyrics().split("\n\n")) {
@@ -100,7 +100,7 @@ public class PPTBuilder {
             slide.addTitle().setText(song.getTitle());
             slide.getTextRuns()[0].getRichTextRunAt(0).setFontSize(48);
 
-            insertTextbox(slide, line, 32, TextShape.AlignCenter,
+            insertTextbox(slide, line, 28, TextShape.AlignCenter,
                     new Rectangle(AUTH_WIDTH, TITLE_HEIGHT,
                     (int) show.getPageSize().getWidth() - (2*AUTH_WIDTH),
                     (int) show.getPageSize().getHeight() - COPYRIGHT_HEIGHT));

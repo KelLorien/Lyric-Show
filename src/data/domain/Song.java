@@ -84,12 +84,26 @@ public class Song {
      * Sets the date this song was last used to the current time;
      * that is, sets {@link #lastUsed} equal to a new {@link Date}.
      */
-    public void setLastDateToNow() {
+    public void setLastUsedToNow() {
         lastUsed = new Date();
     }
 
     public boolean hasKeyword(String keyword) {
         return keywords.contains(keyword);
+    }
+
+    public Song copy() {
+        Song newSong = new Song();
+
+        newSong.setTitle(this.title);
+        newSong.setLyrics(this.lyrics);
+        newSong.setAuthor(this.author);
+        newSong.setLyricist(this.lyricist);
+        newSong.setCopyright(this.copyright);
+        Collections.copy(newSong.keywords, this.keywords);
+        newSong.setLastUsedToNow();
+
+        return newSong;
     }
 
     @Override
