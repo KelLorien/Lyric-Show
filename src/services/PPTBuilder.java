@@ -89,21 +89,22 @@ public class PPTBuilder {
         writePPT(show, outputFile);
     }
 
-    private static final int AUTH_WIDTH = 90;
+    private static final int LYRIC_MARGIN = 75;
+    private static final int AUTH_WIDTH = 150;
     private static final int AUTH_HEIGHT = 50;
     private static final int TITLE_HEIGHT = 150;
     private static final int COPYRIGHT_HEIGHT = 75;
 
     private void addSongToPPT (SlideShow show, Song song) {
-        for (String line: song.getLyrics().split("\n\n")) {
+        for (String lyrics: song.getLyrics().split("\n\n")) {
             Slide slide = show.createSlide();
             slide.addTitle().setText(song.getTitle());
-            slide.getTextRuns()[0].getRichTextRunAt(0).setFontSize(48);
+            slide.getTextRuns()[0].getRichTextRunAt(0).setFontSize(36);
 
-            insertTextbox(slide, line, 28, TextShape.AlignCenter,
-                    new Rectangle(AUTH_WIDTH, TITLE_HEIGHT,
-                    (int) show.getPageSize().getWidth() - (2*AUTH_WIDTH),
-                    (int) show.getPageSize().getHeight() - COPYRIGHT_HEIGHT));
+            insertTextbox(slide, lyrics, 28, TextShape.AlignCenter,
+                    new Rectangle(LYRIC_MARGIN, TITLE_HEIGHT + AUTH_HEIGHT,
+                    (int) show.getPageSize().getWidth() - (LYRIC_MARGIN * 2),
+                    (int) show.getPageSize().getHeight() - (TITLE_HEIGHT + AUTH_HEIGHT)));
 
             insertTextbox(slide, song.getAuthor(), 12, TextShape.AlignLeft,
                     new java.awt.Rectangle(0, TITLE_HEIGHT, AUTH_WIDTH, AUTH_HEIGHT));
@@ -116,9 +117,14 @@ public class PPTBuilder {
                     new Rectangle(0,(int) show.getPageSize().getHeight() - COPYRIGHT_HEIGHT,
                             (int) show.getPageSize().getWidth(), COPYRIGHT_HEIGHT));
         }
+
+        show.createSlide();
     }
 
     private void insertTextbox(Slide slide, String line, int font, int align, Rectangle rect) {
+        if (line == null || line.length() < 1)
+            return;
+
         TextBox box = new TextBox();
         box.setText(line);
         box.setHorizontalAlignment(align);
@@ -176,6 +182,6 @@ public class PPTBuilder {
             e.printStackTrace();
         }
 
-        SongDAO.deleteStuff(PPTBuilder.getInstance().dao);
+        SongDAO.deleteStuff();
     }
 }

@@ -3,6 +3,7 @@ package services;
 import data.SongDAO;
 import data.domain.Song;
 import org.apache.poi.hslf.model.Slide;
+import org.apache.poi.hslf.model.TextRun;
 import org.apache.poi.hslf.usermodel.SlideShow;
 
 import java.io.File;
@@ -62,12 +63,18 @@ public class PPTImporter {
 
     private void parseAllSongs(List<Song> songs, SlideShow show) {
         Slide[] slides = show.getSlides();
+        if (slides.length < 0)
+            return;
+
         Song currentSong = startNewSong(slides[0]);
         for (Slide slide: slides) {
             String nextTitle = slide.getTitle();
+            if (nextTitle == null) {
+                continue;
+            }
             if (nextTitle.equals(currentSong.getTitle())) {
                 currentSong.setLyrics(currentSong.getLyrics()
-                        + slide.getTextRuns()[1].getText() + "\n\n");
+                        + slide.getTextRuns()[1].getText().trim() + "\n\n");
             } else {
                 songs.add(currentSong.copy());
                 currentSong = startNewSong(slide);
@@ -81,9 +88,30 @@ public class PPTImporter {
 
         song.setTitle(slide.getTitle());
         song.setLyrics("");
-        song.setAuthor(slide.getTextRuns()[2].getText());
-        song.setLyricist(slide.getTextRuns()[3].getText());
-        song.setCopyright(slide.getTextRuns()[4].getText());
+
+        TextRun[] textRuns = slide.getTextRuns();
+        if (textRuns.length >= 3) {
+            song.setAuthor(textRuns[2].getText());
+        } else {
+            song.setAuthor("");
+        }
+
+        if (textRuns.length >= 4) {
+            if (textRuns[3].getText().toLowerCase().contains("copyright")) {
+                song.setCopyright(textRuns[3].getText());
+                song.setLyricist("");
+            } else {
+                song.setLyricist(textRuns[3].getText());
+                song.setCopyright("");
+            }
+        } else {
+            song.setLyricist("");
+            song.setCopyright("");
+        }
+
+        if (textRuns.length > 5) {
+            song.setCopyright(textRuns[4].getText());
+        }
 
         return song;
     }
@@ -91,16 +119,22 @@ public class PPTImporter {
     //TODO: remove for prod
     public static void main(String[] args) {
         //TO RUN THIS METHOD, THIS FILE MUST ALREADY EXIST.
-        File target = new File("songs.ppt");
+        File target = new File("/Users/jpipe/Desktop/PM081212.ppt");
 
         try {
-            Song newSong = getInstance().importSong(target).get(0);
+            List<Song> songs = getInstance().importSong(target);
+            List<String> titles = new ArrayList<String>();
 
-            SongDAO.getInstance().addSong(newSong);
+            for (Song song: songs) {
+                titles.add(song.getTitle());
+                SongDAO.getInstance().addSong(song);
+            }
 
-            PPTBuilder.getInstance().buildPPT(Arrays.asList(newSong.getTitle()));
+            PPTBuilder.getInstance().buildPPT(titles);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            SongDAO.deleteStuff();
         }
     }
 }

@@ -352,7 +352,7 @@ public class SongDAO {
         }
 
 
-        deleteStuff(dao);
+        deleteStuff();
 
     }
 
@@ -416,10 +416,10 @@ public class SongDAO {
         return song;
     }
 
-    public static void deleteStuff(SongDAO dao) {
+    public static void deleteStuff() {
         File lib = new File(STORAGE_URL + LIBRARY_DIR_NAME);
 
-        for (String title: dao.getAllTitles()) {
+        for (String title: instance.getAllTitles()) {
             if(!new File(lib, title).delete())
                 System.err.println("\""+title + "\" storage not deleted!");
         }
