@@ -39,7 +39,6 @@ public class SongDAO {
 
     private File library;
     private File index;
-    private ArrayList<String> allTitles = new ArrayList<String>();
 
     //private constructor; use the getInstance() to access this singleton.
     private SongDAO() {
@@ -49,8 +48,6 @@ public class SongDAO {
         if (!library.canRead() || !library.canWrite()) {
             throw new RuntimeException("Library is not readable!");
         }
-
-        allTitles.addAll(Arrays.asList(library.list()));
     }
 
     /**
@@ -74,19 +71,16 @@ public class SongDAO {
             System.err.println("Could not write to library!");
             throw new LibraryWriteException("Could not write to library", e);
         }
-
-        allTitles.add(song.getTitle());
     }
 
     /**
-     * Gets all titles of songs currently in the library. Sorts the running list of stored songs before
-     * returning (this sorting has no effect on the physical library).
-     * @return ArrayList of Strings, representing each song title currently stored in the library in
-     * alphabetical order.
+     * Gets all titles of songs currently in the library.
+     * @return ArrayList of Strings, representing each song title currently stored in the library
      */
     public List<String> getAllTitles() {
-        Collections.sort(allTitles);
-        return new ArrayList<String>(allTitles);
+        ArrayList<String> titles = new ArrayList<String>();
+        titles.addAll(Arrays.asList(library.list()));
+        return titles;
     }
 
     /**
