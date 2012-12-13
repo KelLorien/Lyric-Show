@@ -12,19 +12,22 @@ import java.util.*;
  */
 public class Song {
 
-    String title;
-    String lyrics;
+    String title = "";
+    String lyrics = "";
     Date lastUsed;
-    String author;
-    String lyricist;
-    String copyright;
+    String author = "";
+    String lyricist = "";
+    String copyright = "";
 
     ArrayList<String> keywords = new ArrayList<String>();
 
-    public Song() {}
+    public Song() {
+        setLastUsedToNow();
+    }
 
     public Song(String title) {
         this.title = title;
+        setLastUsedToNow();
     }
 
     public String getTitle() {

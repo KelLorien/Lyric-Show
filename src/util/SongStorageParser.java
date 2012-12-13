@@ -15,7 +15,7 @@ import static util.SongStorageParser.Tag.*;
  */
 public class SongStorageParser {
 
-    private static final String LINE = "\n";
+    private static final String LINE = System.getProperty("line.separator");
 
     /**
      * Returns the String representation of a song without lyrics. Intended for

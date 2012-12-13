@@ -256,11 +256,11 @@ public class SongDAO {
                 String titleLine = indexScanner.nextLine();
                 if (titleLine.equalsIgnoreCase(song.getTitle())) {
                     if (!delete)
-                        tempIndexWriter.append(SongStorageParser.toIndexString(song)).append("\n");
+                        tempIndexWriter.append(SongStorageParser.toIndexString(song));
                     indexScanner.nextLine();
                 } else {
-                    tempIndexWriter.append(titleLine).append("\n")
-                            .append(indexScanner.nextLine()).append("\n");
+                    tempIndexWriter.append(titleLine).append(System.getProperty("line.separator"))
+                            .append(indexScanner.nextLine()).append(System.getProperty("line.separator"));
                 }
             }
         } catch (IOException e) {
@@ -343,6 +343,20 @@ public class SongDAO {
             System.out.println("author: " + storedSong.getAuthor());
             System.out.println("copyright: " + storedSong.getCopyright());
 
+            Song otherSong = new Song("other song");
+            otherSong.setAuthor("other auth");
+            otherSong.setLyrics("all your base\n" +
+                    "all your base\n" +
+                    "all your base\n" +
+                    "all your base\n" +
+                    "all your base\n" +
+                    "all your base\n" +
+                    "all your base\n" +
+                    "all your base\n" +
+                    "all your base\n" +
+                    "all your base\n");
+            dao.addSong(otherSong);
+
             song.setCopyright("CCLI");
             dao.updateSong(song);
 
@@ -352,12 +366,7 @@ public class SongDAO {
             System.out.println("author: " + storedSong.getAuthor());
             System.out.println("copyright: " + storedSong.getCopyright());
 
-            //finds 1 title
-            System.out.println("get title for author: " + dao.getAllSongsWithAttribute(song.getAuthor(), Tag.AUTHOR));
-            //finds 1 title
-            System.out.println("get title for lyricist: " + dao.getAllSongsWithAttribute(song.getLyricist(), Tag.LYRICIST));
-            //finds none
-            System.out.println("get title for copyright: " + dao.getAllSongsWithAttribute(song.getCopyright(), Tag.COPYRIGHT));
+            dao.deleteSong(song.getTitle());
         } catch (Exception e) {
             e.printStackTrace();
         }
