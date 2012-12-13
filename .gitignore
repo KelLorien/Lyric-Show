@@ -6,3 +6,4 @@ song_lib/
 test_output/
 .classpath
 .project
+.metadata/
