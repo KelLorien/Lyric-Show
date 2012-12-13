@@ -1,38 +1,20 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.DefaultListModel;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.ListModel;
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.JButton;
-import javax.swing.JTextArea;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JSeparator;
 
 import java.util.List;
 
 import services.SongList;
-import data.SongDAO;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractListModel;
 
 public class lyricShowGUI extends JFrame {
 
@@ -101,7 +83,7 @@ public class lyricShowGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public lyricShowGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(200, 200, 450, 475);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -154,7 +136,7 @@ public class lyricShowGUI extends JFrame {
 			panManage.add(getLblComposer());
 			panManage.add(getLblLyricist());
 			panManage.add(getScrollPane_3());
-			panManage.add(getButton());
+			panManage.add(getHistoryButton());
 			panManage.add(getBtnSave());
 		}
 		return panManage;
@@ -243,9 +225,7 @@ public class lyricShowGUI extends JFrame {
 			btnCreateSlideshow.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					//************
-					//Add code to start creating a powerpoint
-					//************
+                    //TODO: create slideshow
 				}
 			});
 			btnCreateSlideshow.setBounds(282, 360, 135, 29);
@@ -309,9 +289,7 @@ public class lyricShowGUI extends JFrame {
 			btnBackup.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					//*************
-					// Add code to backup
-					//*************
+                    //TODO: backup library
 				}
 			});
 			btnBackup.setBounds(280, 48, 117, 29);
@@ -324,9 +302,7 @@ public class lyricShowGUI extends JFrame {
 			btnEdit.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					//*************
-					// Add code to EDIT (fill in text boxes)
-					//*************
+                    //TODO: start editing song
 				}
 			});
 			btnEdit.setBounds(280, 130, 117, 29);
@@ -340,9 +316,7 @@ public class lyricShowGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					String songName = lstManageLibrary.getSelectedValue().toString();
-					//*************
-					// Add code to Delete Song
-					//*************
+                    //TODO: delete song
 				}
 			});
 			btnDeleteSong.setBounds(280, 104, 117, 29);
@@ -363,8 +337,8 @@ public class lyricShowGUI extends JFrame {
 					
 					//In response to a button click:
 					int returnVal = fc.showOpenDialog(null);
-					String fileName = fc.getSelectedFile().toString();
-					//call function
+					File targetFile = fc.getSelectedFile();
+					//TODO: import song from PPT
 				}
 			});
 			btnNewSong.setBounds(280, 78, 117, 29);
@@ -473,9 +447,7 @@ public class lyricShowGUI extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 					String search = txtSearchSearch.getText();
 					String type = cmbSearch.getSelectedItem().toString();
-					//*************
-					// Add code to search
-					//*************
+                    //TODO: search for song by artist/lyricist/keywords
 				}
 			});
 			btnSearchSearch.setBounds(205, 41, 117, 29);
@@ -505,9 +477,7 @@ public class lyricShowGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					String key = cmbKey.getSelectedItem().toString();
-					//*************
-					// Add code to search
-					//*************
+                    //TODO: search by key (via keyword)
 				}
 			});
 			btnSearchByKey.setBounds(205, 69, 117, 29);
@@ -560,18 +530,17 @@ public class lyricShowGUI extends JFrame {
 	private JButton btnMoveUp;
 	private JButton button;
 	private JButton btnSave;
-	private JButton btnSaveSong;
+//	private JButton btnSaveSong;
 	private JList lstSearchResults;
 	private static void loadSongs()
 	{
 		SongList songlist = SongList.getInstance();
 		List<String> songs = songlist.getSongTitles();
 		DefaultListModel lm = new DefaultListModel();
-		
-		for(int i=0;i<songs.size();i++)
-		{
-			lm.addElement(songs.get(i));
-		}
+
+        for (String song : songs) {
+            lm.addElement(song);
+        }
 		lm.addElement("This should work");
 		lstSlideLibrary = new JList(lm);
 		lstManageLibrary = new JList(lm);
@@ -635,14 +604,12 @@ public class lyricShowGUI extends JFrame {
 		}
 		return btnMoveUp;
 	}
-	private JButton getButton() {
+	private JButton getHistoryButton() {
 		if (button == null) {
 			button = new JButton("View History");
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					//***********
-					//Need to add code to view history
-					//***********
+                    //TODO: display History
 				}
 			});
 			button.setBounds(280, 23, 117, 29);
@@ -659,9 +626,7 @@ public class lyricShowGUI extends JFrame {
 					String composer = txtComposer.getText();
 					String lyricist = txtLryicist.getText();
 					String lyrics = txtLyrics.getText();
-					//*************
-					// Add code to Save it
-					//*************
+                    //TODO: save song (update song)
 				}
 			});
 			btnSave.setBounds(158, 366, 117, 29);

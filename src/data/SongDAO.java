@@ -196,8 +196,20 @@ public class SongDAO {
      * @throws LibraryWriteException if there is an IO exception writing to the index or library.
      */
     public void updateSong(Song song) throws LibraryWriteException, IOException {
-        updateIndex(song);
+        updateIndex(song, false);
         updateLibrary(song);
+    }
+
+    //TODO: test delete song
+    /**
+     * Deletes the song with the given title from the library
+     * @param title title of the song to be deleted
+     * @throws IOException if there was an error deleting the file from the index or song library
+     */
+    public void deleteSong(String title) throws LibraryWriteException, IOException {
+        Song toDelete = new Song(title);
+        updateIndex(toDelete, true);
+        deleteStorageFile(toDelete);
     }
 
     private void writeToIndex(Song song) throws IOException {
@@ -226,7 +238,7 @@ public class SongDAO {
         }
     }
 
-    private void updateIndex(Song song) throws LibraryWriteException {
+    private void updateIndex(Song song, boolean delete) throws LibraryWriteException {
         File tempIndex = new File(STORAGE_URL + "tempIndex");
 
         FileWriter tempIndexWriter;
@@ -243,7 +255,8 @@ public class SongDAO {
             while(indexScanner.hasNext()) {
                 String titleLine = indexScanner.nextLine();
                 if (titleLine.equalsIgnoreCase(song.getTitle())) {
-                    tempIndexWriter.append(SongStorageParser.toIndexString(song)).append("\n");
+                    if (!delete)
+                        tempIndexWriter.append(SongStorageParser.toIndexString(song)).append("\n");
                     indexScanner.nextLine();
                 } else {
                     tempIndexWriter.append(titleLine).append("\n")
@@ -267,17 +280,21 @@ public class SongDAO {
 
     }
 
-    private void updateLibrary(Song song) throws LibraryWriteException, IOException {
-        if (!new File(library, song.getTitle()).delete()) {
-            throw new LibraryWriteException("Could not save song.\nFailed to delete old song file");
-        }
+    private void updateLibrary(Song song) throws IOException {
+        deleteStorageFile(song);
 
         try {
             writeToLibrary(song);
         } catch (LibraryConflictException e) {
-            //should not happen, since the file should be deleted above when it reaches here
+            //should not happen, since the file should be deleted above
             throw new RuntimeException("Storage file for " + song.getTitle() + " still exists " +
                     "after deletion!");
+        }
+    }
+
+    private void deleteStorageFile(Song song) throws IOException {
+        if (!new File(library, song.getTitle()).delete()) {
+            throw new IOException("Could not save song.\nFailed to delete old song file");
         }
     }
 

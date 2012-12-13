@@ -21,6 +21,12 @@ public class Song {
 
     ArrayList<String> keywords = new ArrayList<String>();
 
+    public Song() {}
+
+    public Song(String title) {
+        this.title = title;
+    }
+
     public String getTitle() {
         return title;
     }
