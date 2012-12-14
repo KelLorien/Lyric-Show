@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import java.util.Arrays;
 import java.util.List;
 
 import controllers.ManageTabController;
@@ -50,7 +51,7 @@ public class lyricShowGUI extends JFrame {
 	private JTextField slideSearch;
 	private JLabel lblSearch;
 	private static JScrollPane scLib;
-	public static JList<String> lstSlideLibrary;
+	public static JList lstSlideLibrary;
 	private JButton btnAddToList;
 	private JScrollPane scCurrentList;
 	private JButton btnCreateSlideshow;
@@ -58,8 +59,8 @@ public class lyricShowGUI extends JFrame {
 	private JTextField txtManageSearch;
 	private JLabel lblSearch_1;
 	private static JScrollPane scManageLibrary;
-	private static JList<String> lstManageLibrary;
-	private JList<String> lstSlideCurrent;
+	private static JList lstManageLibrary;
+	private JList lstSlideCurrent;
 	private JButton btnBackup;
 	private JButton btnEdit;
 	private JButton btnDeleteSong;
@@ -75,10 +76,10 @@ public class lyricShowGUI extends JFrame {
 	private JLabel lblSearch_2;
 	private JTextField txtSearchSearch;
 	private JLabel lblSearchBy;
-	private JComboBox<String> cmbSearch;
+	private JComboBox cmbSearch;
 	private JButton btnSearchSearch;
 	private JLabel lblSearchBy_1;
-	private JComboBox<String> cmbKey;
+	private JComboBox cmbKey;
 	private JButton btnSearchByKey;
 	private JScrollPane scrollPane_4;
 	private JSeparator separator;
@@ -191,9 +192,9 @@ public class lyricShowGUI extends JFrame {
 		}
 		return scLib;
 	}
-	private JList<String> getLstSlideLibrary() {
+	private JList getLstSlideLibrary() {
 		if (lstSlideLibrary == null) {
-			lstSlideLibrary = new JList<String>();
+			lstSlideLibrary = new JList();
 			lstSlideLibrary.addMouseListener(new MouseAdapter() {
 			});
 		}
@@ -206,9 +207,9 @@ public class lyricShowGUI extends JFrame {
 			btnAddToList.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					String song = lstSlideLibrary.getSelectedValue();
+					String song = lstSlideLibrary.getSelectedValue().toString();
 					lmCurrentList.addElement(song);
-					lstSlideCurrent = new JList<String>(lmCurrentList);
+					lstSlideCurrent = new JList(lmCurrentList);
 					scCurrentList.setViewportView(lstSlideCurrent);
 				}
 			});
@@ -231,6 +232,8 @@ public class lyricShowGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
                     //TODO: create slideshow
+					//This needs to be modified
+					slideshowTabController.createSlideShow(Arrays.asList("testing"), new File(""));
 				}
 			});
 			btnCreateSlideshow.setBounds(282, 360, 135, 29);
@@ -244,7 +247,7 @@ public class lyricShowGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					lmCurrentList.addElement(SlideshowTabController.BLANK_SLIDE_TITLE);
-					lstSlideCurrent = new JList<String>(lmCurrentList);
+					lstSlideCurrent = new JList(lmCurrentList);
 					scCurrentList.setViewportView(lstSlideCurrent);
 				}
 			});
@@ -276,15 +279,15 @@ public class lyricShowGUI extends JFrame {
 		}
 		return scManageLibrary;
 	}
-	private JList<String> getLstManageLibrary() {
+	private JList getLstManageLibrary() {
 		if (lstManageLibrary == null) {
-			lstManageLibrary = new JList<String>();
+			lstManageLibrary = new JList();
 		}
 		return lstManageLibrary;
 	}
-	private JList<String> getLstSlideCurrent() {
+	private JList getLstSlideCurrent() {
 		if (lstSlideCurrent == null) {
-			lstSlideCurrent = new JList<String>();
+			lstSlideCurrent = new JList();
 		}
 		return lstSlideCurrent;
 	}
@@ -320,7 +323,7 @@ public class lyricShowGUI extends JFrame {
 			btnDeleteSong.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					String songName = lstManageLibrary.getSelectedValue();
+					String songName = lstManageLibrary.getSelectedValue().toString();
                     //TODO: delete song
 				}
 			});
@@ -436,10 +439,10 @@ public class lyricShowGUI extends JFrame {
 		}
 		return lblSearchBy;
 	}
-	private JComboBox<String> getCmbSearch() {
+	private JComboBox getCmbSearch() {
 		if (cmbSearch == null) {
-			cmbSearch = new JComboBox<String>();
-			cmbSearch.setModel(new DefaultComboBoxModel<String>(new String[] {"Title", "Author", "Keywords"}));
+			cmbSearch = new JComboBox();
+			cmbSearch.setModel(new DefaultComboBoxModel(new String[] {"Title", "Author", "Keywords"}));
 			cmbSearch.setBounds(79, 42, 126, 27);
 		}
 		return cmbSearch;
@@ -467,10 +470,10 @@ public class lyricShowGUI extends JFrame {
 		}
 		return lblSearchBy_1;
 	}
-	private JComboBox<String> getCmbKey() {
+	private JComboBox getCmbKey() {
 		if (cmbKey == null) {
-			cmbKey = new JComboBox<String>();
-			cmbKey.setModel(new DefaultComboBoxModel<String>(new String[] {"C", "C#", "D", "Db", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"}));
+			cmbKey = new JComboBox();
+			cmbKey.setModel(new DefaultComboBoxModel(new String[] {"C", "C#", "D", "Db", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"}));
 			cmbKey.setBounds(79, 70, 126, 27);
 		}
 		return cmbKey;
@@ -520,7 +523,7 @@ public class lyricShowGUI extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 					String song = lstSearchResults.getSelectedValue().toString();
 					lmCurrentList.addElement(song);
-					lstSlideCurrent = new JList<String>(lmCurrentList);
+					lstSlideCurrent = new JList(lmCurrentList);
 					scCurrentList.setViewportView(lstSlideCurrent);
 				}
 			});
@@ -529,7 +532,7 @@ public class lyricShowGUI extends JFrame {
 		return btnSearchAdd;
 	}
 	DefaultListModel lmLibrary = new DefaultListModel();
-	DefaultListModel<String> lmCurrentList = new DefaultListModel<String>();
+	DefaultListModel lmCurrentList = new DefaultListModel();
 	private JButton btnRemove;
 	private JButton btnMoveDown;
 	private JButton btnMoveUp;
@@ -541,14 +544,14 @@ public class lyricShowGUI extends JFrame {
 	{
 		SongList songlist = SongList.getInstance();
 		List<String> songs = songlist.getSongTitles();
-		DefaultListModel<String> lm = new DefaultListModel<String>();
+		DefaultListModel lm = new DefaultListModel();
 
         for (String song : songs) {
             lm.addElement(song);
         }
 		lm.addElement("This should work");
-		lstSlideLibrary = new JList<String>(lm);
-		lstManageLibrary = new JList<String>(lm);
+		lstSlideLibrary = new JList(lm);
+		lstManageLibrary = new JList(lm);
 		scLib.setViewportView(lstSlideLibrary);
 		scManageLibrary.setViewportView(lstManageLibrary);
 	}
@@ -577,7 +580,7 @@ public class lyricShowGUI extends JFrame {
 					if(lstSlideCurrent.getSelectedIndex()<lmCurrentList.getSize()-1)
 					{
 						int songPlace = lstSlideCurrent.getSelectedIndex();
-						String song = lstSlideCurrent.getSelectedValue();
+						String song = lstSlideCurrent.getSelectedValue().toString();
 						lmCurrentList.remove(songPlace);
 						lmCurrentList.add(songPlace+1, song);
 						lstSlideCurrent.setSelectedIndex(songPlace+1);
@@ -598,7 +601,7 @@ public class lyricShowGUI extends JFrame {
 					if(lstSlideCurrent.getSelectedIndex()>0 && lstSlideCurrent.getSelectedIndex()!=-1)
 					{
 						int songPlace = lstSlideCurrent.getSelectedIndex();
-						String song = lstSlideCurrent.getSelectedValue();
+						String song = lstSlideCurrent.getSelectedValue().toString();
 						lmCurrentList.remove(songPlace);
 						lmCurrentList.add(songPlace-1, song);
 						lstSlideCurrent.setSelectedIndex(songPlace-1);
