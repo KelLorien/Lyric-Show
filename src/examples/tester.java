@@ -1,9 +1,4 @@
 package examples;
-import data.LibraryWriteException;
-import data.SongDAO;
-import data.domain.Song;
-
-import java.util.Arrays;
 
 public class tester {
 

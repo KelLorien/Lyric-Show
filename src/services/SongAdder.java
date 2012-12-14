@@ -1,7 +1,6 @@
 package services;
 
 import data.LibraryConflictException;
-import data.LibraryWriteException;
 import data.SongDAO;
 import data.domain.Song;
 
@@ -27,11 +26,15 @@ public class SongAdder {
 
     private SongAdder(){}
 
-    public void saveOrUpdateSong(Song song) throws IOException, LibraryWriteException, LibraryConflictException {
+    public void saveOrUpdateSong(Song song) throws IOException, LibraryConflictException {
         if (songList.getSongTitles().contains(song.getTitle())) {
             dao.addSong(song);
         } else {
             dao.updateSong(song);
         }
+    }
+
+    public void deleteSong(String title) throws IOException {
+        dao.deleteSong(title);
     }
 }

@@ -1,5 +1,7 @@
 package services;
 
+import controllers.ManageTabController;
+import controllers.SlideshowTabController;
 import data.SongDAO;
 import data.domain.Song;
 import org.apache.poi.hslf.model.Slide;
@@ -83,7 +85,11 @@ public class PPTBuilder {
         SlideShow show = new SlideShow();
 
         for (Song song: songs) {
-            addSongToPPT(show, song);
+            if (song.getTitle().equals(SlideshowTabController.BLANK_SLIDE_TITLE)) {
+                show.createSlide();
+            } else {
+                addSongToPPT(show, song);
+            }
         }
 
         writePPT(show, outputFile);
@@ -117,8 +123,6 @@ public class PPTBuilder {
                     new Rectangle(0,(int) show.getPageSize().getHeight() - COPYRIGHT_HEIGHT,
                             (int) show.getPageSize().getWidth(), COPYRIGHT_HEIGHT));
         }
-
-        show.createSlide();
     }
 
     private void insertTextbox(Slide slide, String line, int font, int align, Rectangle rect) {

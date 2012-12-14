@@ -54,23 +54,12 @@ public class SongDAO {
      * Adds a song to the library.
      *
      * @param song new {@link Song} to be written to the library
-     * @throws LibraryWriteException if there was an error writing to the library (usually would be caused
-     * by a {@link IOException}).
+
      * @throws LibraryConflictException if a song with the given title already exists.
      */
-    public void addSong(Song song) throws LibraryWriteException, LibraryConflictException {
-        try {
-            writeToIndex(song);
-        } catch (IOException e) {
-            System.err.println("Could not write to index!");
-            throw new LibraryWriteException("Could not write to index", e);
-        }
-        try {
-            writeToLibrary(song);
-        } catch (IOException e) {
-            System.err.println("Could not write to library!");
-            throw new LibraryWriteException("Could not write to library", e);
-        }
+    public void addSong(Song song) throws LibraryConflictException, IOException {
+        writeToIndex(song);
+        writeToLibrary(song);
     }
 
     /**
@@ -193,20 +182,18 @@ public class SongDAO {
     /**
      * Updates a song that already exists in the library.
      * @param song {@link Song} to be updated
-     * @throws LibraryWriteException if there is an IO exception writing to the index or library.
      */
-    public void updateSong(Song song) throws LibraryWriteException, IOException {
+    public void updateSong(Song song) throws IOException {
         updateIndex(song, false);
         updateLibrary(song);
     }
 
-    //TODO: test delete song
     /**
      * Deletes the song with the given title from the library
      * @param title title of the song to be deleted
      * @throws IOException if there was an error deleting the file from the index or song library
      */
-    public void deleteSong(String title) throws LibraryWriteException, IOException {
+    public void deleteSong(String title) throws IOException {
         Song toDelete = new Song(title);
         updateIndex(toDelete, true);
         deleteStorageFile(toDelete);
@@ -238,16 +225,13 @@ public class SongDAO {
         }
     }
 
-    private void updateIndex(Song song, boolean delete) throws LibraryWriteException {
+    private void updateIndex(Song song, boolean delete) throws IOException {
         File tempIndex = new File(STORAGE_URL + "tempIndex");
 
         FileWriter tempIndexWriter;
-        try {
-            tempIndexWriter = new FileWriter(tempIndex);
-        } catch (IOException e) {
-            System.err.println("unable to create writer to temporary index file");
-            throw new LibraryWriteException("Could not update Index", e);
-        }
+
+        tempIndexWriter = new FileWriter(tempIndex);
+
 
         Scanner indexScanner = getIndexScanner();
 
@@ -263,19 +247,16 @@ public class SongDAO {
                             .append(indexScanner.nextLine()).append(System.getProperty("line.separator"));
                 }
             }
-        } catch (IOException e) {
-            System.err.println("could not write to temporary index file");
-            throw new LibraryWriteException("Could not update Index", e);
         } finally {
             closeQuietly(tempIndexWriter);
             indexScanner.close();
         }
 
         if(!index.delete()) {
-            throw new LibraryWriteException("Could not update Index\nFailed to delete Index.");
+            throw new IOException("Could not update Index\nFailed to delete Index.");
         }
         if(!tempIndex.renameTo(index)) {
-            throw new LibraryWriteException("Could not update Index\nFailed to rename Index.");
+            throw new IOException("Could not update Index\nFailed to rename Index.");
         }
 
     }
