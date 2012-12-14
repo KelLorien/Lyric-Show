@@ -57,7 +57,7 @@ public class SongDAO {
 
      * @throws LibraryConflictException if a song with the given title already exists.
      */
-    public void addSong(Song song) throws LibraryConflictException, IOException {
+    public void addSong(Song song) throws IOException, LibraryConflictException {
         writeToIndex(song);
         writeToLibrary(song);
     }
