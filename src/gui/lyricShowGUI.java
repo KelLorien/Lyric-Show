@@ -12,6 +12,7 @@ import java.util.List;
 import controllers.ManageTabController;
 import controllers.SearchTabController;
 import controllers.SlideshowTabController;
+import data.domain.Song;
 import services.SongList;
 
 import java.awt.event.MouseAdapter;
@@ -20,13 +21,18 @@ import java.io.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class lyricShowGUI extends JFrame {
+public class LyricShowGUI extends JFrame {
+
+    public static final String TITLE = "Title";
+    public static final String AUTHOR = "Author";
+    public static final String KEYWORDS = "Keywords";
+    public static final String KEY = "Key";
 
 	ManageTabController manageTabController = ManageTabController.getInstance();
     SearchTabController searchTabController = SearchTabController.getInstance();
     SlideshowTabController slideshowTabController = SlideshowTabController.getInstance();
 
-	/**
+    /**
 	 * Launch the application.
 	 */
 	
@@ -34,7 +40,7 @@ public class lyricShowGUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					lyricShowGUI frame = new lyricShowGUI();
+					LyricShowGUI frame = new LyricShowGUI();
 					loadSongs();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -64,7 +70,7 @@ public class lyricShowGUI extends JFrame {
 	private JButton btnBackup;
 	private JButton btnEdit;
 	private JButton btnDeleteSong;
-	private JButton btnNewSong;
+	private JButton importBttn;
 	private JTextField txtTitle;
 	private JTextField txtComposer;
 	private JTextField txtLryicist;
@@ -88,7 +94,7 @@ public class lyricShowGUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public lyricShowGUI() {
+	public LyricShowGUI() {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(200, 200, 450, 475);
 		contentPane = new JPanel();
@@ -134,7 +140,7 @@ public class lyricShowGUI extends JFrame {
 			panManage.add(getBtnBackup());
 			panManage.add(getBtnEdit());
 			panManage.add(getBtnDeleteSong());
-			panManage.add(getBtnNewSong());
+			panManage.add(getImportBttn());
 			panManage.add(getTxtTitle());
 			panManage.add(getTxtComposer());
 			panManage.add(getTxtLryicist());
@@ -298,6 +304,9 @@ public class lyricShowGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
                     //TODO: backup library
+                    //needs to get a target directory AND user's selection of PPT, text, or both
+                    File target = null;
+                    searchTabController.backupLibrary(target);
 				}
 			});
 			btnBackup.setBounds(280, 48, 117, 29);
@@ -311,6 +320,9 @@ public class lyricShowGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
                     //TODO: start editing song
+                    String title = "";
+                    Song song = searchTabController.getSong(title);
+                    manageTabController.editSong(song);
 				}
 			});
 			btnEdit.setBounds(280, 130, 117, 29);
@@ -325,16 +337,17 @@ public class lyricShowGUI extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 					String songName = lstManageLibrary.getSelectedValue().toString();
                     //TODO: delete song
+                    searchTabController.deleteSong(songName);
 				}
 			});
 			btnDeleteSong.setBounds(280, 104, 117, 29);
 		}
 		return btnDeleteSong;
 	}
-	private JButton getBtnNewSong() {
-		if (btnNewSong == null) {
-			btnNewSong = new JButton("New Song");
-			btnNewSong.addMouseListener(new MouseAdapter() {
+	private JButton getImportBttn() {
+		if (importBttn == null) {
+			importBttn = new JButton("Import File");
+			importBttn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					//Create a file chooser
@@ -347,11 +360,12 @@ public class lyricShowGUI extends JFrame {
 					int returnVal = fc.showOpenDialog(null);
 					File targetFile = fc.getSelectedFile();
 					//TODO: import song from PPT
+                    manageTabController.importFromPPT(targetFile);
 				}
 			});
-			btnNewSong.setBounds(280, 78, 117, 29);
+			importBttn.setBounds(280, 78, 117, 29);
 		}
-		return btnNewSong;
+		return importBttn;
 	}
 	private JTextField getTxtTitle() {
 		if (txtTitle == null) {
@@ -442,7 +456,7 @@ public class lyricShowGUI extends JFrame {
 	private JComboBox getCmbSearch() {
 		if (cmbSearch == null) {
 			cmbSearch = new JComboBox();
-			cmbSearch.setModel(new DefaultComboBoxModel(new String[] {"Title", "Author", "Keywords"}));
+			cmbSearch.setModel(new DefaultComboBoxModel(new String[] {TITLE, AUTHOR, KEYWORDS}));
 			cmbSearch.setBounds(79, 42, 126, 27);
 		}
 		return cmbSearch;
@@ -456,6 +470,7 @@ public class lyricShowGUI extends JFrame {
 					String search = txtSearchSearch.getText();
 					String type = cmbSearch.getSelectedItem().toString();
                     //TODO: search for song by artist/lyricist/keywords
+                    searchTabController.searchByType(type, search);
 				}
 			});
 			btnSearchSearch.setBounds(205, 41, 117, 29);
@@ -486,6 +501,7 @@ public class lyricShowGUI extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 					String key = cmbKey.getSelectedItem().toString();
                     //TODO: search by key (via keyword)
+                    searchTabController.searchByType(key, KEY);
 				}
 			});
 			btnSearchByKey.setBounds(205, 69, 117, 29);
@@ -635,6 +651,9 @@ public class lyricShowGUI extends JFrame {
 					String lyricist = txtLryicist.getText();
 					String lyrics = txtLyrics.getText();
                     //TODO: save song (update song)
+                    Song song = new Song(title);
+                    //instantiate the rest of the song
+                    manageTabController.saveSong(song);
 				}
 			});
 			btnSave.setBounds(158, 366, 117, 29);
