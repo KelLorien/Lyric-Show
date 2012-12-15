@@ -1,6 +1,6 @@
 package util;		//Not entirely sure which package to put this in, feel free to move it.
 
-/** 
+/**
  * User: Catloaf
  * Date: 12/13/12
  */
@@ -9,73 +9,75 @@ import data.SongDAO;
 import data.domain.Song;
 import services.PPTBuilder;
 
+import java.io.*;
 import java.text.ParseException;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class BackUp {
-	static String dest; //Destination folder
-	
-	//Back Up all Songs as both Powerpoint files and as .txt files
-	public static void BackUpAll(){
-		BackUpTxt();
-		BackUpPPT();
-	}
-	
-	//Back up as .txt files only
-	public static void BackUpTxt(){
-		PrintWriter out=null;
-		File output = null;
-		List<String> titles = SongDAO.getInstance().getAllTitles();
-		try{
-			for(String title: titles){
-				Song song = SongDAO.getInstance().getSong(title);
-				output = new File(dest + "/"+ song.getTitle()+".txt");
-				output.createNewFile();
-				out = new PrintWriter(output);
-				
-				//Write to file here.
-				//Format yet to be determined
-				out.println();//Currently just here to shut eclipse up.
-			}
-		}
-		catch(IOException e){
-			//Not sure what to do here
-		}
-		catch(ParseException pe){
-			//Not sure what to do here
-		}
-		
-	}
-	
-	//Back up as powerpoint files only
-	public static void BackUpPPT(){
-		PPTBuilder pptb = PPTBuilder.getInstance();
-		File output = null;
-		List<String> titles = SongDAO.getInstance().getAllTitles();
-		try{
-			for(String title: titles){
-				Song song = SongDAO.getInstance().getSong(title);
-				output = new File(dest + "/"+ song.getTitle()+".ppt");
-				List<String> x = new ArrayList<String>();	//just a temporary list of length one
-				x.add(title);								//holding the title of the current song in titles
-				pptb.buildPPT(x, output);
-			}
-		}
-		catch(IOException e){
-			//Not sure what to do here
-		}
-		catch(ParseException pe){
-			//Not sure what to do here
-		}
-	}
-	
-	public static void setDestination(String d){
-		dest = d;
-	}
-	
+
+    //Back Up all Songs as both Powerpoint files and as .txt files
+    public static void BackUpAll(String dest) throws IOException, ParseException {
+        BackUpTxt(dest);
+        BackUpPPT(dest);
+    }
+
+    //Back up as .txt files only
+    public static void BackUpTxt(String dest) throws IOException {
+        FileWriter output=null;
+        Scanner libScanner = null;
+        File songStore = new File(SongDAO.STORAGE_URL, SongDAO.LIBRARY_DIR_NAME);
+        File backupDir = new File(dest, SongDAO.LIBRARY_DIR_NAME);
+        backupDir.mkdirs();
+        try{
+            for (String fileName: songStore.list()) {
+                output = new FileWriter(new File(backupDir, fileName));
+                libScanner = new Scanner(new File(songStore, fileName));
+                while (libScanner.hasNext()) {
+                    output.write(libScanner.nextLine());
+                }
+                output.close();
+                libScanner.close();
+            }
+
+            File backupInd = new File(dest, SongDAO.INDEX_FILE_NAME);
+            backupInd.createNewFile();
+            output = new FileWriter(backupInd);
+            libScanner = new Scanner(new File(SongDAO.STORAGE_URL, SongDAO.INDEX_FILE_NAME));
+            while (libScanner.hasNext()) {
+                output.write(libScanner.nextLine());
+            }
+            output.close();
+            libScanner.close();
+        } finally {
+            try {
+                if (output != null) {
+                    output.close();
+                }
+                if (libScanner != null) {
+                    libScanner.close();
+                }
+            } catch (Exception e) {
+                //ignore
+            }
+        }
+
+    }
+
+    //Back up as powerpoint files only
+    public static void BackUpPPT(String dest) throws IOException, ParseException {
+        PPTBuilder pptb = PPTBuilder.getInstance();
+        List<String> titles = SongDAO.getInstance().getAllTitles();
+        File target = new File(dest, "powerpoints");
+        target.mkdirs();
+        for(String title: titles){
+            Song song = SongDAO.getInstance().getSong(title);
+            pptb.buildPPT(Arrays.asList(title), target, title);
+        }
+
+    }
+
 }

@@ -1,7 +1,7 @@
 package controllers;
 
 import data.domain.Song;
-import gui.LyricShowGUI;
+import gui.GUI;
 import services.SongAdder;
 import services.SongFinder;
 
@@ -49,13 +49,13 @@ public class SearchTabController {
 
     public List<String> searchByType(String type, String search) {
         //TODO: get list of songs from songFinder
-        if (type.equals(LyricShowGUI.AUTHOR)) {
+        if (type.equals(GUI.AUTHOR)) {
             //by author/lyricist
-        } else if (type.equals(LyricShowGUI.KEYWORDS)) {
+        } else if (type.equals(GUI.KEYWORDS)) {
             //by keywords
-        } else if (type.equals(LyricShowGUI.KEY)) {
+        } else if (type.equals(GUI.KEY)) {
             //by key
-        } else if (type.equals(LyricShowGUI.TITLE)) {
+        } else if (type.equals(GUI.TITLE)) {
             return Arrays.asList(getSong(search).getTitle());
         }
 

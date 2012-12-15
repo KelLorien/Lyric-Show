@@ -21,7 +21,7 @@ import java.io.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class LyricShowGUI extends JFrame {
+public class GUI extends JFrame {
 
     public static final String TITLE = "Title";
     public static final String AUTHOR = "Author";
@@ -40,7 +40,7 @@ public class LyricShowGUI extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    LyricShowGUI frame = new LyricShowGUI();
+                    GUI frame = new GUI();
                     loadSongs();
                     frame.setVisible(true);
                 } catch (Exception e) {
@@ -94,7 +94,7 @@ public class LyricShowGUI extends JFrame {
     /**
      * Create the frame.
      */
-    public LyricShowGUI() {
+    public GUI() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(200, 200, 450, 475);
         contentPane = new JPanel();

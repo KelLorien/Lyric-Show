@@ -1,6 +1,7 @@
 package data;
 
 import data.domain.Song;
+import util.BackUp;
 import util.Preferences;
 import util.SongStorageParser;
 
@@ -19,10 +20,10 @@ import static util.SongStorageParser.*;
  */
 public class SongDAO {
 
-    private static final String LIBRARY_DIR_NAME = "songs";
-    private static final String INDEX_FILE_NAME = "index.lib";
+    public static final String LIBRARY_DIR_NAME = "songs";
+    public static final String INDEX_FILE_NAME = "index.lib";
 
-    private static String STORAGE_URL = Preferences.getLibraryURL();
+    public static final String STORAGE_URL = Preferences.getLibraryURL();
 
 
     private static SongDAO instance = null;
@@ -347,7 +348,7 @@ public class SongDAO {
             System.out.println("author: " + storedSong.getAuthor());
             System.out.println("copyright: " + storedSong.getCopyright());
 
-            dao.deleteSong(song.getTitle());
+            BackUp.BackUpAll("backup");
         } catch (Exception e) {
             e.printStackTrace();
         }
