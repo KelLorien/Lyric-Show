@@ -1,6 +1,7 @@
 package controllers;
 
 import data.domain.Song;
+import gui.LyricShowGUI;
 import services.SongAdder;
 import services.SongFinder;
 
