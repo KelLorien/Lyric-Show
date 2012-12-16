@@ -251,7 +251,7 @@ public class GUI extends JFrame {
                     final JFileChooser fc = new JFileChooser();
                     fc.setDialogTitle("Choose a place to save the PowerPoint...");
                     fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
+                    fc.showSaveDialog(null);
                     if (fc.showDialog(null, "Output To...") == JFileChooser.APPROVE_OPTION) {
                         slideshowTabController.createSlideShow(songs, fc.getSelectedFile());
                     }

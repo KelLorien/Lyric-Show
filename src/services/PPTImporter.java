@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 /**
  * User: jpipe
  * Date: 12/7/12
@@ -119,22 +121,21 @@ public class PPTImporter {
     //TODO: remove for prod
     public static void main(String[] args) {
         //TO RUN THIS METHOD, THIS FILE MUST ALREADY EXIST.
-        File target = new File("/Users/jpipe/Desktop/PM081212.ppt");
+        File target = new File("/Users/kim/Lyric-Show/PM081212-1.ppt");
 
         try {
             List<Song> songs = getInstance().importSong(target);
             List<String> titles = new ArrayList<String>();
-
             for (Song song: songs) {
                 titles.add(song.getTitle());
                 SongDAO.getInstance().addSong(song);
             }
 
-            PPTBuilder.getInstance().buildPPT(titles);
+         //   PPTBuilder.getInstance().buildPPT(titles);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            SongDAO.deleteStuff();
+         //   SongDAO.deleteStuff();
         }
     }
 }

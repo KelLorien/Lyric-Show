@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 /**
  * User: jpipe
  * Date: 11/26/12
@@ -54,7 +56,7 @@ public class PPTBuilder {
      */
     public void buildPPT(List<String> titles, File dir) throws IOException {
         if (dir == null || !dir.canWrite()) {
-            System.err.println("cannot write to given directory " + dir + ". Writing to default");
+        	JOptionPane.showMessageDialog(null, "Cannot write to that area... Writing to default!");
             buildPPT(titles);
             return;
         }
