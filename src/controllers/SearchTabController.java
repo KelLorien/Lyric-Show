@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 /**
  * User: jpipe
  * Date: 12/13/12
@@ -43,7 +45,7 @@ public class SearchTabController {
         try {
             adder.deleteSong(songName);
         } catch (IOException e) {
-            //TODO: error message
+        	JOptionPane.showMessageDialog(null, "There was a problem deleting the file");
         }
     }
 

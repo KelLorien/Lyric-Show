@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 /**
  * User: jpipe
  * Date: 12/13/12
@@ -40,12 +42,9 @@ public class ManageTabController {
         try {
             adder.saveOrUpdateSong(song);
         } catch (IOException e) {
-            //TODO: error message
-            //could not save song due to IO exception
+        	JOptionPane.showMessageDialog(null, "There was a problem updating the file");
         } catch (LibraryConflictException e) {
-            //TODO: error message
-            //song with this title already exists
-            //this should not happen, since SongAdder.saveOrUpdate checks it it exists
+        	JOptionPane.showMessageDialog(null, "A song with this name already exists");
         }
     }
 
@@ -53,8 +52,7 @@ public class ManageTabController {
         try {
             importer.importSong(targetFile);
         } catch (IOException e) {
-            //TODO: error message
-            //could not write PPT file
+        	JOptionPane.showMessageDialog(null, "There was a problem adding the file");
         }
     }
 

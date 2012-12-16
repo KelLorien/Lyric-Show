@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -73,7 +74,6 @@ public class GUI extends JFrame {
     private JButton importBttn;
     private JTextField txtTitle;
     private JTextField txtComposer;
-    private JTextField txtLryicist;
     private JLabel lblTitle;
     private JLabel lblComposer;
     private JLabel lblLyricist;
@@ -87,7 +87,7 @@ public class GUI extends JFrame {
     private JLabel lblSearchBy_1;
     private JComboBox cmbKey;
     private JButton btnSearchByKey;
-    private JScrollPane scrollPane_4;
+    private JScrollPane scResults;
     private JSeparator separator;
     private JLabel lblSearchResults;
     private JButton btnSearchAdd;
@@ -96,7 +96,7 @@ public class GUI extends JFrame {
      */
     public GUI() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setBounds(200, 200, 450, 475);
+        setBounds(200, 200, 450, 550);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -106,7 +106,7 @@ public class GUI extends JFrame {
     private JTabbedPane getTabbedPane_2() {
         if (tabbedPane == null) {
             tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-            tabbedPane.setBounds(6, 6, 438, 441);
+            tabbedPane.setBounds(6, 6, 438, 516);
             tabbedPane.addTab("Slideshow", null, getPanSlideshow(), null);
             tabbedPane.addTab("Manage Songs", null, getPanManage(), null);
             tabbedPane.addTab("Search", null, getPanSearch(), null);
@@ -143,13 +143,17 @@ public class GUI extends JFrame {
             panManage.add(getImportBttn());
             panManage.add(getTxtTitle());
             panManage.add(getTxtComposer());
-            panManage.add(getTxtLryicist());
             panManage.add(getLblTitle());
             panManage.add(getLblComposer());
             panManage.add(getLblLyricist());
             panManage.add(getScrollPane_3());
             panManage.add(getHistoryButton());
             panManage.add(getBtnSave());
+            panManage.add(getLblCopyright());
+            panManage.add(getTxtCopyright());
+            panManage.add(getTxtLyricist());
+            panManage.add(getLblKey());
+            panManage.add(getCmbManageKey());
         }
         return panManage;
     }
@@ -165,7 +169,7 @@ public class GUI extends JFrame {
             panSearch.add(getLblSearchBy_1());
             panSearch.add(getCmbKey());
             panSearch.add(getBtnSearchByKey());
-            panSearch.add(getScrollPane_4());
+            panSearch.add(getScResults());
             panSearch.add(getSeparator());
             panSearch.add(getLblSearchResults());
             panSearch.add(getBtnSearchAdd());
@@ -193,7 +197,7 @@ public class GUI extends JFrame {
             scLib = new JScrollPane();
             scLib.addMouseListener(new MouseAdapter() {
             });
-            scLib.setBounds(31, 52, 245, 171);
+            scLib.setBounds(31, 52, 245, 209);
             scLib.setViewportView(getLstSlideLibrary());
         }
         return scLib;
@@ -226,7 +230,7 @@ public class GUI extends JFrame {
     private JScrollPane getScCurrentList() {
         if (scCurrentList == null) {
             scCurrentList = new JScrollPane();
-            scCurrentList.setBounds(31, 241, 245, 148);
+            scCurrentList.setBounds(31, 273, 245, 191);
             scCurrentList.setViewportView(getLstSlideCurrent());
         }
         return scCurrentList;
@@ -237,12 +241,22 @@ public class GUI extends JFrame {
             btnCreateSlideshow.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //TODO: create slideshow
-                    //This needs to be modified
-                    slideshowTabController.createSlideShow(Arrays.asList("testing"), new File(""));
+                    //TODO: create slideshow (should be done... just need to test)
+                	List<String> songs = new ArrayList<String>();
+                	for(int i = 0; i<lmCurrentList.getSize();i++)
+                	{
+                		songs.add(lmCurrentList.get(i).toString());
+                		JOptionPane.showMessageDialog(null, songs.get(i));
+                	}
+                    final JFileChooser fc = new JFileChooser();
+                    fc.setDialogTitle("Choose a place to save the PowerPoint...");
+                    FileNameExtensionFilter ffilter = new FileNameExtensionFilter("PowerPoints", "ppt");
+                    fc.setFileFilter(ffilter);
+                    File newPPT = fc.getSelectedFile();
+                    slideshowTabController.createSlideShow(songs, new File(newPPT.toString()));
                 }
             });
-            btnCreateSlideshow.setBounds(282, 360, 135, 29);
+            btnCreateSlideshow.setBounds(283, 406, 135, 29);
         }
         return btnCreateSlideshow;
     }
@@ -257,7 +271,7 @@ public class GUI extends JFrame {
                     scCurrentList.setViewportView(lstSlideCurrent);
                 }
             });
-            btnAddBlankSlide.setBounds(282, 336, 136, 29);
+            btnAddBlankSlide.setBounds(282, 379, 136, 29);
         }
         return btnAddBlankSlide;
     }
@@ -281,7 +295,7 @@ public class GUI extends JFrame {
         if (scManageLibrary == null) {
             scManageLibrary = new JScrollPane();
             scManageLibrary.setBounds(6, 48, 255, 99);
-            scManageLibrary.setViewportView(getLstManageLibrary());
+            scManageLibrary.setRowHeaderView(getLstManageLibrary());
         }
         return scManageLibrary;
     }
@@ -303,10 +317,35 @@ public class GUI extends JFrame {
             btnBackup.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //TODO: backup library
-                    //needs to get a target directory AND user's selection of PPT, text, or both
-                    File target = null;
-                    searchTabController.backupLibrary(target);
+                	Object[] possibilities = {"Library", "PowerPoints", "Both"};
+                	String s = (String)JOptionPane.showInputDialog(
+                	                    null,
+                	                    "Do you want to export the Library, the PowerPoints, or both?",
+                	                    "Backing up the Library",
+                	                    JOptionPane.PLAIN_MESSAGE,
+                	                    null,
+                	                    possibilities,
+                	                    "Both");
+
+                	//If a string was returned, say so.
+                	if ((s != null) && (s.length() > 0)) {
+                		final JFileChooser fc = new JFileChooser();
+                        fc.setDialogTitle("Choose a place to backup the library...");
+                        fc.showSaveDialog(null);
+                        File target = fc.getSelectedFile();
+                	   if (s=="Library")
+                	   {
+                		 //TODO: set backup
+                	   }
+                	   else if (s=="PowerPoints")
+                	   {
+                		 //TODO: set backup
+                	   }
+                	   else if (s=="Both")
+                	   {
+                		   //TODO: set backup
+                	   }
+                	}
                 }
             });
             btnBackup.setBounds(280, 48, 117, 29);
@@ -319,10 +358,14 @@ public class GUI extends JFrame {
             btnEdit.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //TODO: start editing song
-                    String title = "";
+                	//TODO:need to test this
+                    String title = lstManageLibrary.getSelectedValue().toString();
                     Song song = searchTabController.getSong(title);
-                    manageTabController.editSong(song);
+                    txtTitle.setText(song.getTitle());
+                    txtComposer.setText(song.getAuthor());
+                    txtLyricist.setText(song.getLyricist());
+                    txtLyrics.setText(song.getLyrics());
+                    txtCopyright.setText(song.getCopyright());
                 }
             });
             btnEdit.setBounds(280, 130, 117, 29);
@@ -336,7 +379,7 @@ public class GUI extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     String songName = lstManageLibrary.getSelectedValue().toString();
-                    //TODO: delete song
+                    //TODO: delete song (check with josh) think its done
                     searchTabController.deleteSong(songName);
                 }
             });
@@ -383,14 +426,6 @@ public class GUI extends JFrame {
         }
         return txtComposer;
     }
-    private JTextField getTxtLryicist() {
-        if (txtLryicist == null) {
-            txtLryicist = new JTextField();
-            txtLryicist.setBounds(77, 217, 320, 28);
-            txtLryicist.setColumns(10);
-        }
-        return txtLryicist;
-    }
     private JLabel getLblTitle() {
         if (lblTitle == null) {
             lblTitle = new JLabel("Title:");
@@ -418,7 +453,7 @@ public class GUI extends JFrame {
     private JScrollPane getScrollPane_3() {
         if (scrollPane_3 == null) {
             scrollPane_3 = new JScrollPane();
-            scrollPane_3.setBounds(6, 245, 405, 120);
+            scrollPane_3.setBounds(6, 279, 405, 156);
             scrollPane_3.setViewportView(getTxtLyrics());
         }
         return scrollPane_3;
@@ -467,10 +502,19 @@ public class GUI extends JFrame {
             btnSearchSearch.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                	resultsList.removeAllElements();
+                    lstSearchResults = new JList(resultsList);
+                    scResults.setViewportView(lstSearchResults);
                     String search = txtSearchSearch.getText();
                     String type = cmbSearch.getSelectedItem().toString();
-                    //TODO: search for song by artist/lyricist/keywords
-                    searchTabController.searchByType(type, search);
+                    //TODO: All done... just need to test with Brody
+ 
+                    List<String> results =searchTabController.searchByType(type, search);
+                    for (String song : results) {
+                        resultsList.addElement(song);
+                    }
+                    lstSearchResults = new JList(resultsList);
+                    scResults.setViewportView(lstSearchResults);  
                 }
             });
             btnSearchSearch.setBounds(205, 41, 117, 29);
@@ -493,6 +537,7 @@ public class GUI extends JFrame {
         }
         return cmbKey;
     }
+    DefaultListModel resultsList = new DefaultListModel();
     private JButton getBtnSearchByKey() {
         if (btnSearchByKey == null) {
             btnSearchByKey = new JButton("Search By Key");
@@ -500,21 +545,30 @@ public class GUI extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     String key = cmbKey.getSelectedItem().toString();
-                    //TODO: search by key (via keyword)
-                    searchTabController.searchByType(key, KEY);
+                    //TODO: should be ready... just need to test
+                    resultsList.removeAllElements();
+                    lstSearchResults = new JList(resultsList);
+                    scResults.setViewportView(lstSearchResults);
+                    List<String> results = searchTabController.searchByType(key, KEY);
+
+                    for (String song : results) {
+                        resultsList.addElement(song);
+                    }
+                    lstSearchResults = new JList(resultsList);
+                    scResults.setViewportView(lstSearchResults);
                 }
             });
             btnSearchByKey.setBounds(205, 69, 117, 29);
         }
         return btnSearchByKey;
     }
-    private JScrollPane getScrollPane_4() {
-        if (scrollPane_4 == null) {
-            scrollPane_4 = new JScrollPane();
-            scrollPane_4.setBounds(6, 142, 405, 208);
-            scrollPane_4.setViewportView(getLstSearchResults());
+    private JScrollPane getScResults() {
+        if (scResults == null) {
+            scResults = new JScrollPane();
+            scResults.setBounds(6, 142, 405, 281);
+            scResults.setViewportView(getLstSearchResults());
         }
-        return scrollPane_4;
+        return scResults;
     }
     private JSeparator getSeparator() {
         if (separator == null) {
@@ -543,7 +597,7 @@ public class GUI extends JFrame {
                     scCurrentList.setViewportView(lstSlideCurrent);
                 }
             });
-            btnSearchAdd.setBounds(150, 360, 117, 29);
+            btnSearchAdd.setBounds(150, 435, 117, 29);
         }
         return btnSearchAdd;
     }
@@ -554,8 +608,12 @@ public class GUI extends JFrame {
     private JButton btnMoveUp;
     private JButton button;
     private JButton btnSave;
-    //	private JButton btnSaveSong;
     private JList lstSearchResults;
+    private JLabel lblCopyright;
+    private JTextField txtCopyright;
+    private JTextField txtLyricist;
+    private JLabel lblKey;
+    private JComboBox cmbManageKey;
     private static void loadSongs()
     {
         SongList songlist = SongList.getInstance();
@@ -581,7 +639,7 @@ public class GUI extends JFrame {
                         lmCurrentList.remove(lstSlideCurrent.getSelectedIndex());
                 }
             });
-            btnRemove.setBounds(282, 310, 135, 29);
+            btnRemove.setBounds(283, 349, 135, 29);
         }
         return btnRemove;
     }
@@ -604,7 +662,7 @@ public class GUI extends JFrame {
                     }
                 }
             });
-            btnMoveDown.setBounds(282, 282, 135, 29);
+            btnMoveDown.setBounds(283, 320, 135, 29);
         }
         return btnMoveDown;
     }
@@ -624,7 +682,7 @@ public class GUI extends JFrame {
                     }
                 }
             });
-            btnMoveUp.setBounds(282, 255, 135, 29);
+            btnMoveUp.setBounds(283, 293, 135, 29);
         }
         return btnMoveUp;
     }
@@ -633,7 +691,13 @@ public class GUI extends JFrame {
             button = new JButton("View History");
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent arg0) {
-                    //TODO: display History
+                    //TODO: get History
+                	String history="";
+                	txtTitle.setText("");
+                	txtComposer.setText("");
+                	txtLyricist.setText("");
+                	txtCopyright.setText("");
+                	txtLyrics.setText(history);
                 }
             });
             button.setBounds(280, 23, 117, 29);
@@ -647,16 +711,18 @@ public class GUI extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     String title = txtTitle.getText();
-                    String composer = txtComposer.getText();
-                    String lyricist = txtLryicist.getText();
-                    String lyrics = txtLyrics.getText();
-                    //TODO: save song (update song)
-                    Song song = new Song(title);
-                    //instantiate the rest of the song
-                    manageTabController.saveSong(song);
+                    String key = cmbManageKey.getSelectedItem().toString();
+                    Song updatedSong = new Song();
+                    updatedSong.setLyricist(txtLyricist.getText());
+                    updatedSong.setAuthor(txtComposer.getText());
+                    updatedSong.setLyrics(txtLyrics.getText());
+                    updatedSong.setCopyright(txtCopyright.getText());
+                    updatedSong.setTitle(title);
+                    //TODO:Key
+                    manageTabController.saveSong(updatedSong);
                 }
             });
-            btnSave.setBounds(158, 366, 117, 29);
+            btnSave.setBounds(154, 435, 117, 29);
         }
         return btnSave;
     }
@@ -676,4 +742,44 @@ public class GUI extends JFrame {
         }
         return lstSearchResults;
     }
+	private JLabel getLblCopyright() {
+		if (lblCopyright == null) {
+			lblCopyright = new JLabel("Copyright:");
+			lblCopyright.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblCopyright.setBounds(6, 251, 71, 16);
+		}
+		return lblCopyright;
+	}
+	private JTextField getTxtCopyright() {
+		if (txtCopyright == null) {
+			txtCopyright = new JTextField();
+			txtCopyright.setBounds(77, 245, 161, 28);
+			txtCopyright.setColumns(10);
+		}
+		return txtCopyright;
+	}
+	private JTextField getTxtLyricist() {
+		if (txtLyricist == null) {
+			txtLyricist = new JTextField();
+			txtLyricist.setBounds(77, 217, 320, 28);
+			txtLyricist.setColumns(10);
+		}
+		return txtLyricist;
+	}
+	private JLabel getLblKey() {
+		if (lblKey == null) {
+			lblKey = new JLabel("Key:");
+			lblKey.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblKey.setBounds(241, 251, 31, 16);
+		}
+		return lblKey;
+	}
+	private JComboBox getCmbManageKey() {
+		if (cmbManageKey == null) {
+			cmbManageKey = new JComboBox();
+			cmbManageKey.setModel(new DefaultComboBoxModel(new String[] {"C", "C#", "D", "Db", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"}));
+			cmbManageKey.setBounds(280, 247, 86, 27);
+		}
+		return cmbManageKey;
+	}
 }
