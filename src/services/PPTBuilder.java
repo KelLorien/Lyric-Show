@@ -103,7 +103,7 @@ public class PPTBuilder {
         SlideShow show = new SlideShow();
 
         for (Song song: songs) {
-            if (song.getTitle().equals(SlideshowTabController.BLANK_SLIDE_TITLE)) {
+            if (song.getTitle().equalsIgnoreCase(SlideshowTabController.BLANK_SLIDE_TITLE)) {
                 show.createSlide();
             } else {
                 addSongToPPT(show, song);
@@ -127,8 +127,8 @@ public class PPTBuilder {
 
             insertTextbox(slide, lyrics, 28, TextShape.AlignCenter,
                     new Rectangle(LYRIC_MARGIN, TITLE_HEIGHT + (int) (.5 * AUTH_HEIGHT),
-                    (int) show.getPageSize().getWidth() - (LYRIC_MARGIN * 2),
-                    (int) show.getPageSize().getHeight() - (TITLE_HEIGHT + AUTH_HEIGHT)));
+                            (int) show.getPageSize().getWidth() - (LYRIC_MARGIN * 2),
+                            (int) show.getPageSize().getHeight() - (TITLE_HEIGHT + AUTH_HEIGHT)));
 
             insertTextbox(slide, song.getAuthor(), 12, TextShape.AlignLeft,
                     new java.awt.Rectangle(0, TITLE_HEIGHT - (int) (.5 * AUTH_HEIGHT), AUTH_WIDTH, AUTH_HEIGHT));
@@ -172,14 +172,18 @@ public class PPTBuilder {
 
     private void populateSongs(List<String> titles, List<Song> songs) throws FileNotFoundException {
         for (String title: titles) {
-            try {
-                songs.add(dao.getSong(title));
-            } catch (FileNotFoundException e) {
-                System.err.println("Storage file not found for " + title);
-                throw e;
-            } catch (ParseException e) {
-                System.err.println("Error reading storage file for song " + title);
-                e.printStackTrace();
+            if (title.equalsIgnoreCase(SlideshowTabController.BLANK_SLIDE_TITLE)) {
+                songs.add(new Song(SlideshowTabController.BLANK_SLIDE_TITLE));
+            } else {
+                try {
+                    songs.add(dao.getSong(title));
+                } catch (FileNotFoundException e) {
+                    System.err.println("Storage file not found for " + title);
+                    throw e;
+                } catch (ParseException e) {
+                    System.err.println("Error reading storage file for song " + title);
+                    e.printStackTrace();
+                }
             }
         }
     }

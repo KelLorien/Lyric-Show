@@ -241,19 +241,20 @@ public class GUI extends JFrame {
             btnCreateSlideshow.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //TODO: create slideshow (should be done... just need to test)
-                	List<String> songs = new ArrayList<String>();
-                	for(int i = 0; i<lmCurrentList.getSize();i++)
-                	{
-                		songs.add(lmCurrentList.get(i).toString());
-                		JOptionPane.showMessageDialog(null, songs.get(i));
-                	}
+                    //TODO: fix file destination!!! issue probably occurs between controller and PPTBuilder
+                    List<String> songs = new ArrayList<String>();
+                    for(int i = 0; i<lmCurrentList.getSize();i++)
+                    {
+                        songs.add(lmCurrentList.get(i).toString());
+                        JOptionPane.showMessageDialog(null, songs.get(i));
+                    }
                     final JFileChooser fc = new JFileChooser();
                     fc.setDialogTitle("Choose a place to save the PowerPoint...");
-                    FileNameExtensionFilter ffilter = new FileNameExtensionFilter("PowerPoints", "ppt");
-                    fc.setFileFilter(ffilter);
-                    File newPPT = fc.getSelectedFile();
-                    slideshowTabController.createSlideShow(songs, new File(newPPT.toString()));
+                    fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+                    if (fc.showDialog(null, "Output To...") == JFileChooser.APPROVE_OPTION) {
+                        slideshowTabController.createSlideShow(songs, fc.getSelectedFile());
+                    }
                 }
             });
             btnCreateSlideshow.setBounds(283, 406, 135, 29);
@@ -317,35 +318,35 @@ public class GUI extends JFrame {
             btnBackup.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                	Object[] possibilities = {"Library", "PowerPoints", "Both"};
-                	String s = (String)JOptionPane.showInputDialog(
-                	                    null,
-                	                    "Do you want to export the Library, the PowerPoints, or both?",
-                	                    "Backing up the Library",
-                	                    JOptionPane.PLAIN_MESSAGE,
-                	                    null,
-                	                    possibilities,
-                	                    "Both");
+                    Object[] possibilities = {"Library", "PowerPoints", "Both"};
+                    String s = (String)JOptionPane.showInputDialog(
+                            null,
+                            "Do you want to export the Library, the PowerPoints, or both?",
+                            "Backing up the Library",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            possibilities,
+                            "Both");
 
-                	//If a string was returned, say so.
-                	if ((s != null) && (s.length() > 0)) {
-                		final JFileChooser fc = new JFileChooser();
+                    //If a string was returned, say so.
+                    if ((s != null) && (s.length() > 0)) {
+                        final JFileChooser fc = new JFileChooser();
                         fc.setDialogTitle("Choose a place to backup the library...");
                         fc.showSaveDialog(null);
                         File target = fc.getSelectedFile();
-                	   if (s=="Library")
-                	   {
-                		 //TODO: set backup
-                	   }
-                	   else if (s=="PowerPoints")
-                	   {
-                		 //TODO: set backup
-                	   }
-                	   else if (s=="Both")
-                	   {
-                		   //TODO: set backup
-                	   }
-                	}
+                        if (s=="Library")
+                        {
+                            //TODO: set backup
+                        }
+                        else if (s=="PowerPoints")
+                        {
+                            //TODO: set backup
+                        }
+                        else if (s=="Both")
+                        {
+                            //TODO: set backup
+                        }
+                    }
                 }
             });
             btnBackup.setBounds(280, 48, 117, 29);
@@ -358,7 +359,7 @@ public class GUI extends JFrame {
             btnEdit.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                	//TODO:need to test this
+                    //TODO:need to test this
                     String title = lstManageLibrary.getSelectedValue().toString();
                     Song song = searchTabController.getSong(title);
                     txtTitle.setText(song.getTitle());
@@ -404,6 +405,7 @@ public class GUI extends JFrame {
                     File targetFile = fc.getSelectedFile();
                     //TODO: import song from PPT
                     manageTabController.importFromPPT(targetFile);
+                    loadSongs();
                 }
             });
             importBttn.setBounds(280, 78, 117, 29);
@@ -502,19 +504,19 @@ public class GUI extends JFrame {
             btnSearchSearch.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                	resultsList.removeAllElements();
+                    resultsList.removeAllElements();
                     lstSearchResults = new JList(resultsList);
                     scResults.setViewportView(lstSearchResults);
                     String search = txtSearchSearch.getText();
                     String type = cmbSearch.getSelectedItem().toString();
                     //TODO: All done... just need to test with Brody
- 
+
                     List<String> results =searchTabController.searchByType(type, search);
                     for (String song : results) {
                         resultsList.addElement(song);
                     }
                     lstSearchResults = new JList(resultsList);
-                    scResults.setViewportView(lstSearchResults);  
+                    scResults.setViewportView(lstSearchResults);
                 }
             });
             btnSearchSearch.setBounds(205, 41, 117, 29);
@@ -623,7 +625,7 @@ public class GUI extends JFrame {
         for (String song : songs) {
             lm.addElement(song);
         }
-        lm.addElement("This should work");
+//        lm.addElement("This should work");
         lstSlideLibrary = new JList(lm);
         lstManageLibrary = new JList(lm);
         scLib.setViewportView(lstSlideLibrary);
@@ -692,12 +694,12 @@ public class GUI extends JFrame {
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent arg0) {
                     //TODO: get History
-                	String history="";
-                	txtTitle.setText("");
-                	txtComposer.setText("");
-                	txtLyricist.setText("");
-                	txtCopyright.setText("");
-                	txtLyrics.setText(history);
+                    String history="";
+                    txtTitle.setText("");
+                    txtComposer.setText("");
+                    txtLyricist.setText("");
+                    txtCopyright.setText("");
+                    txtLyrics.setText(history);
                 }
             });
             button.setBounds(280, 23, 117, 29);
@@ -742,44 +744,44 @@ public class GUI extends JFrame {
         }
         return lstSearchResults;
     }
-	private JLabel getLblCopyright() {
-		if (lblCopyright == null) {
-			lblCopyright = new JLabel("Copyright:");
-			lblCopyright.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCopyright.setBounds(6, 251, 71, 16);
-		}
-		return lblCopyright;
-	}
-	private JTextField getTxtCopyright() {
-		if (txtCopyright == null) {
-			txtCopyright = new JTextField();
-			txtCopyright.setBounds(77, 245, 161, 28);
-			txtCopyright.setColumns(10);
-		}
-		return txtCopyright;
-	}
-	private JTextField getTxtLyricist() {
-		if (txtLyricist == null) {
-			txtLyricist = new JTextField();
-			txtLyricist.setBounds(77, 217, 320, 28);
-			txtLyricist.setColumns(10);
-		}
-		return txtLyricist;
-	}
-	private JLabel getLblKey() {
-		if (lblKey == null) {
-			lblKey = new JLabel("Key:");
-			lblKey.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblKey.setBounds(241, 251, 31, 16);
-		}
-		return lblKey;
-	}
-	private JComboBox getCmbManageKey() {
-		if (cmbManageKey == null) {
-			cmbManageKey = new JComboBox();
-			cmbManageKey.setModel(new DefaultComboBoxModel(new String[] {"C", "C#", "D", "Db", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"}));
-			cmbManageKey.setBounds(280, 247, 86, 27);
-		}
-		return cmbManageKey;
-	}
+    private JLabel getLblCopyright() {
+        if (lblCopyright == null) {
+            lblCopyright = new JLabel("Copyright:");
+            lblCopyright.setHorizontalAlignment(SwingConstants.RIGHT);
+            lblCopyright.setBounds(6, 251, 71, 16);
+        }
+        return lblCopyright;
+    }
+    private JTextField getTxtCopyright() {
+        if (txtCopyright == null) {
+            txtCopyright = new JTextField();
+            txtCopyright.setBounds(77, 245, 161, 28);
+            txtCopyright.setColumns(10);
+        }
+        return txtCopyright;
+    }
+    private JTextField getTxtLyricist() {
+        if (txtLyricist == null) {
+            txtLyricist = new JTextField();
+            txtLyricist.setBounds(77, 217, 320, 28);
+            txtLyricist.setColumns(10);
+        }
+        return txtLyricist;
+    }
+    private JLabel getLblKey() {
+        if (lblKey == null) {
+            lblKey = new JLabel("Key:");
+            lblKey.setHorizontalAlignment(SwingConstants.RIGHT);
+            lblKey.setBounds(241, 251, 31, 16);
+        }
+        return lblKey;
+    }
+    private JComboBox getCmbManageKey() {
+        if (cmbManageKey == null) {
+            cmbManageKey = new JComboBox();
+            cmbManageKey.setModel(new DefaultComboBoxModel(new String[] {"C", "C#", "D", "Db", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"}));
+            cmbManageKey.setBounds(280, 247, 86, 27);
+        }
+        return cmbManageKey;
+    }
 }

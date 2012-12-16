@@ -50,7 +50,10 @@ public class ManageTabController {
 
     public void importFromPPT(File targetFile) {
         try {
-            importer.importSong(targetFile);
+            for (Song song: importer.importSong(targetFile)) {
+                saveOrUpdate(song);
+            }
+
         } catch (IOException e) {
         	JOptionPane.showMessageDialog(null, "There was a problem adding the file");
         }

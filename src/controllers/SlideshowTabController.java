@@ -30,7 +30,7 @@ public class SlideshowTabController {
 
     public void createSlideShow(List<String> titles, File target) {
         try {
-        	JOptionPane.showMessageDialog(null, "This is the message");
+//        	JOptionPane.showMessageDialog(null, "This is the message");
             pptBuilder.buildPPT(titles, target);
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

@@ -28,9 +28,9 @@ public class SongAdder {
 
     public void saveOrUpdateSong(Song song) throws IOException, LibraryConflictException {
         if (songList.getSongTitles().contains(song.getTitle())) {
-            dao.addSong(song);
-        } else {
             dao.updateSong(song);
+        } else {
+            dao.addSong(song);
         }
     }
 
