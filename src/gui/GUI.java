@@ -205,6 +205,7 @@ public class GUI extends JFrame {
     private JList getLstSlideLibrary() {
         if (lstSlideLibrary == null) {
             lstSlideLibrary = new JList();
+            lstSlideLibrary.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             lstSlideLibrary.addMouseListener(new MouseAdapter() {
             });
         }
@@ -303,6 +304,7 @@ public class GUI extends JFrame {
     private JList getLstManageLibrary() {
         if (lstManageLibrary == null) {
             lstManageLibrary = new JList();
+            lstManageLibrary.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         }
         return lstManageLibrary;
     }
@@ -603,7 +605,7 @@ public class GUI extends JFrame {
         }
         return btnSearchAdd;
     }
-    DefaultListModel lmLibrary = new DefaultListModel();
+    static DefaultListModel lmLibrary = new DefaultListModel();
     DefaultListModel lmCurrentList = new DefaultListModel();
     private JButton btnRemove;
     private JButton btnMoveDown;
@@ -621,9 +623,10 @@ public class GUI extends JFrame {
         SongList songlist = SongList.getInstance();
         List<String> songs = songlist.getSongTitles();
         DefaultListModel lm = new DefaultListModel();
-
+        DefaultListModel lmManage = new DefaultListModel();
         for (String song : songs) {
             lm.addElement(song);
+            lmManage.addElement(song);
         }
 //        lm.addElement("This should work");
         lstSlideLibrary = new JList(lm);
