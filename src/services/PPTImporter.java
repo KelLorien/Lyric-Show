@@ -70,7 +70,7 @@ public class PPTImporter {
         Song currentSong = startNewSong(slides[0]);
         for (Slide slide: slides) {
             String nextTitle = removeNewLines(slide.getTitle());
-            if (nextTitle == null || slide.getTextRuns().length < 1) {
+            if (nextTitle == null || slide.getTextRuns().length < 2) {
                 continue;
             }
             if (nextTitle.equals(currentSong.getTitle())) {

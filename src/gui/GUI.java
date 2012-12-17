@@ -561,9 +561,8 @@ public class GUI extends JFrame {
                     scResults.setViewportView(lstSearchResults);
                     String search = txtSearchSearch.getText();
                     String type = cmbSearch.getSelectedItem().toString();
-                    //TODO: All done... just need to test with Brody
 
-                    List<String> results =searchTabController.searchByType(type, search);
+                    List<String> results = searchTabController.searchByType(type, search);
                     for (String song : results) {
                         resultsList.addElement(song);
                     }
