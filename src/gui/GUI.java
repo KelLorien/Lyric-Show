@@ -391,7 +391,6 @@ public class GUI extends JFrame {
             btnEdit.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //TODO:add load key
                 	clearManageText();
                     String title = lstManageSongs.getSelectedValue().toString();
                     Song song = searchTabController.getSong(title);
@@ -400,7 +399,13 @@ public class GUI extends JFrame {
                     txtLyricist.setText(song.getLyricist());
                     txtLyrics.setText(song.getLyrics());
                     txtCopyright.setText(song.getCopyright());
-         //           cmbManageKey.setSelectedItem(song)
+                    cmbManageKey.setSelectedItem(song.getMusicalKey());
+                    String keyString = "";
+                    List<String> keywords = song.getKeywords();
+                    for(String keyword: keywords)
+                    {
+             //       	keyString += "";
+                    }
                 }
             });
             btnEdit.setBounds(280, 130, 117, 29);
@@ -773,7 +778,18 @@ public class GUI extends JFrame {
                     updatedSong.setMusicalKey(key);
                     String keyword = txtKeywords.getText();
                     String[] keywords = keyword.split(",");
+                    for (String word: keywords)
+                    {
+                    	if (word.charAt(0) == ' ')
+                    	{
+                    		word = word.substring(1);
+                    	}
+                    }
                     updatedSong.addAllKeywords(Arrays.asList(keywords));
+                    if(cmbManageKey.getSelectedIndex()>1)
+                    {
+                    	updatedSong.addMusicalKey(cmbManageKey.getSelectedItem().toString());
+                    }
                     manageTabController.saveSong(updatedSong);
                 }
             });

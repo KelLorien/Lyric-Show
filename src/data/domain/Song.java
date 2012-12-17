@@ -87,8 +87,18 @@ public class Song {
         return musicalKey;
     }
 
+<<<<<<< HEAD
     public void setMusicalKey(String musicalKey) {
         this.musicalKey = musicalKey;
+=======
+    public String getMusicalKey() {
+        String key = "";
+        for (String keyword: keywords) {
+            if (keyword.contains(KEY_MARKER))
+                key = keyword.replace("KEY:", "");
+        }
+        return key;
+>>>>>>> Changing Keywords
     }
 
     public void addKeyword(String... key) {
