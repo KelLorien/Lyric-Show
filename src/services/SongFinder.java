@@ -31,7 +31,7 @@ public class SongFinder {
         return dao.getSong(title);
     }
 
-    public List<String> getTitlesByAuthor(String author) throws ParseException {
+    public List<String> getTitlesByAuthor(String author) throws ParseException {	
         return dao.getAllSongsWithAttribute(author, SongStorageParser.Tag.AUTHOR);
     }
 

@@ -1,7 +1,7 @@
-package util;		//Not entirely sure which package to put this in, feel free to move it.
+package util;	
 
 /**
- * User: Catloaf
+ * User: Ben Okun
  * Date: 12/13/12
  */
 

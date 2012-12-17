@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +16,9 @@ import controllers.SearchTabController;
 import controllers.SlideshowTabController;
 import data.domain.Song;
 import services.History;
+import services.SongFinder;
 import services.SongList;
+import util.BackUp;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -73,13 +76,13 @@ public class GUI extends JFrame {
     private JButton btnEdit;
     private JButton btnDeleteSong;
     private JButton importBttn;
-    private JTextField txtTitle;
-    private JTextField txtComposer;
+    private static JTextField txtTitle;
+    private static JTextField txtComposer;
     private JLabel lblTitle;
     private JLabel lblComposer;
     private JLabel lblLyricist;
     private JScrollPane scrollPane_3;
-    private JTextArea txtLyrics;
+    private static JTextArea txtLyrics;
     private JLabel lblSearch_2;
     private JTextField txtSearchSearch;
     private JLabel lblSearchBy;
@@ -358,17 +361,22 @@ public class GUI extends JFrame {
                         fc.setDialogTitle("Choose a place to backup the library...");
                         fc.showSaveDialog(null);
                         File target = fc.getSelectedFile();
+                        try{
                         if (s.equalsIgnoreCase("Library"))
                         {
-                            //TODO: set backup
+								BackUp.BackUpTxt(target);
                         }
                         else if (s.equalsIgnoreCase("PowerPoints"))
                         {
-                            //TODO: set backup
+                            	BackUp.BackUpPPT(target);
                         }
                         else if (s.equalsIgnoreCase("Both"))
                         {
-                            //TODO: set backup
+                            	BackUp.BackUpAll(target);
+                        }}
+                        catch(Exception e1)
+                        {
+                        	
                         }
                     }
                 }
@@ -384,6 +392,7 @@ public class GUI extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     //TODO:need to test this
+                	clearManageText();
                     String title = lstManageSongs.getSelectedValue().toString();
                     Song song = searchTabController.getSong(title);
                     txtTitle.setText(song.getTitle());
@@ -518,7 +527,7 @@ public class GUI extends JFrame {
     private JComboBox getCmbSearch() {
         if (cmbSearch == null) {
             cmbSearch = new JComboBox();
-            cmbSearch.setModel(new DefaultComboBoxModel(new String[] {TITLE, AUTHOR, KEYWORDS}));
+            cmbSearch.setModel(new DefaultComboBoxModel(new String[] {"Title", "Author", "Keywords"}));
             cmbSearch.setBounds(79, 42, 126, 27);
         }
         return cmbSearch;
@@ -572,7 +581,6 @@ public class GUI extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     String key = cmbKey.getSelectedItem().toString();
-                    //TODO: should be ready... just need to test
                     resultsList.removeAllElements();
                     lstSearchResults = new JList(resultsList);
                     scResults.setViewportView(lstSearchResults);
@@ -637,10 +645,10 @@ public class GUI extends JFrame {
     private JButton btnSave;
     private JList lstSearchResults;
     private JLabel lblCopyright;
-    private JTextField txtCopyright;
-    private JTextField txtLyricist;
+    private static JTextField txtCopyright;
+    private static JTextField txtLyricist;
     private JLabel lblKey;
-    private JComboBox cmbManageKey;
+    private static JComboBox cmbManageKey;
     private static JScrollPane scrollManage;
     private static JList lstManageSongs;
     private static DefaultListModel lm = new DefaultListModel();
@@ -724,10 +732,7 @@ public class GUI extends JFrame {
                 public void actionPerformed(ActionEvent arg0) {
 
                     History history = History.getInstance();
-                    txtTitle.setText("");
-                    txtComposer.setText("");
-                    txtLyricist.setText("");
-                    txtCopyright.setText("");
+                    clearManageText();
                     try {
 						txtLyrics.setText(history.getHistory());
 					} catch (FileNotFoundException e) {
@@ -754,6 +759,7 @@ public class GUI extends JFrame {
                     updatedSong.setCopyright(txtCopyright.getText());
                     updatedSong.addMusicalKey(key);
                     updatedSong.setTitle(title);
+                    updatedSong.addMusicalKey(key);
                     manageTabController.saveSong(updatedSong);
                 }
             });
@@ -830,5 +836,14 @@ public class GUI extends JFrame {
 			lstManageSongs = new JList();
 		}
 		return lstManageSongs;
+	}
+	public static void clearManageText()
+	{
+		txtTitle.setText("");
+		txtComposer.setText("");
+		txtLyrics.setText("");
+		txtLyricist.setText("");
+		txtCopyright.setText("");
+		cmbManageKey.setSelectedIndex(0);
 	}
 }
