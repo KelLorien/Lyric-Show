@@ -95,6 +95,7 @@ public class GUI extends JFrame {
      * Create the frame.
      */
     public GUI() {
+    	setTitle("PowerPoint Creator");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(200, 200, 450, 550);
         contentPane = new JPanel();
@@ -247,14 +248,12 @@ public class GUI extends JFrame {
                     for(int i = 0; i<lmCurrentList.getSize();i++)
                     {
                         songs.add(lmCurrentList.get(i).toString());
-                        JOptionPane.showMessageDialog(null, songs.get(i));
                     }
                     final JFileChooser fc = new JFileChooser();
                     fc.setDialogTitle("Choose a place to save the PowerPoint...");
                     fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    fc.showSaveDialog(null);
-                    if (fc.showDialog(null, "Output To...") == JFileChooser.APPROVE_OPTION) {
-                        slideshowTabController.createSlideShow(songs, fc.getSelectedFile());
+                    if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                        slideshowTabController.createSlideShow(songs, fc.getCurrentDirectory(),fc.getSelectedFile().getName());
                     }
                 }
             });
@@ -782,8 +781,8 @@ public class GUI extends JFrame {
     private JComboBox getCmbManageKey() {
         if (cmbManageKey == null) {
             cmbManageKey = new JComboBox();
-            cmbManageKey.setModel(new DefaultComboBoxModel(new String[] {"C", "C#", "D", "Db", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"}));
-            cmbManageKey.setBounds(280, 247, 86, 27);
+            cmbManageKey.setModel(new DefaultComboBoxModel(new String[] {"[no key]", "C", "C#", "D", "Db", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"}));
+            cmbManageKey.setBounds(280, 247, 106, 27);
         }
         return cmbManageKey;
     }

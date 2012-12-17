@@ -1,5 +1,6 @@
 package controllers;
 
+import services.History;
 import services.PPTBuilder;
 
 import java.io.File;
@@ -28,10 +29,13 @@ public class SlideshowTabController {
 
     private SlideshowTabController() {}
 
-    public void createSlideShow(List<String> titles, File target) {
+    public void createSlideShow(List<String> titles, File target, String fileName) {
         try {
+            History history = History.getInstance();
 //        	JOptionPane.showMessageDialog(null, "This is the message");
-            pptBuilder.buildPPT(titles, target);
+            pptBuilder.buildPPT(titles, target, fileName);
+            history.updateHistory(titles);
+            
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

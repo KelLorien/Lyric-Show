@@ -55,14 +55,14 @@ public class PPTBuilder {
      * @see PPTBuilder#buildPPT(java.util.List)
      */
     public void buildPPT(List<String> titles, File dir) throws IOException {
-        if (dir == null || !dir.canWrite()) {
-        	JOptionPane.showMessageDialog(null, "Cannot write to that area... Writing to default!");
+      //  if (dir == null || !dir.canWrite()) {
+    	{
             buildPPT(titles);
-            return;
+       //     return;
         }
         List<Song> songs = new ArrayList<Song>();
         populateSongs(titles, songs);
-
+        System.out.println(dir);
         outputPPT(songs, dir, DateFormat.getDateInstance().format(new Date()));
     }
 
@@ -165,6 +165,7 @@ public class PPTBuilder {
 
         FileOutputStream outputStream = null;
         try {
+        	System.out.println(outputDir);
             outputStream = new FileOutputStream(new File(outputDir, outputName));
             show.write(outputStream);
         } finally {

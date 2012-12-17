@@ -38,7 +38,7 @@ public class PPTImporter {
         SlideShow show = readSlideShow(ppt);
 
         parseAllSongs(songs, show);
-
+        
         return songs;
     }
 
