@@ -14,6 +14,7 @@ import controllers.ManageTabController;
 import controllers.SearchTabController;
 import controllers.SlideshowTabController;
 import data.domain.Song;
+import services.History;
 import services.SongList;
 
 import java.awt.event.MouseAdapter;
@@ -426,7 +427,7 @@ public class GUI extends JFrame {
                     //In response to a button click:
                     int returnVal = fc.showOpenDialog(null);
                     File targetFile = fc.getSelectedFile();
-                    //TODO: import song from PPT
+
                     manageTabController.importFromPPT(targetFile);
                     loadSongs();
                 }
@@ -720,13 +721,17 @@ public class GUI extends JFrame {
             button = new JButton("View History");
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent arg0) {
-                    //TODO: get History
-                    String history="";
+
+                    History history = History.getInstance();
                     txtTitle.setText("");
                     txtComposer.setText("");
                     txtLyricist.setText("");
                     txtCopyright.setText("");
-                    txtLyrics.setText(history);
+                    try {
+						txtLyrics.setText(history.getHistory());
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
                 }
             });
             button.setBounds(280, 23, 117, 29);
