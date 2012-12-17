@@ -21,6 +21,8 @@ import java.awt.event.MouseEvent;
 import java.io.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GUI extends JFrame {
 
@@ -66,8 +68,6 @@ public class GUI extends JFrame {
     private JButton btnAddBlankSlide;
     private JTextField txtManageSearch;
     private JLabel lblSearch_1;
-    private static JScrollPane scManageLibrary;
-    private static JList lstManageLibrary;
     private JList lstSlideCurrent;
     private JButton btnBackup;
     private JButton btnEdit;
@@ -138,7 +138,6 @@ public class GUI extends JFrame {
             panManage.setLayout(null);
             panManage.add(getTxtManageSearch());
             panManage.add(getLblSearch_1());
-            panManage.add(getScManageLibrary());
             panManage.add(getBtnBackup());
             panManage.add(getBtnEdit());
             panManage.add(getBtnDeleteSong());
@@ -156,6 +155,7 @@ public class GUI extends JFrame {
             panManage.add(getTxtLyricist());
             panManage.add(getLblKey());
             panManage.add(getCmbManageKey());
+            panManage.add(getScrollManage());
         }
         return panManage;
     }
@@ -178,9 +178,28 @@ public class GUI extends JFrame {
         }
         return panSearch;
     }
+    private static DefaultListModel searchCreate = new DefaultListModel();
     private JTextField getSlideSearch() {
         if (slideSearch == null) {
             slideSearch = new JTextField();
+            slideSearch.addKeyListener(new KeyAdapter() {
+            	@Override
+            	public void keyTyped(KeyEvent arg0) {
+            		//will hopefully search inside the library
+            		String searchSongs = slideSearch.getText().toLowerCase();
+            		searchCreate.removeAllElements();
+            		
+            		for(int i=0;i<lm.size();i++)
+            		{
+            			if (lm.elementAt(i).toString().toLowerCase().contains(searchSongs))
+            			{
+            				searchCreate.addElement(lm.elementAt(i).toString());
+            			}
+            		}
+            		lstSlideLibrary = new JList(searchCreate);
+            		scLib.setViewportView(lstSlideLibrary);
+            	}
+            });
             slideSearch.setBounds(31, 24, 245, 28);
             slideSearch.setColumns(10);
         }
@@ -277,9 +296,27 @@ public class GUI extends JFrame {
         }
         return btnAddBlankSlide;
     }
+    public static DefaultListModel manageSearch = new DefaultListModel();
     private JTextField getTxtManageSearch() {
         if (txtManageSearch == null) {
             txtManageSearch = new JTextField();
+            txtManageSearch.addKeyListener(new KeyAdapter() {
+            	@Override
+            	public void keyTyped(KeyEvent e) {
+            		String searchSongs = txtManageSearch.getText().toLowerCase();
+            		manageSearch.removeAllElements();
+            		
+            		for(int i=0;i<lm.size();i++)
+            		{
+            			if (lm.elementAt(i).toString().toLowerCase().contains(searchSongs))
+            			{
+            				manageSearch.addElement(lm.elementAt(i).toString());
+            			}
+            		}
+            		lstManageSongs = new JList(manageSearch);
+            		scrollManage.setViewportView(lstManageSongs);
+            	}
+            });
             txtManageSearch.setBounds(6, 22, 255, 28);
             txtManageSearch.setColumns(10);
         }
@@ -292,21 +329,6 @@ public class GUI extends JFrame {
             lblSearch_1.setBounds(101, 6, 61, 16);
         }
         return lblSearch_1;
-    }
-    private JScrollPane getScManageLibrary() {
-        if (scManageLibrary == null) {
-            scManageLibrary = new JScrollPane();
-            scManageLibrary.setBounds(6, 48, 255, 99);
-            scManageLibrary.setRowHeaderView(getLstManageLibrary());
-        }
-        return scManageLibrary;
-    }
-    private JList getLstManageLibrary() {
-        if (lstManageLibrary == null) {
-            lstManageLibrary = new JList();
-            lstManageLibrary.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        }
-        return lstManageLibrary;
     }
     private JList getLstSlideCurrent() {
         if (lstSlideCurrent == null) {
@@ -362,7 +384,7 @@ public class GUI extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     //TODO:need to test this
-                    String title = lstManageLibrary.getSelectedValue().toString();
+                    String title = lstManageSongs.getSelectedValue().toString();
                     Song song = searchTabController.getSong(title);
                     txtTitle.setText(song.getTitle());
                     txtComposer.setText(song.getAuthor());
@@ -381,7 +403,7 @@ public class GUI extends JFrame {
             btnDeleteSong.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    String songName = lstManageLibrary.getSelectedValue().toString();
+                    String songName = lstManageSongs.getSelectedValue().toString();
                     //TODO: delete song (check with josh) think its done
                     searchTabController.deleteSong(songName);
                 }
@@ -605,7 +627,7 @@ public class GUI extends JFrame {
         }
         return btnSearchAdd;
     }
-    static DefaultListModel lmLibrary = new DefaultListModel();
+
     DefaultListModel lmCurrentList = new DefaultListModel();
     private JButton btnRemove;
     private JButton btnMoveDown;
@@ -618,21 +640,24 @@ public class GUI extends JFrame {
     private JTextField txtLyricist;
     private JLabel lblKey;
     private JComboBox cmbManageKey;
+    private static JScrollPane scrollManage;
+    private static JList lstManageSongs;
+    private static DefaultListModel lm = new DefaultListModel();
+    private static DefaultListModel lmManage = new DefaultListModel();
     private static void loadSongs()
     {
         SongList songlist = SongList.getInstance();
         List<String> songs = songlist.getSongTitles();
-        DefaultListModel lm = new DefaultListModel();
-        DefaultListModel lmManage = new DefaultListModel();
+        
         for (String song : songs) {
             lm.addElement(song);
             lmManage.addElement(song);
+           
         }
-//        lm.addElement("This should work");
         lstSlideLibrary = new JList(lm);
-        lstManageLibrary = new JList(lm);
+        lstManageSongs = new JList(lm);
         scLib.setViewportView(lstSlideLibrary);
-        scManageLibrary.setViewportView(lstManageLibrary);
+        scrollManage.setViewportView(lstManageSongs);
     }
     private JButton getBtnRemove() {
         if (btnRemove == null) {
@@ -788,4 +813,18 @@ public class GUI extends JFrame {
         }
         return cmbManageKey;
     }
+	private JScrollPane getScrollManage() {
+		if (scrollManage == null) {
+			scrollManage = new JScrollPane();
+			scrollManage.setBounds(6, 53, 255, 106);
+			scrollManage.setViewportView(getLstManageSongs());
+		}
+		return scrollManage;
+	}
+	private JList getLstManageSongs() {
+		if (lstManageSongs == null) {
+			lstManageSongs = new JList();
+		}
+		return lstManageSongs;
+	}
 }
