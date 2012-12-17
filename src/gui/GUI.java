@@ -400,7 +400,7 @@ public class GUI extends JFrame {
                     txtLyricist.setText(song.getLyricist());
                     txtLyrics.setText(song.getLyrics());
                     txtCopyright.setText(song.getCopyright());
-              //      cmbManageKey.setSelectedItem(song)
+         //           cmbManageKey.setSelectedItem(song)
                 }
             });
             btnEdit.setBounds(280, 130, 117, 29);
