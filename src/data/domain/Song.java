@@ -84,6 +84,19 @@ public class Song {
         this.copyright = copyright;
     }
 
+    public void addMusicalKey(String key) {
+        addKeyword(KEY_MARKER + key);
+    }
+
+    public String getMusicalKey() {
+        String key = "";
+        for (String keyword: keywords) {
+            if (keyword.contains(KEY_MARKER))
+                key = keyword;
+        }
+        return key;
+    }
+
     public void addKeyword(String... key) {
         for (String word: key) {
             keywords.add(word.trim());
@@ -137,7 +150,4 @@ public class Song {
         return title != null ? title.hashCode() : 0;
     }
 
-    public void addMusicalKey(String key) {
-        addKeyword(KEY_MARKER + key);
-    }
 }
