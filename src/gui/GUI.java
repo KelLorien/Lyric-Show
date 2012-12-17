@@ -266,7 +266,6 @@ public class GUI extends JFrame {
             btnCreateSlideshow.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //TODO: fix file destination!!! issue probably occurs between controller and PPTBuilder
                     List<String> songs = new ArrayList<String>();
                     for(int i = 0; i<lmCurrentList.getSize();i++)
                     {
@@ -435,7 +434,7 @@ public class GUI extends JFrame {
                     fc.setFileFilter(ffilter);
 
                     //In response to a button click:
-                    int returnVal = fc.showOpenDialog(null);
+                    fc.showOpenDialog(null);
                     File targetFile = fc.getSelectedFile();
 
                     manageTabController.importFromPPT(targetFile);
@@ -768,7 +767,8 @@ public class GUI extends JFrame {
         return btnSave;
     }
 
-    private JList getLstSearchResults() {
+    @SuppressWarnings("serial")
+	private JList getLstSearchResults() {
         if (lstSearchResults == null) {
             lstSearchResults = new JList();
             lstSearchResults.setModel(new AbstractListModel() {
