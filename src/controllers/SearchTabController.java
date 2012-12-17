@@ -1,5 +1,6 @@
 package controllers;
 
+import data.LibraryConflictException;
 import data.domain.Song;
 import gui.GUI;
 import services.SongAdder;
@@ -66,7 +67,9 @@ public class SearchTabController {
         try {
             adder.deleteSong(songName);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "There was a problem deleting the file" + e.getMessage());
+            JOptionPane.showMessageDialog(null, "There was a problem deleting the file. " + e.getMessage());
+        } catch (LibraryConflictException e) {
+            JOptionPane.showMessageDialog(null, "There was a problem deleting the file. " + e.getMessage());
         }
     }
 

@@ -1,7 +1,9 @@
 package data;
 
+import controllers.ManageTabController;
+import controllers.SearchTabController;
 import data.domain.Song;
-import util.BackUp;
+import services.SongList;
 import util.Preferences;
 import util.SongStorageParser;
 
@@ -43,8 +45,8 @@ public class SongDAO {
 
     //private constructor; use the getInstance() to access this singleton.
     private SongDAO() {
-        library = new File(STORAGE_URL + LIBRARY_DIR_NAME);
-        index = new File(STORAGE_URL + INDEX_FILE_NAME);
+        library = new File(STORAGE_URL, LIBRARY_DIR_NAME);
+        index = new File(STORAGE_URL, INDEX_FILE_NAME);
         library.mkdirs();
         if (!library.canRead() || !library.canWrite()) {
             throw new RuntimeException("Library is not readable!");
@@ -184,7 +186,7 @@ public class SongDAO {
      * Updates a song that already exists in the library.
      * @param song {@link Song} to be updated
      */
-    public void updateSong(Song song) throws IOException {
+    public void updateSong(Song song) throws IOException, LibraryConflictException {
         updateIndex(song, false);
         updateLibrary(song);
     }
@@ -194,7 +196,7 @@ public class SongDAO {
      * @param title title of the song to be deleted
      * @throws IOException if there was an error deleting the file from the index or song library
      */
-    public void deleteSong(String title) throws IOException {
+    public void deleteSong(String title) throws IOException, LibraryConflictException {
         Song toDelete = new Song(title);
         updateIndex(toDelete, true);
         deleteStorageFile(toDelete);
@@ -226,40 +228,50 @@ public class SongDAO {
         }
     }
 
-    private void updateIndex(Song song, boolean delete) throws IOException {
-        File tempIndex = new File(STORAGE_URL + "tempIndex");
+    private void updateIndex(Song song, boolean delete) throws IOException, LibraryConflictException {
 
-        FileWriter tempIndexWriter;
+        String fullIndex = readIndex();
 
-        tempIndexWriter = new FileWriter(tempIndex);
+        List<String> indexLines = new ArrayList<String>();
+        Collections.addAll(indexLines, fullIndex.split("\n"));
+        boolean updated = false;
+        for (int i = 0; i < indexLines.size(); i +=2 ) {
+            if (indexLines.get(i).equals(song.getTitle())) {
+                indexLines.remove(i);
+                indexLines.remove(i);
+                overwriteIndex(indexLines);
+                updated = true;
+            }
+        }
 
+        if (!updated) {
+            throw new LibraryConflictException("Could not find " + song.getTitle() + " in library.");
+        }
 
-        Scanner indexScanner = getIndexScanner();
+        if (!delete)
+            writeToIndex(song);
+    }
 
+    private void overwriteIndex(List<String> indexLines) throws IOException {
+        index.delete();
+        index.createNewFile();
+        FileWriter writer = new FileWriter(index);
         try {
-            while(indexScanner.hasNext()) {
-                String titleLine = indexScanner.nextLine();
-                if (titleLine.equalsIgnoreCase(song.getTitle())) {
-                    if (!delete)
-                        tempIndexWriter.append(SongStorageParser.toIndexString(song));
-                    indexScanner.nextLine();
-                } else {
-                    tempIndexWriter.append(titleLine).append(System.getProperty("line.separator"))
-                            .append(indexScanner.nextLine()).append(System.getProperty("line.separator"));
-                }
+            for (String s: indexLines) {
+                writer.append(s).append(System.getProperty("line.separator"));
             }
         } finally {
-            closeQuietly(tempIndexWriter);
-            indexScanner.close();
+            writer.close();
         }
+    }
 
-        if(!index.delete()) {
-            throw new IOException("Could not update Index\nFailed to delete Index.");
+    private String readIndex() throws FileNotFoundException {
+        String fullIndex = "";
+        Scanner indexScanner = getIndexScanner();
+        while (indexScanner.hasNext()) {
+            fullIndex += indexScanner.nextLine() + "\n";
         }
-        if(!tempIndex.renameTo(index)) {
-            throw new IOException("Could not update Index\nFailed to rename Index.");
-        }
-
+        return fullIndex;
     }
 
     private void updateLibrary(Song song) throws IOException {
@@ -313,42 +325,15 @@ public class SongDAO {
 
     //TODO: remove for prod
     public static void main(String[] args) {
-        SongDAO dao = SongDAO.getInstance();
-
         Song song = getTestSong();
 
         try {
-            dao.addSong(song);
-            System.out.println("First:");
-            Song storedSong = dao.getSong(song.getTitle());
-            System.out.println("title: " + storedSong.getTitle());
-            System.out.println("author: " + storedSong.getAuthor());
-            System.out.println("copyright: " + storedSong.getCopyright());
-
-            Song otherSong = new Song("other song");
-            otherSong.setAuthor("other auth");
-            otherSong.setLyrics("all your base\n" +
-                    "all your base\n" +
-                    "all your base\n" +
-                    "all your base\n" +
-                    "all your base\n" +
-                    "all your base\n" +
-                    "all your base\n" +
-                    "all your base\n" +
-                    "all your base\n" +
-                    "all your base\n");
-            dao.addSong(otherSong);
-
-            song.setCopyright("CCLI");
-            dao.updateSong(song);
-
-            System.out.println("\nChanged:");
-            storedSong = dao.getSong(song.getTitle());
-            System.out.println("title: " + storedSong.getTitle());
-            System.out.println("author: " + storedSong.getAuthor());
-            System.out.println("copyright: " + storedSong.getCopyright());
-
-            BackUp.BackUpAll(new File("backup"));
+            ManageTabController.getInstance().importFromPPT(new File("C:\\Users\\jpipe\\lyric-show\\PM081212-1.ppt"));
+            System.out.println(SongList.getInstance().getSongTitles());
+            ManageTabController.getInstance().saveSong(song);
+            song.setAuthor("run to the hills");
+            song.setCopyright("CCLI !@#$%^");
+            ManageTabController.getInstance().saveSong(song);
         } catch (Exception e) {
             e.printStackTrace();
         }

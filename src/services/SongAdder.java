@@ -34,7 +34,7 @@ public class SongAdder {
         }
     }
 
-    public void deleteSong(String title) throws IOException {
+    public void deleteSong(String title) throws IOException, LibraryConflictException {
         dao.deleteSong(title);
     }
 }

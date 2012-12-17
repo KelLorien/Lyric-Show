@@ -20,6 +20,7 @@ import java.util.List;
 public class PPTImporter {
 
     private static PPTImporter instance;
+    private static final String NEWLINE_REPLACEMENT = " ";
 
     public static PPTImporter getInstance() {
         if (instance == null)
@@ -68,7 +69,7 @@ public class PPTImporter {
 
         Song currentSong = startNewSong(slides[0]);
         for (Slide slide: slides) {
-            String nextTitle = slide.getTitle();
+            String nextTitle = removeNewLines(slide.getTitle());
             if (nextTitle == null || slide.getTextRuns().length < 1) {
                 continue;
             }
@@ -86,7 +87,7 @@ public class PPTImporter {
     private Song startNewSong(Slide slide) {
         Song song = new Song();
 
-        song.setTitle(slide.getTitle());
+        song.setTitle(removeNewLines(slide.getTitle()));
         song.setLyrics("");
 
         TextRun[] textRuns = slide.getTextRuns();
@@ -114,6 +115,10 @@ public class PPTImporter {
         }
 
         return song;
+    }
+
+    private String removeNewLines(String title) {
+        return title.replaceAll("\n", NEWLINE_REPLACEMENT);
     }
 
     //TODO: remove for prod

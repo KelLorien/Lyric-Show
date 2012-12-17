@@ -41,9 +41,11 @@ public class ManageTabController {
         try {
             adder.saveOrUpdateSong(song);
         } catch (IOException e) {
-        	JOptionPane.showMessageDialog(null, "There was a problem updating the file");
+        	e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "There was a problem updating the file. " + e.getMessage());
         } catch (LibraryConflictException e) {
-        	JOptionPane.showMessageDialog(null, "A song with this name already exists");
+        	e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "A song with this name already exists. " + e.getMessage());
         }
     }
 
@@ -54,7 +56,8 @@ public class ManageTabController {
             }
 
         } catch (IOException e) {
-        	JOptionPane.showMessageDialog(null, "There was a problem adding the file");
+        	e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "There was a problem adding the file. " + e.getMessage());
         }
     }
 
