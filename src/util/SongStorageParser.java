@@ -123,12 +123,12 @@ public class SongStorageParser {
     }
 
     public static enum Tag {
-        KEY ( "<k>", "<\\\\k>"),
-        KEY_LIST( "<keys>", "<\\keys>"),
-        DATE ( "<d>", "<\\d>"),
-        AUTHOR ( "<a>", "<\\a>"),
-        LYRICIST( "<l>", "<\\l>"),
-        COPYRIGHT( "<c>", "<\\c>");
+        KEY ( "<k>", "</k>"),
+        KEY_LIST( "<keys>", "</keys>"),
+        DATE ( "<d>", "</d>"),
+        AUTHOR ( "<a>", "</a>"),
+        LYRICIST( "<l>", "</l>"),
+        COPYRIGHT( "<c>", "</c>");
 
         private final String tagString;
         private final String endTagString;
