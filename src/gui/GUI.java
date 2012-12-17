@@ -222,7 +222,7 @@ public class GUI extends JFrame {
             scLib = new JScrollPane();
             scLib.addMouseListener(new MouseAdapter() {
             });
-            scLib.setBounds(31, 52, 245, 209);
+            scLib.setBounds(31, 52, 245, 290);
             scLib.setViewportView(getLstSlideLibrary());
         }
         return scLib;
@@ -249,14 +249,14 @@ public class GUI extends JFrame {
                     scCurrentList.setViewportView(lstSlideCurrent);
                 }
             });
-            btnAddToList.setBounds(275, 116, 136, 29);
+            btnAddToList.setBounds(282, 156, 136, 29);
         }
         return btnAddToList;
     }
     private JScrollPane getScCurrentList() {
         if (scCurrentList == null) {
             scCurrentList = new JScrollPane();
-            scCurrentList.setBounds(31, 273, 245, 191);
+            scCurrentList.setBounds(31, 373, 245, 141);
             scCurrentList.setViewportView(getLstSlideCurrent());
         }
         return scCurrentList;
@@ -280,7 +280,7 @@ public class GUI extends JFrame {
                     }
                 }
             });
-            btnCreateSlideshow.setBounds(283, 406, 135, 29);
+            btnCreateSlideshow.setBounds(283, 485, 135, 29);
         }
         return btnCreateSlideshow;
     }
@@ -295,7 +295,7 @@ public class GUI extends JFrame {
                     scCurrentList.setViewportView(lstSlideCurrent);
                 }
             });
-            btnAddBlankSlide.setBounds(275, 145, 136, 29);
+            btnAddBlankSlide.setBounds(282, 186, 136, 29);
         }
         return btnAddBlankSlide;
     }
@@ -689,7 +689,7 @@ public class GUI extends JFrame {
                         lmCurrentList.remove(lstSlideCurrent.getSelectedIndex());
                 }
             });
-            btnRemove.setBounds(283, 349, 135, 29);
+            btnRemove.setBounds(283, 425, 135, 29);
         }
         return btnRemove;
     }
@@ -712,7 +712,7 @@ public class GUI extends JFrame {
                     }
                 }
             });
-            btnMoveDown.setBounds(283, 320, 135, 29);
+            btnMoveDown.setBounds(283, 397, 135, 29);
         }
         return btnMoveDown;
     }
@@ -732,7 +732,7 @@ public class GUI extends JFrame {
                     }
                 }
             });
-            btnMoveUp.setBounds(283, 293, 135, 29);
+            btnMoveUp.setBounds(283, 370, 135, 29);
         }
         return btnMoveUp;
     }
@@ -747,7 +747,7 @@ public class GUI extends JFrame {
                     try {
 						txtLyrics.setText(history.getHistory());
 					} catch (FileNotFoundException e) {
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null,"No history found!");
 					}
                 }
             });
