@@ -87,7 +87,6 @@ public class Song {
         return musicalKey;
     }
 
-
     public void setMusicalKey(String musicalKey) {
         this.musicalKey = musicalKey;
     }

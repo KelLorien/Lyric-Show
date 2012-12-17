@@ -97,7 +97,7 @@ public class GUI extends JFrame {
      * Create the frame.
      */
     public GUI() {
-    	setTitle("PowerPoint Creator");
+        setTitle("PowerPoint Creator");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(200, 200, 450, 600);
         contentPane = new JPanel();
@@ -187,22 +187,22 @@ public class GUI extends JFrame {
         if (slideSearch == null) {
             slideSearch = new JTextField();
             slideSearch.addKeyListener(new KeyAdapter() {
-            	@Override
-            	public void keyTyped(KeyEvent arg0) {
-            		//will hopefully search inside the library
-            		String searchSongs = slideSearch.getText().toLowerCase();
-            		searchCreate.removeAllElements();
-            		
-            		for(int i=0;i<lm.size();i++)
-            		{
-            			if (lm.elementAt(i).toString().toLowerCase().contains(searchSongs))
-            			{
-            				searchCreate.addElement(lm.elementAt(i).toString());
-            			}
-            		}
-            		lstSlideLibrary = new JList(searchCreate);
-            		scLib.setViewportView(lstSlideLibrary);
-            	}
+                @Override
+                public void keyTyped(KeyEvent arg0) {
+                    //will hopefully search inside the library
+                    String searchSongs = slideSearch.getText().toLowerCase();
+                    searchCreate.removeAllElements();
+
+                    for(int i=0;i<lm.size();i++)
+                    {
+                        if (lm.elementAt(i).toString().toLowerCase().contains(searchSongs))
+                        {
+                            searchCreate.addElement(lm.elementAt(i).toString());
+                        }
+                    }
+                    lstSlideLibrary = new JList(searchCreate);
+                    scLib.setViewportView(lstSlideLibrary);
+                }
             });
             slideSearch.setBounds(31, 24, 245, 28);
             slideSearch.setColumns(10);
@@ -304,21 +304,21 @@ public class GUI extends JFrame {
         if (txtManageSearch == null) {
             txtManageSearch = new JTextField();
             txtManageSearch.addKeyListener(new KeyAdapter() {
-            	@Override
-            	public void keyTyped(KeyEvent e) {
-            		String searchSongs = txtManageSearch.getText().toLowerCase();
-            		manageSearch.removeAllElements();
-            		
-            		for(int i=0;i<lm.size();i++)
-            		{
-            			if (lm.elementAt(i).toString().toLowerCase().contains(searchSongs))
-            			{
-            				manageSearch.addElement(lm.elementAt(i).toString());
-            			}
-            		}
-            		lstManageSongs = new JList(manageSearch);
-            		scrollManage.setViewportView(lstManageSongs);
-            	}
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    String searchSongs = txtManageSearch.getText().toLowerCase();
+                    manageSearch.removeAllElements();
+
+                    for(int i=0;i<lm.size();i++)
+                    {
+                        if (lm.elementAt(i).toString().toLowerCase().contains(searchSongs))
+                        {
+                            manageSearch.addElement(lm.elementAt(i).toString());
+                        }
+                    }
+                    lstManageSongs = new JList(manageSearch);
+                    scrollManage.setViewportView(lstManageSongs);
+                }
             });
             txtManageSearch.setBounds(6, 22, 255, 28);
             txtManageSearch.setColumns(10);
@@ -362,21 +362,21 @@ public class GUI extends JFrame {
                         fc.showSaveDialog(null);
                         File target = fc.getSelectedFile();
                         try{
-                        if (s.equalsIgnoreCase("Library"))
-                        {
-								BackUp.BackUpTxt(target);
-                        }
-                        else if (s.equalsIgnoreCase("PowerPoints"))
-                        {
-                            	BackUp.BackUpPPT(target);
-                        }
-                        else if (s.equalsIgnoreCase("Both"))
-                        {
-                            	BackUp.BackUpAll(target);
-                        }}
+                            if (s.equalsIgnoreCase("Library"))
+                            {
+                                BackUp.BackUpTxt(target);
+                            }
+                            else if (s.equalsIgnoreCase("PowerPoints"))
+                            {
+                                BackUp.BackUpPPT(target);
+                            }
+                            else if (s.equalsIgnoreCase("Both"))
+                            {
+                                BackUp.BackUpAll(target);
+                            }}
                         catch(Exception e1)
                         {
-                        	
+
                         }
                     }
                 }
@@ -391,7 +391,7 @@ public class GUI extends JFrame {
             btnEdit.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                	clearManageText();
+                    clearManageText();
                     String title = lstManageSongs.getSelectedValue().toString();
                     Song song = searchTabController.getSong(title);
                     txtTitle.setText(song.getTitle());
@@ -404,12 +404,12 @@ public class GUI extends JFrame {
                     List<String> keywords = song.getKeywords();
                     if (keywords.size() >0)
                     {
-                    	for(String keyword: keywords)
-                    	{
-                    		keyString += keyword;
-                    		keyString += ", ";
-                    	}
-                    keyString = keyString.substring(0, keyString.length()-2);
+                        for(String keyword: keywords)
+                        {
+                            keyString += keyword;
+                            keyString += ", ";
+                        }
+                        keyString = keyString.substring(0, keyString.length()-2);
                     }
                     txtKeywords.setText(keyString);
                 }
@@ -425,14 +425,14 @@ public class GUI extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     if (lstManageSongs.getSelectedValue() != null) {
-                    	int n =
-                    			JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + 
-                    						lstManageSongs.getSelectedValue().toString() +"?","Warning",JOptionPane.YES_NO_OPTION);
-                    	if(n == JOptionPane.YES_OPTION)	
-                    	{
-                         searchTabController.deleteSong(lstManageSongs.getSelectedValue().toString());
-                         loadSongs();
-                    	}
+                        int n =
+                                JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " +
+                                        lstManageSongs.getSelectedValue().toString() +"?","Warning",JOptionPane.YES_NO_OPTION);
+                        if(n == JOptionPane.YES_OPTION)
+                        {
+                            searchTabController.deleteSong(lstManageSongs.getSelectedValue().toString());
+                            loadSongs();
+                        }
                     }
                 }
             });
@@ -683,7 +683,7 @@ public class GUI extends JFrame {
         for (String song : songs) {
             lm.addElement(song);
             lmManage.addElement(song);
-           
+
         }
         lstSlideLibrary = new JList(lm);
         lstManageSongs = new JList(lm);
@@ -756,10 +756,10 @@ public class GUI extends JFrame {
                     History history = History.getInstance();
                     clearManageText();
                     try {
-						txtLyrics.setText(history.getHistory());
-					} catch (FileNotFoundException e) {
-						JOptionPane.showMessageDialog(null,"No history found!");
-					}
+                        txtLyrics.setText(history.getHistory());
+                    } catch (FileNotFoundException e) {
+                        JOptionPane.showMessageDialog(null,"No history found!");
+                    }
                 }
             });
             button.setBounds(280, 23, 117, 29);
@@ -785,16 +785,12 @@ public class GUI extends JFrame {
                     String[] keywords = keyword.split(",");
                     for (String word: keywords)
                     {
-                    	if (word.charAt(0) == ' ')
-                    	{
-                    		word = word.substring(1);
-                    		JOptionPane.showMessageDialog(null, "a" +word);
-                    	}
+                        updatedSong.addKeyword(word.trim());
+                        JOptionPane.showMessageDialog(null, "a" +word);
                     }
-                    updatedSong.addAllKeywords(Arrays.asList(keywords));
                     if(cmbManageKey.getSelectedIndex()>1)
                     {
-                    	updatedSong.setMusicalKey(cmbManageKey.getSelectedItem().toString());
+                        updatedSong.setMusicalKey(cmbManageKey.getSelectedItem().toString());
                     }
                     manageTabController.saveSong(updatedSong);
                 }
@@ -805,7 +801,7 @@ public class GUI extends JFrame {
     }
 
 
-	private JList getLstSearchResults() {
+    private JList getLstSearchResults() {
         if (lstSearchResults == null) {
             lstSearchResults = new JList();
             lstSearchResults.setModel(new AbstractListModel() {
@@ -860,51 +856,51 @@ public class GUI extends JFrame {
         }
         return cmbManageKey;
     }
-	private JScrollPane getScrollManage() {
-		if (scrollManage == null) {
-			scrollManage = new JScrollPane();
-			scrollManage.setBounds(6, 53, 255, 106);
-			scrollManage.setViewportView(getLstManageSongs());
-		}
-		return scrollManage;
-	}
-	private JList getLstManageSongs() {
-		if (lstManageSongs == null) {
-			lstManageSongs = new JList();
-		}
-		return lstManageSongs;
-	}
-	public static void clearManageText()
-	{
-		txtTitle.setText("");
-		txtComposer.setText("");
-		txtLyrics.setText("");
-		txtLyricist.setText("");
-		txtCopyright.setText("");
-		cmbManageKey.setSelectedIndex(0);
-	}
-	private JLabel getLblKeywords() {
-		if (lblKeywords == null) {
-			lblKeywords = new JLabel("Keywords:");
-			lblKeywords.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblKeywords.setBounds(6, 279, 71, 16);
-		}
-		return lblKeywords;
-	}
-	private JTextField getTxtKeywords() {
-		if (txtKeywords == null) {
-			txtKeywords = new JTextField();
-			txtKeywords.setBounds(77, 273, 210, 28);
-			txtKeywords.setColumns(10);
-		}
-		return txtKeywords;
-	}
-	private JLabel getLblSeperateByCommas() {
-		if (lblSeperateByCommas == null) {
-			lblSeperateByCommas = new JLabel("*Seperate by commas");
-			lblSeperateByCommas.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-			lblSeperateByCommas.setBounds(294, 280, 117, 16);
-		}
-		return lblSeperateByCommas;
-	}
+    private JScrollPane getScrollManage() {
+        if (scrollManage == null) {
+            scrollManage = new JScrollPane();
+            scrollManage.setBounds(6, 53, 255, 106);
+            scrollManage.setViewportView(getLstManageSongs());
+        }
+        return scrollManage;
+    }
+    private JList getLstManageSongs() {
+        if (lstManageSongs == null) {
+            lstManageSongs = new JList();
+        }
+        return lstManageSongs;
+    }
+    public static void clearManageText()
+    {
+        txtTitle.setText("");
+        txtComposer.setText("");
+        txtLyrics.setText("");
+        txtLyricist.setText("");
+        txtCopyright.setText("");
+        cmbManageKey.setSelectedIndex(0);
+    }
+    private JLabel getLblKeywords() {
+        if (lblKeywords == null) {
+            lblKeywords = new JLabel("Keywords:");
+            lblKeywords.setHorizontalAlignment(SwingConstants.RIGHT);
+            lblKeywords.setBounds(6, 279, 71, 16);
+        }
+        return lblKeywords;
+    }
+    private JTextField getTxtKeywords() {
+        if (txtKeywords == null) {
+            txtKeywords = new JTextField();
+            txtKeywords.setBounds(77, 273, 210, 28);
+            txtKeywords.setColumns(10);
+        }
+        return txtKeywords;
+    }
+    private JLabel getLblSeperateByCommas() {
+        if (lblSeperateByCommas == null) {
+            lblSeperateByCommas = new JLabel("*Seperate by commas");
+            lblSeperateByCommas.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+            lblSeperateByCommas.setBounds(294, 280, 117, 16);
+        }
+        return lblSeperateByCommas;
+    }
 }
