@@ -95,6 +95,7 @@ public class SongDAO {
             song.setAuthor(SongStorageParser.extractTagDataFromString(metaLine, Tag.AUTHOR));
             song.setLyricist(SongStorageParser.extractTagDataFromString(metaLine, Tag.LYRICIST));
             song.setCopyright(SongStorageParser.extractTagDataFromString(metaLine, Tag.COPYRIGHT));
+            song.setMusicalKey(SongStorageParser.extractTagDataFromString(metaLine, Tag.MUSICAL_KEY));
             song.setLastUsed(Long.parseLong(SongStorageParser.extractTagDataFromString(metaLine, Tag.DATE)));
 
             String lyrics = "";

@@ -46,5 +46,4 @@ public class SongFinder {
     public List<String> getTitlesByKey(String key) throws ParseException {
         return dao.getAllSongsWithAttribute(key, SongStorageParser.Tag.MUSICAL_KEY);
     }
-
 }
