@@ -402,10 +402,16 @@ public class GUI extends JFrame {
                     cmbManageKey.setSelectedItem(song.getMusicalKey());
                     String keyString = "";
                     List<String> keywords = song.getKeywords();
-                    for(String keyword: keywords)
+                    if (keywords.size() >0)
                     {
-             //       	keyString += "";
+                    	for(String keyword: keywords)
+                    	{
+                    		keyString += keyword;
+                    		keyString += ", ";
+                    	}
+                    keyString = keyString.substring(0, keyString.length()-2);
                     }
+                    txtKeywords.setText(keyString);
                 }
             });
             btnEdit.setBounds(280, 130, 117, 29);
@@ -773,7 +779,6 @@ public class GUI extends JFrame {
                     updatedSong.setAuthor(txtComposer.getText());
                     updatedSong.setLyrics(txtLyrics.getText());
                     updatedSong.setCopyright(txtCopyright.getText());
-                    updatedSong.setMusicalKey(key);
                     updatedSong.setTitle(title);
                     updatedSong.setMusicalKey(key);
                     String keyword = txtKeywords.getText();
@@ -783,12 +788,13 @@ public class GUI extends JFrame {
                     	if (word.charAt(0) == ' ')
                     	{
                     		word = word.substring(1);
+                    		JOptionPane.showMessageDialog(null, "a" +word);
                     	}
                     }
                     updatedSong.addAllKeywords(Arrays.asList(keywords));
                     if(cmbManageKey.getSelectedIndex()>1)
                     {
-                    	updatedSong.addMusicalKey(cmbManageKey.getSelectedItem().toString());
+                    	updatedSong.setMusicalKey(cmbManageKey.getSelectedItem().toString());
                     }
                     manageTabController.saveSong(updatedSong);
                 }
