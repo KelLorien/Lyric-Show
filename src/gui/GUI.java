@@ -6,8 +6,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import controllers.ManageTabController;
 import controllers.SearchTabController;
@@ -24,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame {
@@ -99,7 +99,7 @@ public class GUI extends JFrame {
     public GUI() {
     	setTitle("PowerPoint Creator");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setBounds(200, 200, 450, 550);
+        setBounds(200, 200, 450, 600);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -109,7 +109,7 @@ public class GUI extends JFrame {
     private JTabbedPane getTabbedPane_2() {
         if (tabbedPane == null) {
             tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-            tabbedPane.setBounds(6, 6, 438, 516);
+            tabbedPane.setBounds(6, 6, 438, 566);
             tabbedPane.addTab("Slideshow", null, getPanSlideshow(), null);
             tabbedPane.addTab("Manage Songs", null, getPanManage(), null);
             tabbedPane.addTab("Search", null, getPanSearch(), null);
@@ -157,6 +157,9 @@ public class GUI extends JFrame {
             panManage.add(getLblKey());
             panManage.add(getCmbManageKey());
             panManage.add(getScrollManage());
+            panManage.add(getLblKeywords());
+            panManage.add(getTxtKeywords());
+            panManage.add(getLblSeperateByCommas());
         }
         return panManage;
     }
@@ -486,7 +489,7 @@ public class GUI extends JFrame {
     private JScrollPane getScrollPane_3() {
         if (scrollPane_3 == null) {
             scrollPane_3 = new JScrollPane();
-            scrollPane_3.setBounds(6, 279, 405, 156);
+            scrollPane_3.setBounds(6, 306, 405, 176);
             scrollPane_3.setViewportView(getTxtLyrics());
         }
         return scrollPane_3;
@@ -597,7 +600,7 @@ public class GUI extends JFrame {
     private JScrollPane getScResults() {
         if (scResults == null) {
             scResults = new JScrollPane();
-            scResults.setBounds(6, 142, 405, 281);
+            scResults.setBounds(6, 142, 405, 331);
             scResults.setViewportView(getLstSearchResults());
         }
         return scResults;
@@ -629,7 +632,7 @@ public class GUI extends JFrame {
                     scCurrentList.setViewportView(lstSlideCurrent);
                 }
             });
-            btnSearchAdd.setBounds(150, 435, 117, 29);
+            btnSearchAdd.setBounds(150, 485, 117, 29);
         }
         return btnSearchAdd;
     }
@@ -650,6 +653,9 @@ public class GUI extends JFrame {
     private static JList lstManageSongs;
     private static DefaultListModel lm = new DefaultListModel();
     private static DefaultListModel lmManage = new DefaultListModel();
+    private JLabel lblKeywords;
+    private JTextField txtKeywords;
+    private JLabel lblSeperateByCommas;
     private static void loadSongs()
     {
         SongList songlist = SongList.getInstance();
@@ -757,15 +763,18 @@ public class GUI extends JFrame {
                     updatedSong.addMusicalKey(key);
                     updatedSong.setTitle(title);
                     updatedSong.addMusicalKey(key);
+                    String keyword = txtKeywords.getText();
+                    String[] keywords = keyword.split(",");
+                    updatedSong.addAllKeywords(Arrays.asList(keywords));
                     manageTabController.saveSong(updatedSong);
                 }
             });
-            btnSave.setBounds(154, 435, 117, 29);
+            btnSave.setBounds(155, 485, 117, 29);
         }
         return btnSave;
     }
 
-    @SuppressWarnings("serial")
+
 	private JList getLstSearchResults() {
         if (lstSearchResults == null) {
             lstSearchResults = new JList();
@@ -843,5 +852,29 @@ public class GUI extends JFrame {
 		txtLyricist.setText("");
 		txtCopyright.setText("");
 		cmbManageKey.setSelectedIndex(0);
+	}
+	private JLabel getLblKeywords() {
+		if (lblKeywords == null) {
+			lblKeywords = new JLabel("Keywords:");
+			lblKeywords.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblKeywords.setBounds(6, 279, 71, 16);
+		}
+		return lblKeywords;
+	}
+	private JTextField getTxtKeywords() {
+		if (txtKeywords == null) {
+			txtKeywords = new JTextField();
+			txtKeywords.setBounds(77, 273, 210, 28);
+			txtKeywords.setColumns(10);
+		}
+		return txtKeywords;
+	}
+	private JLabel getLblSeperateByCommas() {
+		if (lblSeperateByCommas == null) {
+			lblSeperateByCommas = new JLabel("*Seperate by commas");
+			lblSeperateByCommas.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+			lblSeperateByCommas.setBounds(294, 280, 117, 16);
+		}
+		return lblSeperateByCommas;
 	}
 }

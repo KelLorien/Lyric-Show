@@ -4,6 +4,7 @@ import controllers.SlideshowTabController;
 import data.SongDAO;
 import data.domain.Song;
 import org.apache.poi.hslf.model.Slide;
+import org.apache.poi.hslf.model.SlideMaster;
 import org.apache.poi.hslf.model.TextBox;
 import org.apache.poi.hslf.model.TextShape;
 import org.apache.poi.hslf.usermodel.RichTextRun;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 
 /**
  * User: jpipe
@@ -34,6 +36,7 @@ public class PPTBuilder {
     }
 
     private SongDAO dao = SongDAO.getInstance();
+    
 
     //Private constructor. Use getInstance above to use this class
     private PPTBuilder() {
@@ -87,10 +90,13 @@ public class PPTBuilder {
         outputPPT(songs, DEFAULT_OUTPUT_DIR, DateFormat.getDateInstance().format(new Date()));
     }*/
 
+    private SlideMaster[] template;
 
     private void outputPPT(List<Song> songs, File outputDir, String fileName) throws IOException {
         SlideShow show = new SlideShow();
-
+        SlideShow templateSlideShow = readSlideShow(new File("template.ppt"));
+        template = templateSlideShow.getSlidesMasters();
+        
         for (Song song: songs) {
             if (song.getTitle().equalsIgnoreCase(SlideshowTabController.BLANK_SLIDE_TITLE)) {
                 show.createSlide();
@@ -108,13 +114,16 @@ public class PPTBuilder {
     private static final int TITLE_HEIGHT = 125;
     private static final int COPYRIGHT_HEIGHT = 75;
 
-    private void addSongToPPT (SlideShow show, Song song) {
+    private void addSongToPPT (SlideShow show, Song song) throws IOException {
         for (String lyrics: song.getLyrics().split("\n\n")) {
+            
             Slide slide = show.createSlide();
+            slide.setMasterSheet(template[0]);
+            
             slide.addTitle().setText(song.getTitle());
             slide.getTextRuns()[0].getRichTextRunAt(0).setFontSize(36);
 
-            insertTextbox(slide, lyrics, 28, TextShape.AlignCenter,
+            insertTextbox(slide, lyrics, 28, TextShape.AlignLeft,
                     new Rectangle(LYRIC_MARGIN, TITLE_HEIGHT + (int) (.5 * AUTH_HEIGHT),
                             (int) show.getPageSize().getWidth() - (LYRIC_MARGIN * 2),
                             (int) show.getPageSize().getHeight() - (TITLE_HEIGHT + AUTH_HEIGHT)));
@@ -212,5 +221,23 @@ public class PPTBuilder {
         }
 
         SongDAO.deleteStuff();
+    }
+    private SlideShow readSlideShow(File ppt) throws IOException {
+        FileInputStream inputStream = null;
+        SlideShow show = null;
+        try {
+            inputStream = new FileInputStream(ppt);
+            show = new SlideShow(inputStream);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        return show;
     }
 }
