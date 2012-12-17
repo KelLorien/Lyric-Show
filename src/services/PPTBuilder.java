@@ -1,8 +1,6 @@
 package services;
 
-import controllers.ManageTabController;
 import controllers.SlideshowTabController;
-import data.LibraryConflictException;
 import data.SongDAO;
 import data.domain.Song;
 import org.apache.poi.hslf.model.Slide;
@@ -10,7 +8,6 @@ import org.apache.poi.hslf.model.TextBox;
 import org.apache.poi.hslf.model.TextShape;
 import org.apache.poi.hslf.usermodel.RichTextRun;
 import org.apache.poi.hslf.usermodel.SlideShow;
-import util.Preferences;
 
 import java.awt.*;
 import java.io.*;
@@ -20,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 
 /**
  * User: jpipe

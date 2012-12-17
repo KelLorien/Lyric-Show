@@ -6,9 +6,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import controllers.ManageTabController;
@@ -16,7 +14,6 @@ import controllers.SearchTabController;
 import controllers.SlideshowTabController;
 import data.domain.Song;
 import services.History;
-import services.SongFinder;
 import services.SongList;
 import util.BackUp;
 
@@ -28,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+@SuppressWarnings("serial")
 public class GUI extends JFrame {
 
     public static final String TITLE = "Title";

@@ -7,8 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 /**
  * User: jpipe
  * Date: 12/13/12
