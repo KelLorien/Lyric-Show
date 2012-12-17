@@ -83,7 +83,9 @@ public class Song {
     }
 
     public void addKeyword(String... key) {
-        Collections.addAll(keywords, key);
+        for (String word: key) {
+            keywords.add(word.trim());
+        }
     }
 
     public void addAllKeywords(List<String> keys) {
