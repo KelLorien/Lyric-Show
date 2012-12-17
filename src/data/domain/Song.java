@@ -12,6 +12,8 @@ import java.util.*;
  */
 public class Song {
 
+    public static final String KEY_MARKER = "KEY:";
+
     String title = "";
     String lyrics = "";
     Date lastUsed;
@@ -133,5 +135,9 @@ public class Song {
     @Override
     public int hashCode() {
         return title != null ? title.hashCode() : 0;
+    }
+
+    public void addMusicalKey(String key) {
+        addKeyword(KEY_MARKER + key);
     }
 }

@@ -348,7 +348,7 @@ public class SongDAO {
             System.out.println("author: " + storedSong.getAuthor());
             System.out.println("copyright: " + storedSong.getCopyright());
 
-            BackUp.BackUpAll("backup");
+            BackUp.BackUpAll(new File("backup"));
         } catch (Exception e) {
             e.printStackTrace();
         }

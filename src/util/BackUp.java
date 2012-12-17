@@ -20,13 +20,13 @@ import java.util.Scanner;
 public class BackUp {
 
     //Back Up all Songs as both Powerpoint files and as .txt files
-    public static void BackUpAll(String dest) throws IOException, ParseException {
+    public static void BackUpAll(File dest) throws IOException, ParseException {
         BackUpTxt(dest);
         BackUpPPT(dest);
     }
 
     //Back up as .txt files only
-    public static void BackUpTxt(String dest) throws IOException {
+    public static void BackUpTxt(File dest) throws IOException {
         FileWriter output=null;
         Scanner libScanner = null;
         File songStore = new File(SongDAO.STORAGE_URL, SongDAO.LIBRARY_DIR_NAME);
@@ -68,13 +68,12 @@ public class BackUp {
     }
 
     //Back up as powerpoint files only
-    public static void BackUpPPT(String dest) throws IOException, ParseException {
+    public static void BackUpPPT(File dest) throws IOException, ParseException {
         PPTBuilder pptb = PPTBuilder.getInstance();
         List<String> titles = SongDAO.getInstance().getAllTitles();
         File target = new File(dest, "powerpoints");
         target.mkdirs();
         for(String title: titles){
-            Song song = SongDAO.getInstance().getSong(title);
             pptb.buildPPT(Arrays.asList(title), target, title);
         }
 

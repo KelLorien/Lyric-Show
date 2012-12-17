@@ -30,7 +30,6 @@ public class GUI extends JFrame {
     public static final String AUTHOR = "Author";
     public static final String KEYWORDS = "Keywords";
     public static final String KEY = "Key";
-    public static final String KEY_MARKER = "key:";
 
     ManageTabController manageTabController = ManageTabController.getInstance();
     SearchTabController searchTabController = SearchTabController.getInstance();
@@ -358,15 +357,15 @@ public class GUI extends JFrame {
                         fc.setDialogTitle("Choose a place to backup the library...");
                         fc.showSaveDialog(null);
                         File target = fc.getSelectedFile();
-                        if (s=="Library")
+                        if (s.equalsIgnoreCase("Library"))
                         {
                             //TODO: set backup
                         }
-                        else if (s=="PowerPoints")
+                        else if (s.equalsIgnoreCase("PowerPoints"))
                         {
                             //TODO: set backup
                         }
-                        else if (s=="Both")
+                        else if (s.equalsIgnoreCase("Both"))
                         {
                             //TODO: set backup
                         }
@@ -747,9 +746,8 @@ public class GUI extends JFrame {
                     updatedSong.setAuthor(txtComposer.getText());
                     updatedSong.setLyrics(txtLyrics.getText());
                     updatedSong.setCopyright(txtCopyright.getText());
-                    updatedSong.addKeyword(KEY_MARKER + key);
+                    updatedSong.addMusicalKey(key);
                     updatedSong.setTitle(title);
-                    //TODO:Key
                     manageTabController.saveSong(updatedSong);
                 }
             });

@@ -2,6 +2,7 @@ package services;
 
 import controllers.ManageTabController;
 import controllers.SlideshowTabController;
+import data.LibraryConflictException;
 import data.SongDAO;
 import data.domain.Song;
 import org.apache.poi.hslf.model.Slide;
@@ -27,7 +28,7 @@ import javax.swing.JOptionPane;
  * Date: 11/26/12
  */
 public class PPTBuilder {
-    private static final File DEFAULT_OUTPUT_DIR = new File(Preferences.getPPTOutURL());
+//    private static final File DEFAULT_OUTPUT_DIR = new File(Preferences.getPPTOutURL());
 
     private static PPTBuilder instance = null;
 
@@ -44,22 +45,15 @@ public class PPTBuilder {
     }
 
     /**
-     * Builds a powerpoint file out each song specified by a {@link List} of titles. If the given
-     * directory is not writable or is <code>null</code>, it will print to {@link PPTBuilder#DEFAULT_OUTPUT_DIR}.
+     * Builds a powerpoint file out each song specified by a {@link List} of titles.
      * Powerpoint file will have a title equal to today's date.
      * @param titles list of song titles to identify which songs to create a powerpoint out of.
      * @param dir specifies where the created .ppt file will be upon completion.
-     * @return <code>true</code> if the .ppt was successful stored in the given directory. Returns <code>false</code>
      * if the given directory could not be written to (in which case, it will be in the default output directory).
      * @throws IOException if there was an exception writing the file to its target directory.
-     * @see PPTBuilder#buildPPT(java.util.List)
      */
     public void buildPPT(List<String> titles, File dir) throws IOException {
-      //  if (dir == null || !dir.canWrite()) {
-    	{
-            buildPPT(titles);
-       //     return;
-        }
+
         List<Song> songs = new ArrayList<Song>();
         populateSongs(titles, songs);
         System.out.println(dir);
@@ -73,7 +67,6 @@ public class PPTBuilder {
      * @param titles titles of all songs to be used
      * @param dir directory to be output to
      * @param fileName name that the powerpoint will have
-     * @return true if succeeded
      * @throws IOException
      */
     public void buildPPT(List<String> titles, File dir, String fileName) throws IOException {
@@ -82,15 +75,14 @@ public class PPTBuilder {
 
         outputPPT(songs, dir, fileName);
     }
+/*
 
-    /**
      * Builds a powerpoint file out each song specified by a {@link List}, saved at the directory
      * specified by {@link PPTBuilder#DEFAULT_OUTPUT_DIR}.
      * @param titles list of song titles to identify which songs to create a powerpoint out of.
-     * @return <code>true</code> if the .ppt was successful stored in the default directory.
      * @throws IOException if there was an exception writing the file to its target directory.
      * @see PPTBuilder#buildPPT(java.util.List, java.io.File)
-     */
+     *//*
     public void buildPPT(List<String> titles) throws IOException {
         DEFAULT_OUTPUT_DIR.mkdirs();
 
@@ -98,7 +90,7 @@ public class PPTBuilder {
         populateSongs(titles, songs);
 
         outputPPT(songs, DEFAULT_OUTPUT_DIR, DateFormat.getDateInstance().format(new Date()));
-    }
+    }*/
 
 
     private void outputPPT(List<Song> songs, File outputDir, String fileName) throws IOException {
@@ -165,7 +157,6 @@ public class PPTBuilder {
 
         FileOutputStream outputStream = null;
         try {
-        	System.out.println(outputDir);
             outputStream = new FileOutputStream(new File(outputDir, outputName));
             show.write(outputStream);
         } finally {
@@ -204,14 +195,23 @@ public class PPTBuilder {
 
     //TODO: remove for prod
     public static void main(String[] args) {
-        String name = "songs.ppt";
-        new File(DEFAULT_OUTPUT_DIR, name).delete();
-        DEFAULT_OUTPUT_DIR.mkdir();
+        try {
+            Song song = SongDAO.getTestSong();
+            SongDAO.getInstance().addSong(song);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        String name = "testout.ppt";
+        File someDir = new File("somedir/inside it/");
+        someDir.mkdirs();
 
         Song song = SongDAO.getTestSong();
 
         try {
-            PPTBuilder.getInstance().outputPPT(Arrays.asList(song), DEFAULT_OUTPUT_DIR, name);
+            PPTBuilder.getInstance().buildPPT(Arrays.asList(song.getTitle()), someDir);
+            PPTBuilder.getInstance().buildPPT(Arrays.asList(song.getTitle()), someDir, name);
         } catch (Exception e) {
             e.printStackTrace();
         }
