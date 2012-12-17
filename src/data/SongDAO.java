@@ -332,7 +332,9 @@ public class SongDAO {
             ManageTabController.getInstance().saveSong(song);
             song.setAuthor("run to the hills");
             song.setCopyright("CCLI !@#$%^");
+            song.setMusicalKey("K#");
             ManageTabController.getInstance().saveSong(song);
+            System.out.println(SongDAO.getInstance().getAllSongsWithAttribute("K#", Tag.MUSICAL_KEY));
         } catch (Exception e) {
             e.printStackTrace();
         }

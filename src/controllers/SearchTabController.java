@@ -88,13 +88,11 @@ public class SearchTabController {
             } else if (type.equals(GUI.TITLE)) {
                 List<String> songList = SongList.getInstance().getSongTitles();
                 List<String> results = new ArrayList<String>();
-                for(int i=0;i<songList.size();i++)
-                {
-                	if(songList.get(i).toString().toLowerCase().contains(search.toLowerCase()))
-                		{
-                			results.add(songList.get(i).toString());
-                			JOptionPane.showMessageDialog(null, songList.get(i).toString());
-                		}
+                for (String aSongList : songList) {
+                    if (aSongList.toString().toLowerCase().contains(search.toLowerCase())) {
+                        results.add(aSongList.toString());
+                        JOptionPane.showMessageDialog(null, aSongList.toString());
+                    }
                 }
                 return results;
             }

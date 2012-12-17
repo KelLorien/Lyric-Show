@@ -101,6 +101,7 @@ public class SongStorageParser {
     private static String getStorageString(Song song) {
         String ss = valWithTag(song.getAuthor(), AUTHOR)
                 + valWithTag(song.getLyricist(), LYRICIST)
+                + valWithTag(song.getMusicalKey(), MUSICAL_KEY)
                 + valWithTag(String.valueOf(getDateFromSong(song)), DATE)
                 + valWithTag(song.getCopyright(), COPYRIGHT);
 
@@ -128,7 +129,8 @@ public class SongStorageParser {
         DATE ( "<d>", "</d>"),
         AUTHOR ( "<a>", "</a>"),
         LYRICIST( "<l>", "</l>"),
-        COPYRIGHT( "<c>", "</c>");
+        COPYRIGHT( "<c>", "</c>"),
+        MUSICAL_KEY( "<m>", "</m>");
 
         private final String tagString;
         private final String endTagString;

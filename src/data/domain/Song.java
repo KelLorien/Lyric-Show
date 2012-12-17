@@ -12,13 +12,12 @@ import java.util.*;
  */
 public class Song {
 
-    public static final String KEY_MARKER = "KEY:";
-
     String title = "";
     String lyrics = "";
     Date lastUsed;
     String author = "";
     String lyricist = "";
+    String musicalKey = "";
     String copyright = "";
 
     ArrayList<String> keywords = new ArrayList<String>();
@@ -84,17 +83,12 @@ public class Song {
         this.copyright = copyright;
     }
 
-    public void addMusicalKey(String key) {
-        addKeyword(KEY_MARKER + key);
+    public String getMusicalKey() {
+        return musicalKey;
     }
 
-    public String getMusicalKey() {
-        String key = "";
-        for (String keyword: keywords) {
-            if (keyword.contains(KEY_MARKER))
-                key = keyword;
-        }
-        return key;
+    public void setMusicalKey(String musicalKey) {
+        this.musicalKey = musicalKey;
     }
 
     public void addKeyword(String... key) {

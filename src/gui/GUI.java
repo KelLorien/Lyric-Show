@@ -768,9 +768,9 @@ public class GUI extends JFrame {
                     updatedSong.setAuthor(txtComposer.getText());
                     updatedSong.setLyrics(txtLyrics.getText());
                     updatedSong.setCopyright(txtCopyright.getText());
-                    updatedSong.addMusicalKey(key);
+                    updatedSong.setMusicalKey(key);
                     updatedSong.setTitle(title);
-                    updatedSong.addMusicalKey(key);
+                    updatedSong.setMusicalKey(key);
                     String keyword = txtKeywords.getText();
                     String[] keywords = keyword.split(",");
                     updatedSong.addAllKeywords(Arrays.asList(keywords));
