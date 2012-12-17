@@ -402,9 +402,10 @@ public class GUI extends JFrame {
             btnDeleteSong.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    String songName = lstManageSongs.getSelectedValue().toString();
+                    if (lstManageSongs.getSelectedValue() != null) {
                     //TODO: delete song (check with josh) think its done
-                    searchTabController.deleteSong(songName);
+                         searchTabController.deleteSong(lstManageSongs.getSelectedValue().toString());
+                    }
                 }
             });
             btnDeleteSong.setBounds(280, 104, 117, 29);
