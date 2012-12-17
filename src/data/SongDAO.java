@@ -1,7 +1,6 @@
 package data;
 
 import controllers.ManageTabController;
-import controllers.SearchTabController;
 import data.domain.Song;
 import services.SongList;
 import util.Preferences;

@@ -413,8 +413,14 @@ public class GUI extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     if (lstManageSongs.getSelectedValue() != null) {
-                    //TODO: delete song (check with josh) think its done
+                    	int n =
+                    			JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + 
+                    						lstManageSongs.getSelectedValue().toString() +"?","Warning",JOptionPane.YES_NO_OPTION);
+                    	if(n == JOptionPane.YES_OPTION)	
+                    	{
                          searchTabController.deleteSong(lstManageSongs.getSelectedValue().toString());
+                         loadSongs();
+                    	}
                     }
                 }
             });
@@ -660,7 +666,8 @@ public class GUI extends JFrame {
     {
         SongList songlist = SongList.getInstance();
         List<String> songs = songlist.getSongTitles();
-        
+        lm.removeAllElements();
+        lmManage.removeAllElements();
         for (String song : songs) {
             lm.addElement(song);
             lmManage.addElement(song);
