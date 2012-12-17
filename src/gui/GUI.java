@@ -249,7 +249,7 @@ public class GUI extends JFrame {
                     scCurrentList.setViewportView(lstSlideCurrent);
                 }
             });
-            btnAddToList.setBounds(288, 116, 117, 29);
+            btnAddToList.setBounds(275, 116, 136, 29);
         }
         return btnAddToList;
     }
@@ -295,7 +295,7 @@ public class GUI extends JFrame {
                     scCurrentList.setViewportView(lstSlideCurrent);
                 }
             });
-            btnAddBlankSlide.setBounds(282, 379, 136, 29);
+            btnAddBlankSlide.setBounds(275, 145, 136, 29);
         }
         return btnAddBlankSlide;
     }
@@ -391,7 +391,7 @@ public class GUI extends JFrame {
             btnEdit.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //TODO:need to test this
+                    //TODO:add load key
                 	clearManageText();
                     String title = lstManageSongs.getSelectedValue().toString();
                     Song song = searchTabController.getSong(title);
@@ -400,6 +400,7 @@ public class GUI extends JFrame {
                     txtLyricist.setText(song.getLyricist());
                     txtLyrics.setText(song.getLyrics());
                     txtCopyright.setText(song.getCopyright());
+              //      cmbManageKey.setSelectedItem(song)
                 }
             });
             btnEdit.setBounds(280, 130, 117, 29);
