@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -39,7 +41,7 @@ public class History {
      *
      */
     public void updateHistory(List<String> titles) throws IOException {
-        String newHistory = DATE_DELIM + "\n";
+        String newHistory = DATE_DELIM + DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()) + "\n";
 
         for (String title: titles) {
             newHistory += title + "\n";
