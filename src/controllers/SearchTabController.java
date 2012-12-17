@@ -4,6 +4,7 @@ import data.domain.Song;
 import gui.GUI;
 import services.SongAdder;
 import services.SongFinder;
+import services.SongList;
 import util.BackUp;
 
 import java.io.File;
@@ -11,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -83,7 +83,17 @@ public class SearchTabController {
             } else if (type.equals(GUI.KEY)) {
                 return finder.getTitlesByKey(search);
             } else if (type.equals(GUI.TITLE)) {
-                return Arrays.asList(getSong(search).getTitle());
+                List<String> songList = SongList.getInstance().getSongTitles();
+                List<String> results = new ArrayList<String>();
+                for(int i=0;i<songList.size();i++)
+                {
+                	if(songList.get(i).toString().toLowerCase().contains(search.toLowerCase()))
+                		{
+                			results.add(songList.get(i).toString());
+                			JOptionPane.showMessageDialog(null, songList.get(i).toString());
+                		}
+                }
+                return results;
             }
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(null, "Could not read from library. " + e.getMessage());
