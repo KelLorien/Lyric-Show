@@ -767,7 +767,6 @@ public class GUI extends JFrame {
                     for (String word: keywords)
                     {
                         updatedSong.addKeyword(word.trim());
-                        JOptionPane.showMessageDialog(null, "a" +word);
                     }
                     if(cmbManageKey.getSelectedIndex()>1)
                     {
