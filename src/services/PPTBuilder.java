@@ -1,34 +1,23 @@
-
 package services;
 
-import java.awt.Rectangle;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import controllers.SlideshowTabController;
+import data.SongDAO;
+import data.domain.Song;
+import org.apache.poi.hslf.model.Slide;
+import org.apache.poi.hslf.model.SlideMaster;
+import org.apache.poi.hslf.model.TextBox;
+import org.apache.poi.hslf.model.TextShape;
+import org.apache.poi.hslf.usermodel.RichTextRun;
+import org.apache.poi.hslf.usermodel.SlideShow;
+
+import java.awt.*;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import javax.swing.JOptionPane;
-
-
-import org.apache.poi.hslf.model.Slide;
-
-import org.apache.poi.hslf.model.TextBox;
-import org.apache.poi.hslf.model.TextShape;
-import org.apache.poi.hslf.usermodel.RichTextRun;
-import org.apache.poi.hslf.usermodel.SlideShow;
-
-
-import controllers.SlideshowTabController;
-import data.SongDAO;
-import data.domain.Song;
 
 
 /**
@@ -101,12 +90,13 @@ public class PPTBuilder {
         outputPPT(songs, DEFAULT_OUTPUT_DIR, DateFormat.getDateInstance().format(new Date()));
     }*/
 
-    private Slide template;
+    private SlideMaster[] template;
+
     private void outputPPT(List<Song> songs, File outputDir, String fileName) throws IOException {
         SlideShow show = new SlideShow();
         SlideShow templateSlideShow = readSlideShow(new File("template.ppt"));
-        template = templateSlideShow.getSlides()[0];
-      
+        template = templateSlideShow.getSlidesMasters();
+        
         for (Song song: songs) {
             if (song.getTitle().equalsIgnoreCase(SlideshowTabController.BLANK_SLIDE_TITLE)) {
                 show.createSlide();
@@ -128,8 +118,7 @@ public class PPTBuilder {
         for (String lyrics: song.getLyrics().split("\n\n")) {
             
             Slide slide = show.createSlide();
-            slide.setMasterSheet(template.getMasterSheet());
-            JOptionPane.showMessageDialog(null,slide.getFollowMasterBackground());
+            slide.setMasterSheet(template[0]);
             
             slide.addTitle().setText(song.getTitle());
             slide.getTextRuns()[0].getRichTextRunAt(0).setFontSize(36);
