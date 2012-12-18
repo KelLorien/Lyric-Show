@@ -37,21 +37,6 @@ public class SearchTabController {
 
     private SearchTabController() {}
 
-    public void backupLibrary(File target, boolean txt, boolean ppt) {
-        try {
-            if (txt) {
-                BackUp.BackUpTxt(target);
-            }
-            if (ppt) {
-                BackUp.BackUpPPT(target);
-            }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Could not backup. " + e.getMessage());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "Could not read library. Some files may be corrupt. " + e.getMessage());
-        }
-    }
-
     public Song getSong(String title) {
         try {
             return finder.getSongByTitle(title);

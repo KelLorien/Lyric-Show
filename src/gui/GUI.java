@@ -361,16 +361,12 @@ public class GUI extends JFrame {
                         fc.setDialogTitle("Choose a place to backup the library...");
                         fc.showSaveDialog(null);
                         File target = fc.getSelectedFile();
-                        try {
-                            if (s.equalsIgnoreCase("Library")) {
-                                BackUp.BackUpTxt(target);
-                            } else if (s.equalsIgnoreCase("PowerPoints")) {
-                                BackUp.BackUpPPT(target);
-                            } else if (s.equalsIgnoreCase("Both")) {
-                                BackUp.BackUpAll(target);
-                            }
-                        } catch (Exception e1) {
-
+                        if (s.equalsIgnoreCase("Library")) {
+                            manageTabController.backupLibrary(target, true, false);
+                        } else if (s.equalsIgnoreCase("PowerPoints")) {
+                            manageTabController.backupLibrary(target, false, true);
+                        } else if (s.equalsIgnoreCase("Both")) {
+                            manageTabController.backupLibrary(target, true, true);
                         }
                     }
                 }

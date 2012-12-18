@@ -2,12 +2,14 @@ package controllers;
 
 import data.LibraryConflictException;
 import data.domain.Song;
+import services.BackUp;
 import services.PPTImporter;
 import services.SongAdder;
 import services.SongList;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 
 import javax.swing.JOptionPane;
 
@@ -76,6 +78,21 @@ public class ManageTabController {
             JOptionPane.showMessageDialog(null, "There was a problem adding the file. " + e.getMessage());
         } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(null, "Problem updating a song. " + e.getMessage());
+        }
+    }
+
+    public void backupLibrary(File target, boolean txt, boolean ppt) {
+        try {
+            if (txt) {
+                BackUp.BackUpTxt(target);
+            }
+            if (ppt) {
+                BackUp.BackUpPPT(target);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Could not backup. " + e.getMessage());
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, "Could not read library. Some files may be corrupt. " + e.getMessage());
         }
     }
 
