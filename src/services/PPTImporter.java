@@ -1,5 +1,6 @@
 package services;
 
+<<<<<<< HEAD
 import data.SongDAO;
 import data.domain.Song;
 import org.apache.poi.hslf.model.Slide;
@@ -7,11 +8,20 @@ import org.apache.poi.hslf.model.TextRun;
 import org.apache.poi.hslf.usermodel.SlideShow;
 
 import javax.swing.*;
+=======
+>>>>>>> Template
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.poi.hslf.model.Slide;
+import org.apache.poi.hslf.model.TextRun;
+import org.apache.poi.hslf.usermodel.SlideShow;
+
+import data.SongDAO;
+import data.domain.Song;
 
 
 /**

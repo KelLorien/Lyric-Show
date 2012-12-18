@@ -1,17 +1,48 @@
 package gui;
 
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import java.util.*;
-
+import services.History;
+import services.SongList;
+import util.BackUp;
 import controllers.ManageTabController;
 import controllers.SearchTabController;
 import controllers.SlideshowTabController;
 import data.domain.Song;
+<<<<<<< HEAD
 import services.History;
 import services.SongList;
 import services.BackUp;
@@ -24,6 +55,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Font;
+=======
+>>>>>>> Template
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame {
@@ -595,6 +628,11 @@ public class GUI extends JFrame {
 
                     for (String song : results) {
                         resultsList.addElement(song);
+                    }
+                    JOptionPane.showMessageDialog(null,results.size());
+                    for(int i=0;i<results.size();i++)
+                    {
+                    	JOptionPane.showMessageDialog(null,results.get(i));
                     }
                     lstSearchResults = new JList(resultsList);
                     scResults.setViewportView(lstSearchResults);
