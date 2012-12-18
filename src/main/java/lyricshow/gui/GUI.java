@@ -874,7 +874,7 @@ public class GUI extends JFrame {
                 listModel.addElement(lm.elementAt(i).toString());
             }
         }
-        list = new JList(listModel);
+        list.setModel(listModel);
         pane.setViewportView(list);
     }
 }
