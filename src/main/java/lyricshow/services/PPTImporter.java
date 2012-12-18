@@ -1,7 +1,6 @@
-package services;
+package lyricshow.services;
 
-import data.SongDAO;
-import data.domain.Song;
+import lyricshow.data.domain.Song;
 import org.apache.poi.hslf.model.Slide;
 import org.apache.poi.hslf.model.TextRun;
 import org.apache.poi.hslf.usermodel.SlideShow;

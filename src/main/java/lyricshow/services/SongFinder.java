@@ -1,8 +1,8 @@
-package services;
+package lyricshow.services;
 
-import data.SongDAO;
-import data.domain.Song;
-import util.SongStorageParser;
+import lyricshow.data.SongDAO;
+import lyricshow.data.domain.Song;
+import lyricshow.util.SongStorageParser;
 
 import java.io.FileNotFoundException;
 import java.text.ParseException;

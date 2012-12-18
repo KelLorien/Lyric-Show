@@ -1,29 +1,21 @@
-package gui;
+package lyricshow.gui;
 
-import java.awt.EventQueue;
+import lyricshow.controllers.ManageTabController;
+import lyricshow.controllers.SearchTabController;
+import lyricshow.controllers.SlideshowTabController;
+import lyricshow.data.domain.Song;
+import lyricshow.services.History;
+import lyricshow.services.SongList;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import java.util.*;
-
-import controllers.ManageTabController;
-import controllers.SearchTabController;
-import controllers.SlideshowTabController;
-import data.domain.Song;
-import services.History;
-import services.SongList;
-import services.BackUp;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.Font;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame {

@@ -1,6 +1,6 @@
-package services;
+package lyricshow.services;
 
-import data.SongDAO;
+import lyricshow.data.SongDAO;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,6 +1,6 @@
-package services;
+package lyricshow.services;
 
-import util.Preferences;
+import lyricshow.util.Preferences;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,11 +22,11 @@ public class History {
     private static final String DATE_DELIM = "<--->";
     private static final int HISTORY_LENGTH = 4;
 
-    private static History instance = null;
+    private static lyricshow.services.History instance = null;
 
-    public static History getInstance() {
+    public static lyricshow.services.History getInstance() {
         if (instance == null)
-            instance = new History();
+            instance = new lyricshow.services.History();
         return instance;
     }
 
@@ -37,7 +37,7 @@ public class History {
     /**
      * Updates the history. If the history file cannot be found, a new one is created.
      * @param titles the new titles to be added to the history.
-     * @throws IOException if there is a problem writing to the history file.
+     * @throws java.io.IOException if there is a problem writing to the history file.
      *
      */
     public void updateHistory(List<String> titles) throws IOException {
@@ -71,10 +71,10 @@ public class History {
     }
 
     /**
-     * Gets the (unformatted) history. Stored as far back as specified by {@link History#HISTORY_LENGTH}
+     * Gets the (unformatted) history. Stored as far back as specified by {@link lyricshow.services.History#HISTORY_LENGTH}
      * @return String, which shows the titles used the last 4 times a powerpoint presentation was created
      * by this application.
-     * @throws FileNotFoundException if there is no history file.
+     * @throws java.io.FileNotFoundException if there is no history file.
      */
     public String getHistory() throws FileNotFoundException {
         Scanner scanner = null;

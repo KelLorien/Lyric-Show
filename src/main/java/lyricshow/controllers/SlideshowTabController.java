@@ -1,7 +1,7 @@
-package controllers;
+package lyricshow.controllers;
 
-import services.History;
-import services.PPTBuilder;
+import lyricshow.services.History;
+import lyricshow.services.PPTBuilder;
 
 import javax.swing.*;
 import java.io.File;

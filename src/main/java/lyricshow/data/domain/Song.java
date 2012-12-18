@@ -1,6 +1,9 @@
-package data.domain;
+package lyricshow.data.domain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
  * User: jpipe
@@ -8,7 +11,7 @@ import java.util.*;
  *
  * Represents a Song. Contains the title, lyrics, date last used, and all other keywords
  * of a song stored in the library. Attributes besides title and lyrics are stored in a
- * {@link List} of Strings.
+ * {@link java.util.List} of Strings.
  */
 public class Song {
 
@@ -102,7 +105,7 @@ public class Song {
     }
     /**
      * Sets the date this song was last used to the current time;
-     * that is, sets {@link #lastUsed} equal to a new {@link Date}.
+     * that is, sets {@link #lastUsed} equal to a new {@link java.util.Date}.
      */
     public void setLastUsedToNow() {
         lastUsed = new Date();

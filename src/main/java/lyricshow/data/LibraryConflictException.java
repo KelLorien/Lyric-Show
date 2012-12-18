@@ -1,4 +1,4 @@
-package data;
+package lyricshow.data;
 
 /**
  * User: jpipe

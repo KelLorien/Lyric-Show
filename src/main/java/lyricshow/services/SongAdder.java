@@ -1,8 +1,8 @@
-package services;
+package lyricshow.services;
 
-import data.LibraryConflictException;
-import data.SongDAO;
-import data.domain.Song;
+import lyricshow.data.LibraryConflictException;
+import lyricshow.data.SongDAO;
+import lyricshow.data.domain.Song;
 
 import java.io.IOException;
 

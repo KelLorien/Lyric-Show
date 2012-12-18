@@ -1,22 +1,18 @@
-package controllers;
+package lyricshow.controllers;
 
-import data.LibraryConflictException;
-import data.domain.Song;
-import gui.GUI;
-import services.SongAdder;
-import services.SongFinder;
-import services.SongList;
-import services.BackUp;
+import lyricshow.data.domain.Song;
+import lyricshow.gui.GUI;
+import lyricshow.services.SongAdder;
+import lyricshow.services.SongFinder;
+import lyricshow.services.SongList;
 
-import java.io.File;
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 
 /**
  * User: jpipe
@@ -43,7 +39,7 @@ public class SearchTabController {
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "Could not find a song entitled " + title);
         } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "Could not read data for song " + title + ". File may be corrupt!" + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Could not read lyricshow.data for song " + title + ". File may be corrupt!" + e.getMessage());
         }
         return new Song();
     }

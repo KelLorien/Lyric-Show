@@ -1,18 +1,18 @@
-package data;
+package lyricshow.data;
 
-import controllers.ManageTabController;
-import controllers.SearchTabController;
-import data.domain.Song;
-import gui.GUI;
-import services.SongList;
-import util.Preferences;
-import util.SongStorageParser;
+import lyricshow.controllers.ManageTabController;
+import lyricshow.controllers.SearchTabController;
+import lyricshow.data.domain.Song;
+import lyricshow.gui.GUI;
+import lyricshow.services.SongList;
+import lyricshow.util.Preferences;
+import lyricshow.util.SongStorageParser;
 
 import java.io.*;
 import java.text.ParseException;
 import java.util.*;
 
-import static util.SongStorageParser.*;
+import static lyricshow.util.SongStorageParser.*;
 
 /**
  * User: jpipe
@@ -80,8 +80,8 @@ public class SongDAO {
      * Gets the song with the given title.
      * @param title the song title of the desired song
      * @return {@link Song} object fully instantiated with all its relevant information.
-     * @throws FileNotFoundException if the file for the associate song is not found.
-     * @throws ParseException if the file could not be parsed. Probably means files were
+     * @throws java.io.FileNotFoundException if the file for the associate song is not found.
+     * @throws java.text.ParseException if the file could not be parsed. Probably means files were
      * corrupted
      */
     public Song getSong(String title) throws FileNotFoundException, ParseException {
@@ -117,8 +117,8 @@ public class SongDAO {
     /**
      * Determines which songs have the given keyword, and returns a list of all those song's titles.
      * @param key keyword by which to filter song titles.
-     * @return {@link List} of each song title corresponding to each song which has the given keyword.
-     * @throws ParseException if there was an error parsing the keywords from the index (could mean index
+     * @return {@link java.util.List} of each song title corresponding to each song which has the given keyword.
+     * @throws java.text.ParseException if there was an error parsing the keywords from the index (could mean index
      * is corrupt)
      */
     public List<String> getTitlesWithKeyword(String key) throws ParseException {
@@ -160,10 +160,10 @@ public class SongDAO {
     }
 
     /**
-     * Gets a {@link Map} of all song's {@link Song#lastUsed} to the respective song's title.
+     * Gets a {@link java.util.Map} of all song's {@link Song#lastUsed} to the respective song's title.
      *
-     * @return {@link Map} of {@link Date} objects to Strings.
-     * @throws ParseException if the index file could not be parses (may mean index is corrupt).
+     * @return {@link java.util.Map} of {@link java.util.Date} objects to Strings.
+     * @throws java.text.ParseException if the index file could not be parses (may mean index is corrupt).
      */
     public Map<Date, String> getAllTitlesToLastUsedDatesMap() throws ParseException {
         Map<Date, String> titleToDate = new HashMap<Date, String>();
@@ -196,7 +196,7 @@ public class SongDAO {
     /**
      * Deletes the song with the given title from the library
      * @param title title of the song to be deleted
-     * @throws IOException if there was an error deleting the file from the index or song library
+     * @throws java.io.IOException if there was an error deleting the file from the index or song library
      */
     public void deleteSong(String title) throws IOException, LibraryConflictException {
         Song toDelete = new Song(title);

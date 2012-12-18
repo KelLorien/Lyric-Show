@@ -1,17 +1,16 @@
-package controllers;
+package lyricshow.controllers;
 
-import data.LibraryConflictException;
-import data.domain.Song;
-import services.BackUp;
-import services.PPTImporter;
-import services.SongAdder;
-import services.SongList;
+import lyricshow.data.LibraryConflictException;
+import lyricshow.data.domain.Song;
+import lyricshow.services.BackUp;
+import lyricshow.services.PPTImporter;
+import lyricshow.services.SongAdder;
+import lyricshow.services.SongList;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-
-import javax.swing.JOptionPane;
 
 /**
  * User: jpipe

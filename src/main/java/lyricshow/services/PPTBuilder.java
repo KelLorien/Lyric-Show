@@ -1,10 +1,10 @@
-package services;
+package lyricshow.services;
 
-import controllers.SlideshowTabController;
-import data.SongDAO;
-import data.domain.Song;
+
+import lyricshow.controllers.SlideshowTabController;
+import lyricshow.data.SongDAO;
+import lyricshow.data.domain.Song;
 import org.apache.poi.hslf.model.Slide;
-import org.apache.poi.hslf.model.SlideMaster;
 import org.apache.poi.hslf.model.TextBox;
 import org.apache.poi.hslf.model.TextShape;
 import org.apache.poi.hslf.usermodel.RichTextRun;
@@ -36,19 +36,19 @@ public class PPTBuilder {
     }
 
     private SongDAO dao = SongDAO.getInstance();
-    
+
 
     //Private constructor. Use getInstance above to use this class
     private PPTBuilder() {
     }
 
     /**
-     * Builds a powerpoint file out each song specified by a {@link List} of titles.
+     * Builds a powerpoint file out each song specified by a {@link java.util.List} of titles.
      * Powerpoint file will have a title equal to today's date.
      * @param titles list of song titles to identify which songs to create a powerpoint out of.
      * @param dir specifies where the created .ppt file will be upon completion.
      * if the given directory could not be written to (in which case, it will be in the default output directory).
-     * @throws IOException if there was an exception writing the file to its target directory.
+     * @throws java.io.IOException if there was an exception writing the file to its target directory.
      */
     public void buildPPT(List<String> titles, File dir) throws IOException {
 
@@ -60,12 +60,12 @@ public class PPTBuilder {
 
     /**
      * Builds the powerpoint with the given title. If the title lacks a .ppt at the end, it
-     * will be added automatically. {@link PPTBuilder#buildPPT(java.util.List, java.io.File)}
+     * will be added automatically. {@link lyricshow.services.PPTBuilder#buildPPT(java.util.List, java.io.File)}
      *
      * @param titles titles of all songs to be used
      * @param dir directory to be output to
      * @param fileName name that the powerpoint will have
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public void buildPPT(List<String> titles, File dir, String fileName) throws IOException {
         List<Song> songs = new ArrayList<Song>();
@@ -123,7 +123,7 @@ public class PPTBuilder {
                             (int) show.getPageSize().getHeight() - (TITLE_HEIGHT + AUTH_HEIGHT)));
 
             insertTextbox(slide, song.getAuthor(), 12, TextShape.AlignLeft,
-                    new java.awt.Rectangle(0, TITLE_HEIGHT - (int) (.5 * AUTH_HEIGHT), AUTH_WIDTH, AUTH_HEIGHT));
+                    new Rectangle(0, TITLE_HEIGHT - (int) (.5 * AUTH_HEIGHT), AUTH_WIDTH, AUTH_HEIGHT));
 
             insertTextbox(slide, song.getLyricist(), 12, TextShape.AlignRight,
                     new Rectangle((int) show.getPageSize().getWidth() - AUTH_WIDTH,
