@@ -180,20 +180,8 @@ public class GUI extends JFrame {
             slideSearch = new JTextField();
             slideSearch.addKeyListener(new KeyAdapter() {
                 @Override
-                public void keyTyped(KeyEvent arg0) {
-                    //will hopefully search inside the library
-                    String searchSongs = slideSearch.getText().toLowerCase();
-                    searchCreate.removeAllElements();
-
-                    for(int i=0;i<lm.size();i++)
-                    {
-                        if (lm.elementAt(i).toString().toLowerCase().contains(searchSongs))
-                        {
-                            searchCreate.addElement(lm.elementAt(i).toString());
-                        }
-                    }
-                    lstSlideLibrary = new JList(searchCreate);
-                    scLib.setViewportView(lstSlideLibrary);
+                public void keyReleased(KeyEvent arg0) {
+                    filterList(slideSearch, searchCreate, lstSlideLibrary, scLib);
                 }
             });
             slideSearch.setBounds(31, 24, 245, 28);
@@ -297,19 +285,8 @@ public class GUI extends JFrame {
             txtManageSearch = new JTextField();
             txtManageSearch.addKeyListener(new KeyAdapter() {
                 @Override
-                public void keyTyped(KeyEvent e) {
-                    String searchSongs = txtManageSearch.getText().toLowerCase();
-                    manageSearch.removeAllElements();
-
-                    for(int i=0;i<lm.size();i++)
-                    {
-                        if (lm.elementAt(i).toString().toLowerCase().contains(searchSongs))
-                        {
-                            manageSearch.addElement(lm.elementAt(i).toString());
-                        }
-                    }
-                    lstManageSongs = new JList(manageSearch);
-                    scrollManage.setViewportView(lstManageSongs);
+                public void keyReleased(KeyEvent e) {
+                    filterList(txtManageSearch, manageSearch, lstManageSongs, scrollManage);
                 }
             });
             txtManageSearch.setBounds(6, 22, 255, 28);
@@ -317,6 +294,7 @@ public class GUI extends JFrame {
         }
         return txtManageSearch;
     }
+
     private JLabel getLblSearch_1() {
         if (lblSearch_1 == null) {
             lblSearch_1 = new JLabel("Search");
@@ -773,6 +751,7 @@ public class GUI extends JFrame {
                         updatedSong.setMusicalKey(cmbManageKey.getSelectedItem().toString());
                     }
                     manageTabController.saveSong(updatedSong);
+                    loadSongs();
                 }
             });
             btnSave.setBounds(155, 485, 117, 29);
@@ -882,5 +861,20 @@ public class GUI extends JFrame {
             lblSeperateByCommas.setBounds(294, 280, 117, 16);
         }
         return lblSeperateByCommas;
+    }
+
+    private void filterList(JTextField textField, DefaultListModel listModel, JList list, JScrollPane pane) {
+        String searchSongs = textField.getText().toLowerCase();
+        listModel.removeAllElements();
+
+        for(int i=0;i<lm.size();i++)
+        {
+            if (lm.elementAt(i).toString().toLowerCase().contains(searchSongs))
+            {
+                listModel.addElement(lm.elementAt(i).toString());
+            }
+        }
+        list = new JList(listModel);
+        pane.setViewportView(list);
     }
 }
