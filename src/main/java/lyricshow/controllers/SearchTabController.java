@@ -72,7 +72,6 @@ public class SearchTabController {
                 for (String aSongList : songList) {
                     if (aSongList.toLowerCase().contains(search.toLowerCase())) {
                         results.add(aSongList);
-                        JOptionPane.showMessageDialog(null, aSongList);
                     }
                 }
                 return results;
