@@ -1,13 +1,19 @@
 package util;
 
-import data.domain.Song;
+import static util.SongStorageParser.Tag.AUTHOR;
+import static util.SongStorageParser.Tag.COPYRIGHT;
+import static util.SongStorageParser.Tag.DATE;
+import static util.SongStorageParser.Tag.KEY;
+import static util.SongStorageParser.Tag.KEY_LIST;
+import static util.SongStorageParser.Tag.LYRICIST;
+import static util.SongStorageParser.Tag.MUSICAL_KEY;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static util.SongStorageParser.Tag.*;
+import data.domain.Song;
 
 /**
  * User: jpipe
