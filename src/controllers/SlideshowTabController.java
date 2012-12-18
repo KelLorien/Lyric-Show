@@ -1,12 +1,18 @@
 package controllers;
 
+<<<<<<< HEAD
 import services.History;
 import services.PPTBuilder;
 
 import javax.swing.*;
+=======
+>>>>>>> Template
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import services.History;
+import services.PPTBuilder;
 
 /**
  * User: jpipe
