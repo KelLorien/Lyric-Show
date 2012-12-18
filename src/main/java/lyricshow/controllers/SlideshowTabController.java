@@ -30,10 +30,8 @@ public class SlideshowTabController {
 
     public void createSlideShow(List<String> titles, File target, String fileName) {
         try {
-            History history = History.getInstance();
             pptBuilder.buildPPT(titles, target, fileName);
-            history.updateHistory(titles);
-            
+            History.getInstance().updateHistory(titles);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not create slideshow. " + e.getMessage());
         }
