@@ -1,36 +1,18 @@
 package data;
 
-<<<<<<< HEAD
 import controllers.ManageTabController;
 import controllers.SearchTabController;
 import data.domain.Song;
 import gui.GUI;
-=======
-import static util.SongStorageParser.toFullStorageString;
-import static util.SongStorageParser.toIndexString;
-
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
->>>>>>> Template
 import services.SongList;
 import util.Preferences;
 import util.SongStorageParser;
-import util.SongStorageParser.Tag;
-import controllers.ManageTabController;
-import data.domain.Song;
+
+import java.io.*;
+import java.text.ParseException;
+import java.util.*;
+
+import static util.SongStorageParser.*;
 
 /**
  * User: jpipe

@@ -1,13 +1,12 @@
 package controllers;
 
+import data.LibraryConflictException;
+import data.domain.Song;
 import gui.GUI;
-<<<<<<< HEAD
 import services.SongAdder;
 import services.SongFinder;
 import services.SongList;
 import services.BackUp;
-=======
->>>>>>> Template
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,13 +17,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-
-import services.SongAdder;
-import services.SongFinder;
-import services.SongList;
-import util.BackUp;
-import data.LibraryConflictException;
-import data.domain.Song;
 
 /**
  * User: jpipe

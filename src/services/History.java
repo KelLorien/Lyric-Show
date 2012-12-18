@@ -1,5 +1,7 @@
 package services;
 
+import util.Preferences;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -8,8 +10,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-
-import util.Preferences;
 
 /**
  * User: jpipe
