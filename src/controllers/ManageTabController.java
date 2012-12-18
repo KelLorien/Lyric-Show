@@ -1,6 +1,5 @@
 package controllers;
 
-<<<<<<< HEAD
 import data.LibraryConflictException;
 import data.domain.Song;
 import services.BackUp;
@@ -8,18 +7,11 @@ import services.PPTImporter;
 import services.SongAdder;
 import services.SongList;
 
-=======
->>>>>>> Template
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 
 import javax.swing.JOptionPane;
-
-import services.PPTImporter;
-import services.SongAdder;
-import data.LibraryConflictException;
-import data.domain.Song;
 
 /**
  * User: jpipe
