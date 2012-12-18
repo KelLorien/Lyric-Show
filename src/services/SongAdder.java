@@ -26,15 +26,23 @@ public class SongAdder {
 
     private SongAdder(){}
 
-    public void saveOrUpdateSong(Song song) throws IOException, LibraryConflictException {
-        if (songList.getSongTitles().contains(song.getTitle())) {
+    public void updateSong(Song song) throws IOException {
+        try {
             dao.updateSong(song);
-        } else {
-            dao.addSong(song);
+        } catch (LibraryConflictException e) {
+            throw new RuntimeException("LibraryConflictException when updating song: " + song.getTitle(), e);
         }
     }
 
-    public void deleteSong(String title) throws IOException, LibraryConflictException {
-        dao.deleteSong(title);
+    public void addSong(Song song) throws IOException, LibraryConflictException {
+        dao.addSong(song);
+    }
+
+    public void deleteSong(String title) throws IOException {
+        try {
+            dao.deleteSong(title);
+        } catch (LibraryConflictException e) {
+            throw new RuntimeException("LibraryConflictException when updating song: " + title, e);
+        }
     }
 }

@@ -6,6 +6,7 @@ import org.apache.poi.hslf.model.Slide;
 import org.apache.poi.hslf.model.TextRun;
 import org.apache.poi.hslf.usermodel.SlideShow;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -123,22 +124,23 @@ public class PPTImporter {
 
     //TODO: remove for prod
     public static void main(String[] args) {
-        //TO RUN THIS METHOD, THIS FILE MUST ALREADY EXIST.
-        File target = new File("/Users/kim/Lyric-Show/PM081212-1.ppt");
-
-        try {
-            List<Song> songs = getInstance().importSong(target);
-            List<String> titles = new ArrayList<String>();
-            for (Song song: songs) {
-                titles.add(song.getTitle());
-                SongDAO.getInstance().addSong(song);
-            }
-
-         //   PPTBuilder.getInstance().buildPPT(titles);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-         //   SongDAO.deleteStuff();
-        }
+//        //TO RUN THIS METHOD, THIS FILE MUST ALREADY EXIST.
+//        File target = new File("/Users/kim/Lyric-Show/PM081212-1.ppt");
+//
+//        try {
+//            List<Song> songs = getInstance().importSong(target);
+//            List<String> titles = new ArrayList<String>();
+//            for (Song song: songs) {
+//                titles.add(song.getTitle());
+//                SongDAO.getInstance().addSong(song);
+//            }
+//
+//         //   PPTBuilder.getInstance().buildPPT(titles);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//         //   SongDAO.deleteStuff();
+//        }
+        JOptionPane.showMessageDialog(null, "wat is dis");
     }
 }

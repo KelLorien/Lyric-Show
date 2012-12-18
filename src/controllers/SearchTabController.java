@@ -6,7 +6,7 @@ import gui.GUI;
 import services.SongAdder;
 import services.SongFinder;
 import services.SongList;
-import util.BackUp;
+import services.BackUp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -68,7 +68,7 @@ public class SearchTabController {
             adder.deleteSong(songName);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "There was a problem deleting the file. " + e.getMessage());
-        } catch (LibraryConflictException e) {
+        } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(null, "There was a problem deleting the file. " + e.getMessage());
         }
     }
@@ -89,9 +89,9 @@ public class SearchTabController {
                 List<String> songList = SongList.getInstance().getSongTitles();
                 List<String> results = new ArrayList<String>();
                 for (String aSongList : songList) {
-                    if (aSongList.toString().toLowerCase().contains(search.toLowerCase())) {
-                        results.add(aSongList.toString());
-                        JOptionPane.showMessageDialog(null, aSongList.toString());
+                    if (aSongList.toLowerCase().contains(search.toLowerCase())) {
+                        results.add(aSongList);
+                        JOptionPane.showMessageDialog(null, aSongList);
                     }
                 }
                 return results;

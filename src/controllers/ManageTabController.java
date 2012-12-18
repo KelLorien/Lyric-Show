@@ -4,6 +4,7 @@ import data.LibraryConflictException;
 import data.domain.Song;
 import services.PPTImporter;
 import services.SongAdder;
+import services.SongList;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class ManageTabController {
 
     private SongAdder adder = SongAdder.getInstance();
     private PPTImporter importer = PPTImporter.getInstance();
+    private SongList songList = SongList.getInstance();
 
     private ManageTabController() {}
 
@@ -39,7 +41,11 @@ public class ManageTabController {
 
     private void saveOrUpdate(Song song) {
         try {
-            adder.saveOrUpdateSong(song);
+            if (songList.getSongTitles().contains(song.getTitle())) {
+                adder.updateSong(song);
+            } else {
+                adder.addSong(song);
+            }
         } catch (IOException e) {
         	e.printStackTrace();
             JOptionPane.showMessageDialog(null, "There was a problem updating the file. " + e.getMessage());
@@ -52,12 +58,24 @@ public class ManageTabController {
     public void importFromPPT(File targetFile) {
         try {
             for (Song song: importer.importSong(targetFile)) {
-                saveOrUpdate(song);
+
+                try {
+                    adder.addSong(song);
+                } catch (LibraryConflictException e) {
+                    int selection = JOptionPane.showConfirmDialog(null, "Song entitled: " + song.getTitle() + " already exists.\n" +
+                            "Replace with this one? ", "Library Conflict" , JOptionPane.YES_NO_OPTION);
+                    if (selection == JOptionPane.OK_OPTION) {
+                        adder.updateSong(song);
+                    }
+                }
+
             }
 
         } catch (IOException e) {
         	e.printStackTrace();
             JOptionPane.showMessageDialog(null, "There was a problem adding the file. " + e.getMessage());
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(null, "Problem updating a song. " + e.getMessage());
         }
     }
 

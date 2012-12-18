@@ -14,7 +14,7 @@ import controllers.SlideshowTabController;
 import data.domain.Song;
 import services.History;
 import services.SongList;
-import util.BackUp;
+import services.BackUp;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -346,7 +346,7 @@ public class GUI extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     Object[] possibilities = {"Library", "PowerPoints", "Both"};
-                    String s = (String)JOptionPane.showInputDialog(
+                    String s = (String) JOptionPane.showInputDialog(
                             null,
                             "Do you want to export the Library, the PowerPoints, or both?",
                             "Backing up the Library",
@@ -361,21 +361,15 @@ public class GUI extends JFrame {
                         fc.setDialogTitle("Choose a place to backup the library...");
                         fc.showSaveDialog(null);
                         File target = fc.getSelectedFile();
-                        try{
-                            if (s.equalsIgnoreCase("Library"))
-                            {
+                        try {
+                            if (s.equalsIgnoreCase("Library")) {
                                 BackUp.BackUpTxt(target);
-                            }
-                            else if (s.equalsIgnoreCase("PowerPoints"))
-                            {
+                            } else if (s.equalsIgnoreCase("PowerPoints")) {
                                 BackUp.BackUpPPT(target);
-                            }
-                            else if (s.equalsIgnoreCase("Both"))
-                            {
+                            } else if (s.equalsIgnoreCase("Both")) {
                                 BackUp.BackUpAll(target);
-                            }}
-                        catch(Exception e1)
-                        {
+                            }
+                        } catch (Exception e1) {
 
                         }
                     }
@@ -545,7 +539,7 @@ public class GUI extends JFrame {
     private JComboBox getCmbSearch() {
         if (cmbSearch == null) {
             cmbSearch = new JComboBox();
-            cmbSearch.setModel(new DefaultComboBoxModel(new String[] {"Title", "Author", "Keywords"}));
+            cmbSearch.setModel(new DefaultComboBoxModel(new String[]{"Title", "Author", "Keywords"}));
             cmbSearch.setBounds(79, 42, 126, 27);
         }
         return cmbSearch;
@@ -601,7 +595,7 @@ public class GUI extends JFrame {
                     resultsList.removeAllElements();
                     lstSearchResults = new JList(resultsList);
                     scResults.setViewportView(lstSearchResults);
-                    List<String> results = searchTabController.searchByType(key, KEY);
+                    List<String> results = searchTabController.searchByType(KEY, key);
 
                     for (String song : results) {
                         resultsList.addElement(song);
@@ -695,7 +689,7 @@ public class GUI extends JFrame {
             btnRemove.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    if(lstSlideCurrent.getSelectedIndex()!=-1)
+                    if (lstSlideCurrent.getSelectedIndex() != -1)
                         lmCurrentList.remove(lstSlideCurrent.getSelectedIndex());
                 }
             });

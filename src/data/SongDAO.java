@@ -1,7 +1,9 @@
 package data;
 
 import controllers.ManageTabController;
+import controllers.SearchTabController;
 import data.domain.Song;
+import gui.GUI;
 import services.SongList;
 import util.Preferences;
 import util.SongStorageParser;
@@ -328,14 +330,14 @@ public class SongDAO {
         Song song = getTestSong();
 
         try {
-            ManageTabController.getInstance().importFromPPT(new File("C:\\Users\\jpipe\\lyric-show\\PM081212-1.ppt"));
+            ManageTabController.getInstance().importFromPPT(new File("C:\\Users\\Josh Pipe\\Documents\\GitHub\\Lyric-Show\\PM081212-1.ppt"));
             System.out.println(SongList.getInstance().getSongTitles());
             ManageTabController.getInstance().saveSong(song);
             song.setAuthor("run to the hills");
             song.setCopyright("CCLI !@#$%^");
             song.setMusicalKey("K#");
             ManageTabController.getInstance().saveSong(song);
-            System.out.println(SongDAO.getInstance().getAllSongsWithAttribute("K#", Tag.MUSICAL_KEY));
+            System.out.println(SearchTabController.getInstance().searchByType(GUI.KEY, "K#"));
         } catch (Exception e) {
             e.printStackTrace();
         }
