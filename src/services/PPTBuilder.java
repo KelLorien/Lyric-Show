@@ -90,13 +90,10 @@ public class PPTBuilder {
         outputPPT(songs, DEFAULT_OUTPUT_DIR, DateFormat.getDateInstance().format(new Date()));
     }*/
 
-    private SlideMaster[] template;
 
     private void outputPPT(List<Song> songs, File outputDir, String fileName) throws IOException {
         SlideShow show = new SlideShow();
-        SlideShow templateSlideShow = readSlideShow(new File("template.ppt"));
-        template = templateSlideShow.getSlidesMasters();
-        
+
         for (Song song: songs) {
             if (song.getTitle().equalsIgnoreCase(SlideshowTabController.BLANK_SLIDE_TITLE)) {
                 show.createSlide();
@@ -114,12 +111,9 @@ public class PPTBuilder {
     private static final int TITLE_HEIGHT = 125;
     private static final int COPYRIGHT_HEIGHT = 75;
 
-    private void addSongToPPT (SlideShow show, Song song) throws IOException {
+    private void addSongToPPT (SlideShow show, Song song) {
         for (String lyrics: song.getLyrics().split("\n\n")) {
-            
             Slide slide = show.createSlide();
-            slide.setMasterSheet(template[0]);
-            
             slide.addTitle().setText(song.getTitle());
             slide.getTextRuns()[0].getRichTextRunAt(0).setFontSize(36);
 
@@ -221,23 +215,5 @@ public class PPTBuilder {
         }
 
         SongDAO.deleteStuff();
-    }
-    private SlideShow readSlideShow(File ppt) throws IOException {
-        FileInputStream inputStream = null;
-        SlideShow show = null;
-        try {
-            inputStream = new FileInputStream(ppt);
-            show = new SlideShow(inputStream);
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        }
-
-        return show;
     }
 }
