@@ -92,17 +92,17 @@ public class PPTImporter {
 
         TextRun[] textRuns = slide.getTextRuns();
         if (textRuns.length >= 3) {
-            song.setAuthor(textRuns[2].getText());
+            song.setAuthor(removeNewLines(textRuns[2].getText()));
         } else {
             song.setAuthor("");
         }
 
         if (textRuns.length >= 4) {
             if (textRuns[3].getText().toLowerCase().contains("copyright")) {
-                song.setCopyright(textRuns[3].getText());
+                song.setCopyright(removeNewLines(textRuns[3].getText()));
                 song.setLyricist("");
             } else {
-                song.setLyricist(textRuns[3].getText());
+                song.setLyricist(removeNewLines(textRuns[3].getText()));
                 song.setCopyright("");
             }
         } else {
@@ -111,7 +111,7 @@ public class PPTImporter {
         }
 
         if (textRuns.length >= 5) {
-            song.setCopyright(textRuns[4].getText());
+            song.setCopyright(removeNewLines(textRuns[4].getText()));
         }
 
         return song;
