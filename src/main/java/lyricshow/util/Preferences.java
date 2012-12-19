@@ -36,8 +36,4 @@ public class Preferences {
 
 
     }
-
-    public static String getPPTOutURL() {
-        return "output/";
-    }
 }

@@ -15,13 +15,13 @@ import java.util.List;
  */
 public class Song {
 
-    String title = "";
-    String lyrics = "";
-    Date lastUsed;
-    String author = "";
-    String lyricist = "";
-    String musicalKey = "";
-    String copyright = "";
+    private String title = "";
+    private String lyrics = "";
+    private Date lastUsed;
+    private String author = "";
+    private String lyricist = "";
+    private String musicalKey = "";
+    private String copyright = "";
 
     ArrayList<String> keywords = new ArrayList<String>();
 

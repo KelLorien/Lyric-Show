@@ -6,6 +6,7 @@ import lyricshow.services.PPTBuilder;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -34,6 +35,12 @@ public class SlideshowTabController {
             History.getInstance().updateHistory(titles);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not create slideshow. " + e.getMessage());
+            return;
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, "Could not create slideshow. " + e.getMessage());
+            return;
         }
+        JOptionPane.showMessageDialog(null, "SlideShow complete");
+
     }
 }

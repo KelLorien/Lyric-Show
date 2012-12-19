@@ -50,7 +50,7 @@ public class PPTBuilder {
      * if the given directory could not be written to (in which case, it will be in the default output directory).
      * @throws java.io.IOException if there was an exception writing the file to its target directory.
      */
-    public void buildPPT(List<String> titles, File dir) throws IOException {
+    public void buildPPT(List<String> titles, File dir) throws IOException, ParseException {
 
         List<Song> songs = new ArrayList<Song>();
         populateSongs(titles, songs);
@@ -67,7 +67,7 @@ public class PPTBuilder {
      * @param fileName name that the powerpoint will have
      * @throws java.io.IOException
      */
-    public void buildPPT(List<String> titles, File dir, String fileName) throws IOException {
+    public void buildPPT(List<String> titles, File dir, String fileName) throws IOException, ParseException {
         List<Song> songs = new ArrayList<Song>();
         populateSongs(titles, songs);
 
@@ -162,7 +162,7 @@ public class PPTBuilder {
         }
     }
 
-    private void populateSongs(List<String> titles, List<Song> songs) throws FileNotFoundException {
+    private void populateSongs(List<String> titles, List<Song> songs) throws FileNotFoundException, ParseException {
         for (String title: titles) {
             if (title.equalsIgnoreCase(SlideshowTabController.BLANK_SLIDE_TITLE)) {
                 songs.add(new Song(SlideshowTabController.BLANK_SLIDE_TITLE));
@@ -174,7 +174,7 @@ public class PPTBuilder {
                     throw e;
                 } catch (ParseException e) {
                     System.err.println("Error reading storage file for song " + title);
-                    e.printStackTrace();
+                    throw e;
                 }
             }
         }

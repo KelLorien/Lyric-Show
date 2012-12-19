@@ -17,12 +17,6 @@ import java.util.Scanner;
 
 public class BackUp {
 
-    //Back Up all Songs as both Powerpoint files and as .txt files
-    public static void BackUpAll(File dest) throws IOException, ParseException {
-        BackUpTxt(dest);
-        BackUpPPT(dest);
-    }
-
     //Back up as .txt files only
     public static void BackUpTxt(File dest) throws IOException {
         FileWriter output=null;
@@ -35,7 +29,7 @@ public class BackUp {
                 output = new FileWriter(new File(backupDir, fileName));
                 libScanner = new Scanner(new File(songStore, fileName));
                 while (libScanner.hasNext()) {
-                    output.write(libScanner.nextLine());
+                    output.write(libScanner.nextLine() + "\n");
                 }
                 output.close();
                 libScanner.close();
@@ -46,7 +40,7 @@ public class BackUp {
             output = new FileWriter(backupInd);
             libScanner = new Scanner(new File(SongDAO.STORAGE_URL, SongDAO.INDEX_FILE_NAME));
             while (libScanner.hasNext()) {
-                output.write(libScanner.nextLine());
+                output.write(libScanner.nextLine() + "\n");
             }
             output.close();
             libScanner.close();

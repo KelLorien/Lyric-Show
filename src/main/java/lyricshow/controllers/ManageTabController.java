@@ -91,7 +91,7 @@ public class ManageTabController {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not backup. " + e.getMessage());
         } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "Could not read library. Some files may be corrupt. " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Could not backup. " + e.getMessage());
         }
     }
 

@@ -47,7 +47,7 @@ public class History {
             newHistory += title + "\n";
         }
 
-        String historyText = "";
+        String historyText;
         try {
             historyText = getHistory();
         } catch (FileNotFoundException e) {

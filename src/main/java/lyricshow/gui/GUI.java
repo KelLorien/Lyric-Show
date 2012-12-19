@@ -25,9 +25,9 @@ public class GUI extends JFrame {
     public static final String KEYWORDS = "Keywords";
     public static final String KEY = "Key";
 
-    ManageTabController manageTabController = ManageTabController.getInstance();
-    SearchTabController searchTabController = SearchTabController.getInstance();
-    SlideshowTabController slideshowTabController = SlideshowTabController.getInstance();
+    private ManageTabController manageTabController = ManageTabController.getInstance();
+    private SearchTabController searchTabController = SearchTabController.getInstance();
+    private SlideshowTabController slideshowTabController = SlideshowTabController.getInstance();
 
     /**
      * Launch the application.
@@ -54,7 +54,7 @@ public class GUI extends JFrame {
     private JTextField slideSearch;
     private JLabel lblSearch;
     private static JScrollPane scLib;
-    public static JList lstSlideLibrary;
+    private static JList lstSlideLibrary;
     private JButton btnAddToList;
     private JScrollPane scCurrentList;
     private JButton btnCreateSlideshow;
@@ -279,7 +279,7 @@ public class GUI extends JFrame {
         }
         return btnAddBlankSlide;
     }
-    public static DefaultListModel manageSearch = new DefaultListModel();
+    private static DefaultListModel manageSearch = new DefaultListModel();
     private JTextField getTxtManageSearch() {
         if (txtManageSearch == null) {
             txtManageSearch = new JTextField();
@@ -550,7 +550,7 @@ public class GUI extends JFrame {
         }
         return cmbKey;
     }
-    DefaultListModel resultsList = new DefaultListModel();
+    private DefaultListModel resultsList = new DefaultListModel();
     private JButton getBtnSearchByKey() {
         if (btnSearchByKey == null) {
             btnSearchByKey = new JButton("Search By Key");
@@ -614,7 +614,7 @@ public class GUI extends JFrame {
         return btnSearchAdd;
     }
 
-    DefaultListModel lmCurrentList = new DefaultListModel();
+    private DefaultListModel lmCurrentList = new DefaultListModel();
     private JButton btnRemove;
     private JButton btnMoveDown;
     private JButton btnMoveUp;
@@ -829,7 +829,7 @@ public class GUI extends JFrame {
         }
         return lstManageSongs;
     }
-    public static void clearManageText()
+    private static void clearManageText()
     {
         txtTitle.setText("");
         txtComposer.setText("");

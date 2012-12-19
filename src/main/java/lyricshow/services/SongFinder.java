@@ -23,7 +23,7 @@ public class SongFinder {
         return instance;
     }
 
-    SongDAO dao = SongDAO.getInstance();
+    private SongDAO dao = SongDAO.getInstance();
 
     private SongFinder() {}
 

@@ -22,7 +22,6 @@ public class SongAdder {
     }
 
     private SongDAO dao = SongDAO.getInstance();
-    private SongList songList = SongList.getInstance();
 
     private SongAdder(){}
 

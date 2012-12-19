@@ -267,7 +267,7 @@ public class SongDAO {
         }
     }
 
-    private String readIndex() throws FileNotFoundException {
+    private String readIndex() {
         String fullIndex = "";
         Scanner indexScanner = getIndexScanner();
         while (indexScanner.hasNext()) {
