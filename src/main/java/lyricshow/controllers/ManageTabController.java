@@ -76,7 +76,7 @@ public class ManageTabController {
         	e.printStackTrace();
             JOptionPane.showMessageDialog(null, "There was a problem adding the file. " + e.getMessage());
         } catch (RuntimeException e) {
-            JOptionPane.showMessageDialog(null, "Problem updating a song. " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Runtime Exception: Problem updating a song. " + e.getMessage());
         }
     }
 

@@ -110,7 +110,7 @@ public class PPTImporter {
             song.setCopyright("");
         }
 
-        if (textRuns.length > 5) {
+        if (textRuns.length >= 5) {
             song.setCopyright(textRuns[4].getText());
         }
 
@@ -118,28 +118,9 @@ public class PPTImporter {
     }
 
     private String removeNewLines(String title) {
+        if (title == null)
+            return null;
         return title.replaceAll("\n", NEWLINE_REPLACEMENT);
     }
 
-    //TODO: remove for prod
-    public static void main(String[] args) {
-//        //TO RUN THIS METHOD, THIS FILE MUST ALREADY EXIST.
-//        File target = new File("/Users/kim/Lyric-Show/PM081212-1.ppt");
-//
-//        try {
-//            List<Song> songs = getInstance().importSong(target);
-//            List<String> titles = new ArrayList<String>();
-//            for (Song song: songs) {
-//                titles.add(song.getTitle());
-//                SongDAO.getInstance().addSong(song);
-//            }
-//
-//         //   PPTBuilder.getInstance().buildPPT(titles);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//         //   SongDAO.deleteStuff();
-//        }
-        JOptionPane.showMessageDialog(null, "wat is dis");
-    }
 }
