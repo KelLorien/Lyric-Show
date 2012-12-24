@@ -73,26 +73,10 @@ public class PPTBuilder {
 
         outputPPT(songs, dir, fileName);
     }
-/*
-
-     * Builds a powerpoint file out each song specified by a {@link List}, saved at the directory
-     * specified by {@link PPTBuilder#DEFAULT_OUTPUT_DIR}.
-     * @param titles list of song titles to identify which songs to create a powerpoint out of.
-     * @throws IOException if there was an exception writing the file to its target directory.
-     * @see PPTBuilder#buildPPT(java.util.List, java.io.File)
-     *//*
-    public void buildPPT(List<String> titles) throws IOException {
-        DEFAULT_OUTPUT_DIR.mkdirs();
-
-        List<Song> songs = new ArrayList<Song>();
-        populateSongs(titles, songs);
-
-        outputPPT(songs, DEFAULT_OUTPUT_DIR, DateFormat.getDateInstance().format(new Date()));
-    }*/
 
 
     private void outputPPT(List<Song> songs, File outputDir, String fileName) throws IOException {
-        SlideShow show = new SlideShow();
+        SlideShow show = readSlideShow(new File("template.ppt"));
 
         for (Song song: songs) {
             if (song.getTitle().equalsIgnoreCase(SlideshowTabController.BLANK_SLIDE_TITLE)) {
@@ -106,7 +90,7 @@ public class PPTBuilder {
     }
 
     private static final int LYRIC_MARGIN = 25;
-    private static final int AUTH_WIDTH = 150;
+    private static final int AUTH_WIDTH = 125;
     private static final int AUTH_HEIGHT = 50;
     private static final int TITLE_HEIGHT = 125;
     private static final int COPYRIGHT_HEIGHT = 75;
@@ -129,7 +113,7 @@ public class PPTBuilder {
                     new Rectangle((int) show.getPageSize().getWidth() - AUTH_WIDTH,
                             TITLE_HEIGHT - (int) (.5 * AUTH_HEIGHT), AUTH_WIDTH, AUTH_HEIGHT));
 
-            insertTextbox(slide, song.getCopyright(), 10, TextShape.AlignCenter,
+            insertTextbox(slide, song.getCopyright(), 10, TextShape.AlignRight,
                     new Rectangle(0,(int) show.getPageSize().getHeight() - COPYRIGHT_HEIGHT,
                             (int) show.getPageSize().getWidth(), COPYRIGHT_HEIGHT));
         }
@@ -144,6 +128,8 @@ public class PPTBuilder {
         box.setHorizontalAlignment(align);
         RichTextRun textRun = box.getTextRun().getRichTextRunAt(0);
         textRun.setFontSize(font);
+        textRun.setFontName("Arial");
+        textRun.setFontColor(Color.white);
         box.setAnchor(rect);
         slide.addShape(box);
     }
@@ -216,4 +202,22 @@ public class PPTBuilder {
 
         SongDAO.deleteStuff();
     }
+    private static SlideShow readSlideShow(File ppt) throws IOException {
+	    FileInputStream inputStream = null;
+	    SlideShow show = null;
+	    try {
+	        inputStream = new FileInputStream(ppt);
+	        show = new SlideShow(inputStream);
+	    } finally {
+	        if (inputStream != null) {
+	            try {
+	                inputStream.close();
+	            } catch (IOException e) {
+	                //ignore
+	            }
+	        }
+	    }
+
+	    return show;
+	}	
 }
